@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4xlearner Pro MCQ Creator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;900&display=swap" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --bg: #090d16;
+            --panel: #131b2e;
+            --accent: #38bdf8;
+            --text: #ffffff;
+            --muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Control Panel */
+        .panel {
+            background: var(--panel);
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #1e293b;
+            height: fit-content;
+        }
+
+        label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--muted);
+            margin-top: 12px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        textarea,
+        select,
+        input {
+            width: 100%;
+            padding: 10px;
+            background: #090d16;
+            border: 1px solid #334155;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            margin-top: 5px;
+        }
+
+        textarea:focus,
+        select:focus,
+        input:focus {
+            border-color: var(--accent);
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: white;
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: 0.2s;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+
+        .drag-hint {
+            font-size: 0.75rem;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 12px;
+            text-align: center;
+            border: 1px dashed #38bdf8;
+        }
+
+        /* Workspace / Preview */
+        .workspace {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #05070c;
+            border-radius: 16px;
+            padding: 20px;
+            min-height: 550px;
+            overflow: auto;
+            border: 1px solid #1e293b;
+        }
+
+        /* Target Box for Export */
+        .export-card {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px;
+            user-select: none;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            border-radius: 16px;
+            transition: width 0.3s, height 0.3s;
+        }
+
+        /* Draggable components inside card */
+        .draggable {
+            position: relative;
+            cursor: grab;
+            touch-action: none;
+            z-index: 10;
+        }
+
+        .draggable:active {
+            cursor: grabbing;
+        }
+
+        /* Channel Logo Header */
+        .header-logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            width: fit-content;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #38bdf8, #6366f1);
+            color: #000;
+            font-weight: 900;
+            font-size: 0.85rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .channel-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        /* Question Styling */
+        .question-section {
+            width: 100%;
+        }
+
+        .q-tag {
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .question-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        /* Options Styling */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .opt-key {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        /* Footer Comment CTA */
+        .footer-cta {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- THEMES --- */
+        .th-neon {
+            background: radial-gradient(circle at 10% 20%, #1e1b4b, #030712);
+            color: #fff;
+        }
+
+        .th-neon .opt-key,
+        .th-neon .q-tag {
+            background: #38bdf8;
+            color: #000;
+        }
+
+        .th-gold {
+            background: linear-gradient(135deg, #2b2311, #080705);
+            color: #fff;
+        }
+
+        .th-gold .opt-key,
+        .th-gold .q-tag {
+            background: #f59e0b;
+            color: #000;
+        }
+
+        .th-gold .option-item {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .th-cyber {
+            background: linear-gradient(180deg, #1e0038, #05000e);
+            color: #00ffcc;
+        }
+
+        .th-cyber .question-title,
+        .th-cyber .option-item {
+            color: #fff;
+        }
+
+        .th-cyber .opt-key {
+            background: #00ffcc;
+            color: #000;
+        }
+
+        .th-cyber .q-tag {
+            background: #ff007f;
+            color: #fff;
+        }
+
+        .th-crimson {
+            background: radial-gradient(circle, #3e0707, #0b0101);
+            color: #fff;
+        }
+
+        .th-crimson .opt-key,
+        .th-crimson .q-tag {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .th-emerald {
+            background: radial-gradient(circle, #064e3b, #021a14);
+            color: #fff;
+        }
+
+        .th-emerald .opt-key,
+        .th-emerald .q-tag {
+            background: #10b981;
+            color: #000;
+        }
+
+        .th-ocean {
+            background: linear-gradient(180deg, #075985, #03131e);
+            color: #fff;
+        }
+
+        .th-ocean .opt-key,
+        .th-ocean .q-tag {
+            background: #06b6d4;
+            color: #000;
+        }
+
+        .th-purple {
+            background: linear-gradient(135deg, #4c1d95, #110326);
+            color: #fff;
+        }
+
+        .th-purple .opt-key,
+        .th-purple .q-tag {
+            background: #c084fc;
+            color: #000;
+        }
+
+        .th-minimal {
+            background: #18181b;
+            color: #f4f4f5;
+        }
+
+        .th-minimal .opt-key,
+        .th-minimal .q-tag {
+            background: #3f3f46;
+            color: #fff;
+        }
+
+        .th-amber {
+            background: linear-gradient(135deg, #451a03, #130600);
+            color: #fff;
+        }
+
+        .th-amber .opt-key,
+        .th-amber .q-tag {
+            background: #f97316;
+            color: #000;
+        }
+
+        .th-studio {
+            background: linear-gradient(180deg, #27272a, #09090b);
+            color: #fff;
+        }
+
+        .th-studio .opt-key,
+        .th-studio .q-tag {
+            background: #ffffff;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>⚡ 4xlearner Custom MCQ Studio</h1>
+        <p style="color: var(--muted); font-size: 0.85rem;">Draggable Elements • Custom Aspect Ratios • 4K Export</p>
+    </header>
+
+    <div class="main-grid">
+        <!-- CONTROLS -->
+        <div class="panel">
+            <label>1 Single Input (Question + Options)</label>
+            <textarea id="rawInput" rows="6" placeholder="Paste directly:
+Computer का मस्तिष्क किसे कहा जाता है?
+A) RAM
+B) CPU
+C) ROM
+D) Hard Disk"></textarea>
+
+            <label>Channel Name</label>
+            <input type="text" id="channelInput" value="@4xlearner" />
+
+            <label>Canvas Size (Aspect Ratio)</label>
+            <select id="aspectRatio">
+                <option value="9:16">9:16 (Shorts / Reels / Story) - [1080x1920]</option>
+                <option value="1:1">1:1 (Instagram Post / Community) - [1080x1080]</option>
+                <option value="16:9">16:9 (YouTube Thumbnail / FB) - [1920x1080]</option>
+                <option value="4:5">4:5 (Instagram Portrait Feed) - [1080x1350]</option>
+            </select>
+
+            <label>Theme Style</label>
+            <select id="themeSelect">
+                <option value="th-neon">1. Midnight Neon</option>
+                <option value="th-gold">2. Royal Gold</option>
+                <option value="th-cyber">3. Cyberpunk High-Contrast</option>
+                <option value="th-crimson">4. Crimson Red</option>
+                <option value="th-emerald">5. Emerald Green</option>
+                <option value="th-ocean">6. Deep Ocean</option>
+                <option value="th-purple">7. Purple Galaxy</option>
+                <option value="th-minimal">8. Matte Minimal</option>
+                <option value="th-amber">9. Sunset Amber</option>
+                <option value="th-studio">10. Studio Carbon</option>
+            </select>
+
+            <div class="drag-hint">
+                💡 <b>Tip:</b> Logo, Question, Options & Footer ko mouse ya touch se pakad kar apni marzi se upar-niche
+                set karein!
+            </div>
+
+            <button class="btn-action" onclick="export4KImage()">📸 Download 4K Image</button>
+            <div id="status"
+                style="display:none; color: var(--accent); font-size: 0.85rem; margin-top: 10px; text-align: center; font-weight: 700;">
+                Rendering 4K ultra crisp...</div>
+        </div>
+
+        <!-- PREVIEW AREA -->
+        <div class="workspace">
+            <!-- Target export card -->
+            <div id="exportCard" class="export-card th-neon" style="width: 360px; height: 640px;">
+
+                <!-- DRAGGABLE 1: HEADER LOGO -->
+                <div class="draggable header-logo-badge" id="dragLogo">
+                    <span class="logo-icon">4X</span>
+                    <span class="channel-title" id="dispChannel">@4xlearner</span>
+                </div>
+
+                <!-- DRAGGABLE 2: QUESTION -->
+                <div class="draggable question-section" id="dragQuestion">
+                    <span class="q-tag">QUIZ</span>
+                    <h2 class="question-title" id="dispQ">एक मिनट रुको” को English में क्या बोलते हैं?</h2>
+                </div>
+
+                <!-- DRAGGABLE 3: OPTIONS -->
+                <div class="draggable options-grid" id="dragOptions">
+                    <div class="option-item"><span class="opt-key">A</span><span id="optA">Wait a minute.</span></div>
+                    <div class="option-item"><span class="opt-key">B</span><span id="optB">Take a minute.</span></div>
+                    <div class="option-item"><span class="opt-key">C</span><span id="optC">Stop one minute.</span></div>
+                    <div class="option-item"><span class="opt-key">D</span><span id="optD">Stay one minute.</span></div>
+                </div>
+
+                <!-- DRAGGABLE 4: FOOTER CTA -->
+                <div class="draggable footer-cta" id="dragFooter">
+                    💬 Sahi Answer COMMENT Me Batayein! 👇
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const exportCard = document.getElementById('exportCard');
+        const rawInput = document.getElementById('rawInput');
+        const channelInput = document.getElementById('channelInput');
+        const aspectRatio = document.getElementById('aspectRatio');
+        const themeSelect = document.getElementById('themeSelect');
+        const status = document.getElementById('status');
+
+        // 1. Single Box Parser
+        rawInput.addEventListener('input', () => {
+            const lines = rawInput.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            if (!lines.length) return;
+
+            document.getElementById('dispQ').innerText = lines[0];
+            const optKeys = ['optA', 'optB', 'optC', 'optD'];
+            optKeys.forEach(k => document.getElementById(k).innerText = '...');
+
+            let optIdx = 0;
+            for (let i = 1; i < lines.length; i++) {
+                let cleaned = lines[i].replace(/^([A-Da-d0-9][\.\)\-\:\s]+)/, '');
+                if (optIdx < 4) {
+                    document.getElementById(optKeys[optIdx]).innerText = cleaned;
+                    optIdx++;
+                }
+            }
+        });
+
+        // 2. Channel Branding Input
+        channelInput.addEventListener('input', (e) => {
+            document.getElementById('dispChannel').innerText = e.target.value || '@4xlearner';
+        });
+
+        // 3. Theme Selector
+        themeSelect.addEventListener('change', (e) => {
+            exportCard.className = `export-card ${e.target.value}`;
+        });
+
+        // 4. Multi-Platform Aspect Ratio Handler
+        aspectRatio.addEventListener('change', (e) => {
+            const ratio = e.target.value;
+            // Reset positions to keep clean layout
+            document.querySelectorAll('.draggable').forEach(el => {
+                el.style.transform = 'translate(0px, 0px)';
+                el.setAttribute('data-x', 0);
+                el.setAttribute('data-y', 0);
+            });
+
+            const optionsGrid = document.getElementById('dragOptions');
+
+            if (ratio === '9:16') {
+                exportCard.style.width = '360px';
+                exportCard.style.height = '640px';
+                optionsGrid.style.gridTemplateColumns = '1fr';
+            } else if (ratio === '1:1') {
+                exportCard.style.width = '480px';
+                exportCard.style.height = '480px';
+                optionsGrid.style.gridTemplateColumns = '1fr';
+            } else if (ratio === '16:9') {
+                exportCard.style.width = '640px';
+                exportCard.style.height = '360px';
+                // 16:9 me 2 column options auto arrange ho jate hain taaki overlap na ho
+                optionsGrid.style.gridTemplateColumns = '1fr 1fr';
+            } else if (ratio === '4:5') {
+                exportCard.style.width = '400px';
+                exportCard.style.height = '500px';
+                optionsGrid.style.gridTemplateColumns = '1fr';
+            }
+        });
+
+        // 5. DRAG & DROP ENGINE (Touch + Mouse Support)
+        function makeDraggable(el) {
+            let isDragging = false;
+            let startX, startY;
+            let currentX = 0, currentY = 0;
+
+            function onStart(e) {
+                isDragging = true;
+                const evt = e.touches ? e.touches[0] : e;
+                startX = evt.clientX - currentX;
+                startY = evt.clientY - currentY;
+            }
+
+            function onMove(e) {
+                if (!isDragging) return;
+                const evt = e.touches ? e.touches[0] : e;
+                currentX = evt.clientX - startX;
+                currentY = evt.clientY - startY;
+                el.style.transform = `translate(${currentX}px, ${currentY}px)`;
+            }
+
+            function onEnd() {
+                isDragging = false;
+            }
+
+            el.addEventListener('mousedown', onStart);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onEnd);
+
+            el.addEventListener('touchstart', onStart, { passive: true });
+            window.addEventListener('touchmove', onMove, { passive: true });
+            window.addEventListener('touchend', onEnd);
+        }
+
+        document.querySelectorAll('.draggable').forEach(makeDraggable);
+
+        // 6. TRUE 4K IMAGE EXPORT (Scale 6x for crisp ultra-res)
+        async function export4KImage() {
+            status.style.display = 'block';
+            status.innerText = '📸 Generating Ultra-Sharp 4K Image...';
+
+            try {
+                const canvas = await html2canvas(exportCard, {
+                    scale: 6, // 360 * 6 = 2160px width (Perfect 4K)
+                    useCORS: true,
+                    backgroundColor: null,
+                    logging: false
+                });
+
+                const link = document.createElement('a');
+                link.download = `4xlearner-mcq-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+            } catch (err) {
+                alert('Export error: ' + err);
+            } finally {
+                status.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>

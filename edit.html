@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>4X LEARNER — Ultra Viral Thumbnail & Reels Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@700;800;900&family=Montserrat:ital,wght@0,800;0,900;1,900&family=Permanent+Marker&family=Playfair+Display:ital,wght@1,900&family=Poppins:wght@800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #07090e;
+            --panel: #0d121c;
+            --border: #1e293b;
+            --accent: #ffd400;
+            --cyan: #00f2fe;
+            --red: #ff2244;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Montserrat', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Bar */
+        header.topbar {
+            height: 58px;
+            background: #090e17;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ffd400, #ff4000);
+            color: #000;
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+            font-size: 16px;
+            box-shadow: 0 0 15px rgba(255, 212, 0, 0.4);
+        }
+
+        .brand span {
+            color: var(--cyan);
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 7px;
+            align-items: center;
+        }
+
+        .btn {
+            border: 1px solid #283344;
+            color: #fff;
+            background: #162030;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-weight: 800;
+            font-size: 11px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.15s ease;
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        .btn-magic {
+            background: linear-gradient(135deg, #ffd400, #ff6b00);
+            color: #000;
+            border: none;
+        }
+
+        .btn-4k {
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            color: #000;
+            border: none;
+            font-weight: 900;
+        }
+
+        .btn-video {
+            background: linear-gradient(135deg, #ff2244, #990011);
+            color: #fff;
+            border: none;
+        }
+
+        /* Main Responsive Workspace */
+        .workspace {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 290px minmax(0, 1fr) 330px;
+            min-height: calc(100vh - 58px);
+        }
+
+        /* Left Drawer */
+        .left-panel {
+            background: #090d16;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 14px;
+        }
+
+        .panel-head {
+            font-size: 11px;
+            font-weight: 900;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 8px 0 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .format-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .format-card {
+            border: 1px solid #1e293b;
+            background: #0f172a;
+            color: #94a3b8;
+            border-radius: 8px;
+            padding: 10px 8px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .format-card strong {
+            display: block;
+            color: #fff;
+            font-size: 12px;
+        }
+
+        .format-card small {
+            color: #64748b;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .format-card.active {
+            border-color: var(--accent);
+            background: #24220c;
+            box-shadow: inset 0 0 0 1px rgba(255, 212, 0, 0.4);
+        }
+
+        .format-card.active strong {
+            color: var(--accent);
+        }
+
+        .style-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .style-card {
+            border: 1px solid #1e293b;
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 6px;
+            cursor: pointer;
+            text-align: left;
+            transition: transform 0.15s;
+        }
+
+        .style-card:active {
+            transform: scale(0.97);
+        }
+
+        .style-card.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(255, 212, 0, 0.35);
+        }
+
+        .style-preview {
+            height: 42px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 900;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .style-card b {
+            display: block;
+            font-size: 10px;
+            color: #cbd5e1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Center Stage Viewport */
+        .center-stage {
+            background: radial-gradient(circle at center, #151e2e 0%, #090c13 70%, #030406 100%);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .stage-tools {
+            height: 42px;
+            border-bottom: 1px solid var(--border);
+            background: #090d16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tool-btn {
+            background: #111827;
+            border: 1px solid #1e293b;
+            color: #94a3b8;
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .tool-btn.active {
+            color: #fff;
+            border-color: var(--cyan);
+        }
+
+        .viewport-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            overflow: hidden;
+        }
+
+        #renderCanvas {
+            display: block;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            max-width: 100%;
+            max-height: calc(100vh - 165px);
+            background: #000;
+        }
+
+        /* Right Editor Panel */
+        .right-panel {
+            background: #090d16;
+            border-left: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 14px;
+        }
+
+        .edit-group {
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 14px;
+            margin-bottom: 14px;
+        }
+
+        .edit-group:last-child {
+            border-bottom: none;
+        }
+
+        .field {
+            margin-bottom: 10px;
+        }
+
+        .field label {
+            display: flex;
+            justify-content: space-between;
+            color: #7d889b;
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .field input[type="text"],
+        .field select {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 7px;
+            padding: 8px 10px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            outline: none;
+        }
+
+        .field input[type="text"]:focus,
+        .field select:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 8px rgba(0, 242, 254, 0.25);
+        }
+
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .color-picker {
+            width: 100%;
+            height: 34px;
+            border: none;
+            background: #0f172a;
+            border-radius: 6px;
+            padding: 2px;
+            cursor: pointer;
+        }
+
+        .preset-model-row {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            margin-top: 8px;
+            padding-bottom: 4px;
+        }
+
+        .model-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            object-fit: cover;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .model-thumb.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 8px rgba(255, 212, 0, 0.5);
+        }
+
+        .subject-selector {
+            border: 1px dashed #334155;
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .subject-selector:hover {
+            border-color: var(--cyan);
+            color: #fff;
+        }
+
+        /* Mobile Bottom Navigation */
+        .mobile-tab-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 52px;
+            background: #090d16;
+            border-top: 1px solid var(--border);
+            z-index: 300;
+        }
+
+        .mobile-tab-bar button {
+            flex: 1;
+            border: none;
+            background: none;
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 900;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .mobile-tab-bar button.active {
+            color: var(--accent);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 65px;
+            transform: translate(-50%, 20px);
+            background: #fff;
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 900;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        /* Mobile Responsive Breakpoints */
+        @media (max-width: 960px) {
+            .workspace {
+                grid-template-columns: 220px minmax(0, 1fr);
+            }
+
+            .right-panel {
+                position: fixed;
+                right: 0;
+                top: 58px;
+                bottom: 52px;
+                width: 320px;
+                z-index: 250;
+                transform: translateX(100%);
+                transition: transform 0.25s ease;
+                box-shadow: -15px 0 40px rgba(0, 0, 0, 0.7);
+            }
+
+            .right-panel.open {
+                transform: translateX(0);
+            }
+
+            .mobile-tab-bar {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .workspace {
+                display: block;
+            }
+
+            .left-panel {
+                position: fixed;
+                left: 0;
+                top: 58px;
+                bottom: 52px;
+                width: 100%;
+                z-index: 250;
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+            }
+
+            .left-panel.open {
+                transform: translateX(0);
+            }
+
+            .center-stage {
+                height: calc(100vh - 110px);
+            }
+
+            .top-actions .btn:nth-child(1) {
+                display: none;
+            }
+
+            header.topbar {
+                padding: 0 10px;
+            }
+
+            .brand {
+                font-size: 13px;
+            }
+
+            .btn {
+                padding: 6px 9px;
+                font-size: 10px;
+            }
+
+            .viewport-box {
+                padding: 8px;
+            }
+
+            #renderCanvas {
+                max-width: calc(100vw - 16px);
+                max-height: calc(100vh - 170px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- App Header -->
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-badge">⚡</div>
+            4X LEARNER <span>STUDIO</span>
+        </div>
+        <div class="top-actions">
+            <button class="btn btn-magic" onclick="magicGenerate()">🎲 Magic</button>
+            <button class="btn" onclick="document.getElementById('uploadInput').click()">🖼 PNG</button>
+            <button class="btn btn-4k" onclick="export4KPNG()">⚡ 4K PNG</button>
+            <button class="btn btn-video" id="videoBtn" onclick="exportMotionVideo()">🎥 Video</button>
+        </div>
+    </header>
+
+    <!-- Main Grid Workspace -->
+    <div class="workspace">
+
+        <!-- LEFT: Canvas Format & 50 Real Layouts -->
+        <aside class="left-panel" id="leftPanel">
+            <div class="panel-head">
+                <span>Canvas Format</span>
+                <small style="color:var(--accent)">Default: Shorts</small>
+            </div>
+            <div class="format-grid">
+                <button class="format-card active" onclick="switchCanvasFormat('shorts', this)">
+                    <strong>Shorts / Reels</strong>
+                    <small>1080 × 1920 (9:16)</small>
+                </button>
+                <button class="format-card" onclick="switchCanvasFormat('youtube', this)">
+                    <strong>YouTube Video</strong>
+                    <small>1280 × 720 (16:9)</small>
+                </button>
+                <button class="format-card" onclick="switchCanvasFormat('poster', this)">
+                    <strong>Poster Feed</strong>
+                    <small>1080 × 1350 (4:5)</small>
+                </button>
+                <button class="format-card" onclick="switchCanvasFormat('square', this)">
+                    <strong>Square Post</strong>
+                    <small>1080 × 1080 (1:1)</small>
+                </button>
+            </div>
+
+            <div class="panel-head" style="margin-top:16px;">
+                <span>50 High-CTR Styles</span>
+                <small id="styleCount">50 Layouts</small>
+            </div>
+            <div class="style-grid" id="styleGrid"></div>
+        </aside>
+
+        <!-- CENTER: Scaled Visual Canvas Viewport -->
+        <main class="center-stage">
+            <div class="stage-tools">
+                <button class="tool-btn active" onclick="fitCanvasView()">FIT VIEW</button>
+                <button class="tool-btn" onclick="zoomCanvas(0.85)">−</button>
+                <button class="tool-btn" onclick="zoomCanvas(1.15)">+</button>
+                <button class="tool-btn" onclick="toggleMotionPhysics()">⚡ MOTION: <span
+                        id="motionStatus">ON</span></button>
+            </div>
+            <div class="viewport-box">
+                <canvas id="renderCanvas"></canvas>
+            </div>
+        </main>
+
+        <!-- RIGHT: English Course Content & Design Controls -->
+        <aside class="right-panel" id="rightPanel">
+            <div class="edit-group">
+                <div class="panel-head" style="margin-top:0;">English Course Content</div>
+                <div class="field">
+                    <label>Badge / Channel</label>
+                    <input type="text" id="inBadge" value="⚡ 4X LEARNER OFFICIAL" oninput="renderMaster()" />
+                </div>
+                <div class="field">
+                    <label>Line 1 (Headline Hook)</label>
+                    <input type="text" id="inH1" value="रोज बोले जाने वाले" oninput="renderMaster()" />
+                </div>
+                <div class="field">
+                    <label>Line 2 (High-CTR Keyword)</label>
+                    <input type="text" id="inH2" value="DAILY SENTENCES" oninput="renderMaster()" />
+                </div>
+                <div class="field">
+                    <label>Subtitle / Feature</label>
+                    <input type="text" id="inSub" value="HINDI TO ENGLISH • 5 MIN HACK" oninput="renderMaster()" />
+                </div>
+                <div class="two-cols">
+                    <div class="field">
+                        <label>CTA Button</label>
+                        <input type="text" id="inBtn" value="START FREE LESSON" oninput="renderMaster()" />
+                    </div>
+                    <div class="field">
+                        <label>Bottom Handle</label>
+                        <input type="text" id="inFooter" value="HINDI TO ENGLISH • DAILY ENGLISH COURSE"
+                            oninput="renderMaster()" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="edit-group">
+                <div class="panel-head">Visual Theme & Tuning</div>
+                <div class="two-cols">
+                    <div class="field">
+                        <label>Headline Font</label>
+                        <select id="selFont" onchange="renderMaster()">
+                            <option value="Montserrat" selected>Montserrat (Modern)</option>
+                            <option value="Anton">Anton (Heavy Clickbait)</option>
+                            <option value="Bebas Neue">Bebas Neue (Viral YouTube)</option>
+                            <option value="Poppins">Poppins (Clean Pro)</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Visual Effect</label>
+                        <select id="selEffect" onchange="renderMaster()">
+                            <option value="fire">Flame & Fire Sparks</option>
+                            <option value="sunburst">Sunburst Rays</option>
+                            <option value="cyber">3D Perspective Grid</option>
+                            <option value="particles">Floating 3D Orbs</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="two-cols">
+                    <div class="field">
+                        <label>Base Background</label>
+                        <input type="color" id="colBg" class="color-picker" value="#0a1220" oninput="renderMaster()" />
+                    </div>
+                    <div class="field">
+                        <label>Highlight Glow</label>
+                        <input type="color" id="colAccent" class="color-picker" value="#ffd400"
+                            oninput="renderMaster()" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="edit-group">
+                <div class="panel-head">Reaction Subject Photo</div>
+                <div class="subject-selector" onclick="document.getElementById('uploadInput').click()">
+                    <strong>+ Upload Your Custom PNG</strong>
+                    <small style="display:block;color:#64748b;">Or pick high-CTR reaction models below:</small>
+                </div>
+                <input type="file" id="uploadInput" accept="image/*" style="display:none;" />
+
+                <div class="preset-model-row" id="modelList"></div>
+
+                <div class="two-cols" style="margin-top:10px;">
+                    <div class="field">
+                        <label>Subject Zoom</label>
+                        <input type="range" id="subScale" min="0.5" max="2" step="0.05" value="1"
+                            oninput="renderMaster()" style="width:100%;accent-color:var(--accent);" />
+                    </div>
+                    <div class="field">
+                        <label>Shift X</label>
+                        <input type="range" id="subX" min="-600" max="600" value="0" oninput="renderMaster()"
+                            style="width:100%;accent-color:var(--accent);" />
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Mobile Bottom Tab Navigation -->
+    <nav class="mobile-tab-bar">
+        <button onclick="switchMobileSheet('left')">🎨<br>50 STYLES</button>
+        <button onclick="switchMobileSheet('canvas')" class="active">⬛<br>CANVAS</button>
+        <button onclick="switchMobileSheet('right')">⚙<br>CUSTOMIZE</button>
+    </nav>
+
+    <div class="toast" id="toastBox">Ready</div>
+
+    <script>
+        const canvas = document.getElementById('renderCanvas');
+        const ctx = canvas.getContext('2d');
+        const toastBox = document.getElementById('toastBox');
+
+        let currentFormat = 'shorts'; // Default: Shorts size (9:16)
+        let activeStyleIdx = 0;
+        let motionEnabled = true;
+        let frameTick = 0;
+        let zoomVal = 1;
+        let subjectImage = null;
+
+        // Supported Responsive Formats
+        const formats = {
+            shorts: { w: 1080, h: 1920, label: '9:16 Shorts' },
+            youtube: { w: 1280, h: 720, label: '16:9 YouTube' },
+            poster: { w: 1080, h: 1350, label: '4:5 Poster' },
+            square: { w: 1080, h: 1080, label: '1:1 Square' }
+        };
+
+        // 50 High-CTR Thumbnail Design Architectures
+        const layoutTypes = [
+            {
+                id: "fire_shock",
+                name: "Fire Shock Viral",
+                theme: "fire",
+                bg: ["#2d0505", "#080101"],
+                acc: "#ffd400",
+                h1Bg: "#000000",
+                pillBg: "#e60026",
+                btnCol: "#ffd400",
+                font: "Anton",
+                pillText: "DESIGN"
+            },
+            {
+                id: "sunburst_red",
+                name: "Sunburst Clickbait",
+                theme: "sunburst",
+                bg: ["#c5161d", "#5b0407"],
+                acc: "#ffd400",
+                h1Bg: "#ffffff",
+                pillBg: "#ffd400",
+                btnCol: "#ffd400",
+                font: "Bebas Neue",
+                pillText: "I WILL DESIGN"
+            },
+            {
+                id: "split_blue",
+                name: "Split Blue & Gold",
+                theme: "particles",
+                bg: ["#0a47a3", "#04193d"],
+                acc: "#00f2fe",
+                h1Bg: "#ffffff",
+                pillBg: "#ffd400",
+                btnCol: "#00f2fe",
+                font: "Montserrat",
+                pillText: "AMAZING"
+            },
+            {
+                id: "neon_synth",
+                name: "Synthwave Grid",
+                theme: "cyber",
+                bg: ["#240935", "#08020d"],
+                acc: "#ff007f",
+                h1Bg: "#ffffff",
+                pillBg: "#00f2fe",
+                btnCol: "#ff007f",
+                font: "Anton",
+                pillText: "REELS VIRAL"
+            },
+            {
+                id: "dark_grunge",
+                name: "Moody Grunge Pop",
+                theme: "fire",
+                bg: ["#1c102a", "#07030b"],
+                acc: "#ff0055",
+                h1Bg: "#ffffff",
+                pillBg: "#9900ff",
+                btnCol: "#ff0055",
+                font: "Montserrat",
+                pillText: "NEW ONE"
+            }
+        ];
+
+        const styles50 = [];
+        for (let i = 1; i <= 50; i++) {
+            const parent = layoutTypes[(i - 1) % layoutTypes.length];
+            styles50.push({
+                id: i,
+                name: `#${i} ${parent.name}`,
+                theme: parent.theme,
+                bg: parent.bg,
+                acc: parent.acc,
+                h1Bg: parent.h1Bg,
+                pillBg: parent.pillBg,
+                btnCol: parent.btnCol,
+                font: parent.font,
+                pillText: parent.pillText
+            });
+        }
+
+        // High-CTR Unsplash Reaction Faces
+        const unsplashModels = [
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=600&auto=format&fit=crop&q=80"
+        ];
+
+        // Build 50 Style Thumbnails in Left Drawer
+        const styleGrid = document.getElementById('styleGrid');
+        styles50.forEach((s, idx) => {
+            const card = document.createElement('div');
+            card.className = `style-card ${idx === 0 ? 'active' : ''}`;
+            card.innerHTML = `
+        <div class="style-preview" style="background:linear-gradient(135deg, ${s.bg[0]}, ${s.acc}); color:#fff;">
+          ${s.pillText}
+        </div>
+        <b>${s.name}</b>
+      `;
+            card.onclick = () => selectStylePreset(idx);
+            styleGrid.appendChild(card);
+        });
+
+        // Populate Reaction Subject Models
+        const modelList = document.getElementById('modelList');
+        unsplashModels.forEach((url, i) => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.className = `model-thumb ${i === 0 ? 'active' : ''}`;
+            img.onclick = () => {
+                document.querySelectorAll('.model-thumb').forEach(m => m.classList.remove('active'));
+                img.classList.add('active');
+                loadModelImage(url);
+            };
+            modelList.appendChild(img);
+        });
+
+        function loadModelImage(url) {
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = () => {
+                subjectImage = img;
+                renderMaster();
+            };
+            img.src = url;
+        }
+        loadModelImage(unsplashModels[0]); // Initial Load
+
+        // Preset Selection
+        function selectStylePreset(idx) {
+            activeStyleIdx = idx;
+            const s = styles50[idx];
+            document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.style-card')[idx].classList.add('active');
+
+            document.getElementById('colBg').value = s.bg[0];
+            document.getElementById('colAccent').value = s.acc;
+            document.getElementById('selFont').value = s.font;
+            document.getElementById('selEffect').value = s.theme;
+
+            renderMaster();
+            showToast(`Applied Layout: ${s.name}`);
+        }
+
+        // Switch Canvas Format
+        function switchCanvasFormat(fmt, el) {
+            currentFormat = fmt;
+            document.querySelectorAll('.format-card').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            fitCanvasView();
+            renderMaster();
+            showToast(`Format: ${formats[fmt].label}`);
+        }
+
+        // Dynamic Responsive Viewport Fitting
+        function fitCanvasView() {
+            const f = formats[currentFormat];
+            const box = document.querySelector('.viewport-box');
+            const maxW = box.clientWidth - 16;
+            const maxH = box.clientHeight - 16;
+            const ratio = f.w / f.h;
+
+            let w = maxW;
+            let h = w / ratio;
+            if (h > maxH) {
+                h = maxH;
+                w = h * ratio;
+            }
+            canvas.style.width = `${Math.max(40, w)}px`;
+            canvas.style.height = `${Math.max(40, h)}px`;
+        }
+        window.addEventListener('resize', fitCanvasView);
+
+        function zoomCanvas(mult) {
+            zoomVal *= mult;
+            zoomVal = Math.max(0.4, Math.min(2.5, zoomVal));
+            canvas.style.transform = `scale(${zoomVal})`;
+        }
+
+        // Custom PNG Upload
+        document.getElementById('uploadInput').addEventListener('change', (e) => {
+            const f = e.target.files[0];
+            if (f) {
+                const img = new Image();
+                img.onload = () => {
+                    subjectImage = img;
+                    renderMaster();
+                    showToast("Custom Subject Added!");
+                };
+                img.src = URL.createObjectURL(f);
+            }
+        });
+
+        // Background Special Effects
+        function drawBackgroundFX(w, h, theme, accent, t) {
+            if (theme === 'sunburst') {
+                ctx.save();
+                ctx.translate(w / 2, h / 2);
+                ctx.fillStyle = accent;
+                ctx.globalAlpha = 0.12;
+                const count = 28;
+                const step = (Math.PI * 2) / count;
+                const rot = t * 0.004;
+                for (let i = 0; i < count; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.arc(0, 0, Math.max(w, h) * 1.5, i * step + rot, (i + 0.5) * step + rot);
+                    ctx.fill();
+                }
+                ctx.restore();
+            } else if (theme === 'fire') {
+                ctx.save();
+                ctx.fillStyle = accent;
+                for (let i = 0; i < 35; i++) {
+                    const py = (h - ((t * 4.5 + i * 85) % h));
+                    const px = (i * 143) % w;
+                    ctx.globalAlpha = 0.18 + 0.18 * Math.sin(i + t * 0.05);
+                    ctx.beginPath();
+                    ctx.arc(px, py, 6 + (i % 9), 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            } else if (theme === 'cyber') {
+                ctx.save();
+                ctx.strokeStyle = accent;
+                ctx.globalAlpha = 0.14;
+                ctx.lineWidth = 3;
+                for (let x = 0; x < w; x += 110) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+                }
+                for (let y = 0; y < h; y += 110) {
+                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+                }
+                ctx.restore();
+            } else if (theme === 'particles') {
+                ctx.save();
+                ctx.fillStyle = "#ff2244";
+                // YouTube 3D floating badge cubes
+                for (let i = 0; i < 4; i++) {
+                    const bx = (w * 0.2 + i * w * 0.25 + Math.sin(t * 0.04 + i) * 20);
+                    const by = (h * 0.25 + (i % 2) * h * 0.45 + Math.cos(t * 0.04 + i) * 25);
+                    ctx.save();
+                    ctx.translate(bx, by);
+                    ctx.rotate(0.25 * Math.sin(t * 0.03 + i));
+                    ctx.beginPath();
+                    ctx.roundRect(-50, -35, 100, 70, 16);
+                    ctx.fill();
+                    // Inner triangle
+                    ctx.fillStyle = "#fff";
+                    ctx.beginPath();
+                    ctx.moveTo(-10, -18); ctx.lineTo(18, 0); ctx.lineTo(-10, 18);
+                    ctx.fill();
+                    ctx.restore();
+                }
+                ctx.restore();
+            }
+        }
+
+        // Auto-Fit Typography Engine
+        function calculateFittingFontSize(text, maxW, startSize, font) {
+            let size = startSize;
+            ctx.font = `900 ${size}px "${font}"`;
+            while (ctx.measureText(text).width > maxW && size > 24) {
+                size -= 3;
+                ctx.font = `900 ${size}px "${font}"`;
+            }
+            return size;
+        }
+
+        // Render Master Frame
+        function renderMaster() {
+            const f = formats[currentFormat];
+            canvas.width = f.w;
+            canvas.height = f.h;
+
+            const bgCol = document.getElementById('colBg').value;
+            const accent = document.getElementById('colAccent').value;
+            const font = document.getElementById('selFont').value;
+            const theme = document.getElementById('selEffect').value;
+            const activeStyle = styles50[activeStyleIdx];
+
+            const badge = document.getElementById('inBadge').value;
+            const h1 = document.getElementById('inH1').value;
+            const h2 = document.getElementById('inH2').value;
+            const sub = document.getElementById('inSub').value;
+            const btn = document.getElementById('inBtn').value;
+            const footer = document.getElementById('inFooter').value;
+
+            // 1. Background Radial Lighting
+            const bgGrad = ctx.createRadialGradient(f.w / 2, f.h * 0.45, 60, f.w / 2, f.h / 2, f.h * 0.9);
+            bgGrad.addColorStop(0, bgCol);
+            bgGrad.addColorStop(1, '#020306');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, f.w, f.h);
+
+            // 2. Dynamic Theme FX
+            drawBackgroundFX(f.w, f.h, theme, accent, frameTick);
+
+            // 3. User / Unsplash Model (Smart Positioning & Aspect Fit)
+            if (subjectImage) {
+                ctx.save();
+                const scale = parseFloat(document.getElementById('subScale').value);
+                const shiftX = parseFloat(document.getElementById('subX').value);
+                const ar = subjectImage.width / subjectImage.height;
+
+                let targetW = (currentFormat === 'shorts' ? f.w * 0.98 : f.w * 0.58) * scale;
+                let targetH = targetW / ar;
+                let posX = (currentFormat === 'shorts' ? (f.w - targetW) / 2 : f.w * 0.46) + shiftX;
+                let posY = f.h - targetH;
+
+                // Rim-Light Glow Behind Subject
+                ctx.shadowColor = accent;
+                ctx.shadowBlur = 40;
+                ctx.drawImage(subjectImage, posX, posY, targetW, targetH);
+                ctx.restore();
+            }
+
+            // Fast Landing Motion Pulse
+            const bounce = motionEnabled ? Math.sin(frameTick * 0.08) * 9 : 0;
+
+            // 4. Top Badge Header (4X LEARNER OFFICIAL)
+            ctx.save();
+            ctx.font = "900 32px 'Montserrat'";
+            const badgeW = ctx.measureText(badge).width + 54;
+            const badgeY = (currentFormat === 'shorts' ? 140 : 45) + bounce;
+            const badgeX = currentFormat === 'shorts' ? (f.w - badgeW) / 2 : 55;
+
+            ctx.fillStyle = activeStyle.pillBg;
+            ctx.beginPath();
+            ctx.roundRect(badgeX, badgeY, badgeW, 56, 12);
+            ctx.fill();
+
+            ctx.fillStyle = (activeStyle.pillBg === "#ffd400" || activeStyle.pillBg === "#00f2fe") ? "#000" : "#fff";
+            ctx.textAlign = "center";
+            ctx.fillText(badge, badgeX + badgeW / 2, badgeY + 39);
+            ctx.restore();
+
+            // 5. Main Content Layout
+            ctx.save();
+            const centerX = currentFormat === 'shorts' ? f.w / 2 : f.w * 0.32;
+            const maxTextW = currentFormat === 'shorts' ? f.w * 0.88 : f.w * 0.56;
+            const startY = (currentFormat === 'shorts' ? 360 : 190) + bounce;
+
+            // Heavy Shadow for Contrast
+            ctx.shadowColor = "rgba(0,0,0,0.95)";
+            ctx.shadowBlur = 24;
+            ctx.shadowOffsetY = 6;
+            ctx.textAlign = "center";
+
+            // Line 1: Headline Hook
+            const s1 = calculateFittingFontSize(h1, maxTextW, currentFormat === 'shorts' ? 95 : 75, font);
+            ctx.font = `900 ${s1}px "${font}"`;
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(h1, centerX, startY);
+
+            // Line 2: High-CTR Highlight
+            const s2 = calculateFittingFontSize(h2, maxTextW, currentFormat === 'shorts' ? 130 : 105, font);
+            const h2Y = startY + s2 * 1.05;
+
+            // High-CTR Accent Pill / Banner
+            ctx.font = `900 ${s2}px "${font}"`;
+            const h2W = ctx.measureText(h2).width;
+            ctx.fillStyle = accent;
+            ctx.beginPath();
+            ctx.roundRect(centerX - h2W / 2 - 22, h2Y - s2 * 0.86, h2W + 44, s2 * 1.06, 14);
+            ctx.fill();
+
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "#000000";
+            ctx.fillText(h2, centerX, h2Y);
+
+            // Subtitle / Topic
+            ctx.shadowBlur = 16;
+            const subSize = calculateFittingFontSize(sub, maxTextW, currentFormat === 'shorts' ? 44 : 34, 'Montserrat');
+            ctx.font = `900 ${subSize}px 'Montserrat'`;
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(sub, centerX, h2Y + subSize * 1.55);
+
+            // Call to Action Button
+            const btnY = h2Y + subSize * 1.55 + 38;
+            const btnW = Math.min(maxTextW, 460);
+            ctx.fillStyle = activeStyle.btnCol;
+            ctx.beginPath();
+            ctx.roundRect(centerX - btnW / 2, btnY, btnW, 70, 35);
+            ctx.fill();
+
+            ctx.fillStyle = (activeStyle.btnCol === "#ffd400" || activeStyle.btnCol === "#00f2fe") ? "#000" : "#fff";
+            ctx.font = "900 28px 'Montserrat'";
+            ctx.fillText(btn, centerX, btnY + 45);
+            ctx.restore();
+
+            // 6. Bottom English Course Bar
+            ctx.save();
+            const footH = currentFormat === 'shorts' ? 70 : 50;
+            ctx.fillStyle = "rgba(0,0,0,0.88)";
+            ctx.fillRect(0, f.h - footH, f.w, footH);
+
+            ctx.textAlign = "center";
+            ctx.fillStyle = "#cbd5e1";
+            ctx.font = "800 24px 'Montserrat'";
+            ctx.fillText(footer, f.w / 2, f.h - (footH / 2) + 8);
+            ctx.restore();
+        }
+
+        // Animation Loop
+        function loop() {
+            if (motionEnabled) frameTick++;
+            renderMaster();
+            requestAnimationFrame(loop);
+        }
+        document.fonts.ready.then(() => {
+            fitCanvasView();
+            loop();
+        });
+
+        function toggleMotionPhysics() {
+            motionEnabled = !motionEnabled;
+            document.getElementById('motionStatus').innerText = motionEnabled ? 'ON' : 'OFF';
+            showToast(`Motion Physics: ${motionEnabled ? 'ON' : 'OFF'}`);
+        }
+
+        // Magic Generator
+        function magicGenerate() {
+            const hooks = [
+                ["रोज बोले जाने वाले", "DAILY SENTENCES", "HINDI TO ENGLISH • 5 MIN HACK"],
+                ["99% लोग गलत बोलते हैं", "COMMON MISTAKES", "SPEAK LIKE A PRO NATIVE"],
+                ["बिना अटके बोलना सीखें", "SPEAK FLUENTLY", "FULL ENGLISH COURSE 2026"],
+                ["सिर्फ 10 शब्द रोज", "10 DAILY WORDS", "VOCABULARY BOOSTER #1"],
+                ["ये 5 गलतियां बंद करो", "STOP SAYING THIS", "ENGLISH GRAMMAR SECRETS"]
+            ];
+            const pick = hooks[Math.floor(Math.random() * hooks.length)];
+            document.getElementById('inH1').value = pick[0];
+            document.getElementById('inH2').value = pick[1];
+            document.getElementById('inSub').value = pick[2];
+
+            const r = Math.floor(Math.random() * styles50.length);
+            selectStylePreset(r);
+            showToast("⚡ Magic Hook Loaded!");
+        }
+
+        // Pure 4K PNG Export
+        function export4KPNG() {
+            const f = formats[currentFormat];
+            const oldW = canvas.width;
+            const oldH = canvas.height;
+
+            // Multiply to Native 4K Buffer (2160x3840 for Shorts / 3840x2160 for YouTube)
+            canvas.width = f.w * 2;
+            canvas.height = f.h * 2;
+            renderMaster();
+
+            const a = document.createElement('a');
+            a.download = `4X-LEARNER-${currentFormat.toUpperCase()}-4K-${Date.now()}.png`;
+            a.href = canvas.toDataURL('image/png', 1.0);
+            a.click();
+
+            // Reset
+            canvas.width = oldW;
+            canvas.height = oldH;
+            fitCanvasView();
+            renderMaster();
+            showToast("✓ Ultra-HD 4K Downloaded!");
+        }
+
+        // 60FPS Video Export
+        function exportMotionVideo() {
+            const vBtn = document.getElementById('videoBtn');
+            vBtn.innerText = "🔴 Rec 5s...";
+            showToast("Encoding 60FPS Video...");
+
+            const stream = canvas.captureStream(60);
+            let mime = "video/webm;codecs=vp9";
+            if (!MediaRecorder.isTypeSupported(mime)) mime = "video/webm";
+
+            const rec = new MediaRecorder(stream, {
+                mimeType: mime,
+                videoBitsPerSecond: 16000000
+            });
+
+            const chunks = [];
+            rec.ondataavailable = e => chunks.push(e.data);
+            rec.onstop = () => {
+                const blob = new Blob(chunks, { type: "video/webm" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.download = `4X-LEARNER-${currentFormat}-${Date.now()}.webm`;
+                a.href = url;
+                a.click();
+                vBtn.innerText = "🎥 Video";
+                showToast("✓ Motion Video Downloaded!");
+            };
+
+            rec.start();
+            setTimeout(() => rec.stop(), 5000);
+        }
+
+        // Mobile Sheet Toggler
+        function switchMobileSheet(tab) {
+            const left = document.getElementById('leftPanel');
+            const right = document.getElementById('rightPanel');
+            left.classList.remove('open');
+            right.classList.remove('open');
+
+            document.querySelectorAll('.mobile-tab-bar button').forEach(b => b.classList.remove('active'));
+
+            if (tab === 'left') {
+                left.classList.add('open');
+                event.currentTarget.classList.add('active');
+            } else if (tab === 'right') {
+                right.classList.add('open');
+                event.currentTarget.classList.add('active');
+            } else {
+                document.querySelectorAll('.mobile-tab-bar button')[1].classList.add('active');
+            }
+        }
+
+        function showToast(msg) {
+            toastBox.innerText = msg;
+            toastBox.classList.add('show');
+            setTimeout(() => toastBox.classList.remove('show'), 2000);
+        }
+    </script>
+</body>
+
+</html>

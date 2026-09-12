@@ -1,0 +1,2933 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>4X LEARNER — Premium English Mistake Shorts Studio</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #eef2f7;
+            --surface: rgba(255, 255, 255, .88);
+            --surface2: #ffffff;
+            --text: #101828;
+            --muted: #667085;
+            --line: rgba(15, 23, 42, .09);
+            --primary: #635bff;
+            --cyan: #06b6d4;
+            --shadow: 0 24px 70px rgba(15, 23, 42, .10);
+            --radius: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Plus Jakarta Sans", "Nirmala UI", "Mangal", "Segoe UI", system-ui, sans-serif;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(99, 91, 255, .10), transparent 28%),
+                radial-gradient(circle at 90% 20%, rgba(6, 182, 212, .09), transparent 26%),
+                linear-gradient(135deg, #f8fafc, #edf2f7);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        body {
+            padding-bottom: 30px;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        .app {
+            width: min(1500px, 100%);
+            margin: auto;
+            padding: 14px;
+        }
+
+        /* =========================================================
+   TOP BAR
+========================================================= */
+
+        .topbar {
+            min-height: 70px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, .78);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 10px;
+            z-index: 50;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-width: 0;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            flex: 0 0 48px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: -.5px;
+            border-radius: 16px;
+            background:
+                radial-gradient(circle at 25% 20%, rgba(255, 255, 255, .5), transparent 25%),
+                linear-gradient(135deg, #625bff, #06b6d4);
+            box-shadow:
+                0 10px 28px rgba(99, 91, 255, .30),
+                inset 0 1px rgba(255, 255, 255, .45);
+        }
+
+        .brandText {
+            min-width: 0;
+        }
+
+        .brand h1 {
+            font-size: 17px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .brand small {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .3px;
+            white-space: nowrap;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        /* =========================================================
+   BUTTONS
+========================================================= */
+
+        .btn {
+            min-height: 42px;
+            border: 1px solid var(--line);
+            border-radius: 13px;
+            padding: 9px 13px;
+            background: rgba(255, 255, 255, .85);
+            color: var(--text);
+            font-size: 11px;
+            font-weight: 900;
+            transition:
+                transform .18s ease,
+                box-shadow .18s ease,
+                border-color .18s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 25px rgba(15, 23, 42, .10);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(.98);
+        }
+
+        .btn.primary {
+            color: #fff;
+            border: 0;
+            background: linear-gradient(135deg, #625bff, #06b6d4);
+            box-shadow: 0 9px 25px rgba(99, 91, 255, .25);
+        }
+
+        .btn.green {
+            color: #fff;
+            border: 0;
+            background: linear-gradient(135deg, #059669, #10b981);
+            box-shadow: 0 8px 22px rgba(5, 150, 105, .20);
+        }
+
+        .btn.red {
+            color: #fff;
+            border: 0;
+            background: linear-gradient(135deg, #e11d48, #f43f5e);
+        }
+
+        .btn.gold {
+            color: #fff;
+            border: 0;
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+        }
+
+        /* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+        .layout {
+            display: grid;
+            grid-template-columns: 410px minmax(0, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+            align-items: start;
+        }
+
+        .panel {
+            border: 1px solid var(--line);
+            border-radius: 26px;
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+        }
+
+        /* =========================================================
+   CONTROL PANEL
+========================================================= */
+
+        .controls {
+            padding: 15px;
+            position: sticky;
+            top: 96px;
+            max-height: calc(100vh - 110px);
+            overflow: auto;
+        }
+
+        .controls::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .controls::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 20px;
+        }
+
+        .section {
+            padding: 0 0 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .section:last-child {
+            border-bottom: 0;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .sectionTitle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 9px;
+        }
+
+        .label {
+            color: #64748b;
+            font-size: 9.5px;
+            font-weight: 900;
+            letter-spacing: 1.15px;
+            text-transform: uppercase;
+        }
+
+        .badge {
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #4f46e5;
+            font-size: 8px;
+            font-weight: 900;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 205px;
+            max-height: 400px;
+            resize: vertical;
+            border: 1px solid #d7dee9;
+            border-radius: 17px;
+            padding: 13px;
+            background: linear-gradient(145deg, #fbfdff, #f4f7fb);
+            color: var(--text);
+            outline: 0;
+            font-size: 11px;
+            line-height: 1.65;
+            font-weight: 700;
+            box-shadow: inset 0 1px rgba(255, 255, 255, .8);
+        }
+
+        textarea:focus,
+        input:focus,
+        select:focus {
+            border-color: #635bff;
+            box-shadow: 0 0 0 3px rgba(99, 91, 255, .10);
+            outline: 0;
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type=text],
+        input[type=number],
+        select {
+            width: 100%;
+            min-height: 40px;
+            padding: 8px 10px;
+            border: 1px solid #d7dee9;
+            border-radius: 12px;
+            background: #f8fafc;
+            color: var(--text);
+            outline: 0;
+            font-size: 10.5px;
+            font-weight: 800;
+        }
+
+        input[type=range] {
+            width: 100%;
+            accent-color: #635bff;
+        }
+
+        .rangeRow {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 54px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .rangeValue {
+            min-height: 34px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 10px;
+            font-weight: 900;
+        }
+
+        /* =========================================================
+   THEME GRID
+========================================================= */
+
+        .themeGrid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 7px;
+            max-height: 250px;
+            overflow: auto;
+            padding: 3px;
+        }
+
+        .themeGrid::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .themeGrid::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .theme {
+            height: 52px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            border-radius: 13px;
+            padding: 0;
+            isolation: isolate;
+        }
+
+        .theme::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .35), transparent);
+            transform: translateX(-120%);
+            transition: .4s;
+            z-index: -1;
+        }
+
+        .theme:hover::after {
+            transform: translateX(120%);
+        }
+
+        .theme.active {
+            border-color: #fff;
+            outline: 2px solid #635bff;
+            box-shadow: 0 5px 16px rgba(99, 91, 255, .20);
+        }
+
+        .theme span {
+            position: absolute;
+            left: 6px;
+            bottom: 5px;
+            color: #fff;
+            font-size: 7px;
+            font-weight: 900;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, .8);
+        }
+
+        /* =========================================================
+   PREVIEW
+========================================================= */
+
+        .preview {
+            min-width: 0;
+            padding: 17px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .previewHead {
+            width: 100%;
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .previewTitle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: .7px;
+        }
+
+        .liveDot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 0 5px rgba(16, 185, 129, .10);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 4px rgba(16, 185, 129, .10)
+            }
+
+            50% {
+                box-shadow: 0 0 0 8px rgba(16, 185, 129, .02)
+            }
+        }
+
+        .status {
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: #ecfdf5;
+            color: #047857;
+            font-size: 9px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .stage {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 4px 0 8px;
+        }
+
+        .phone {
+            width: min(100%, 430px);
+            aspect-ratio: 9/16;
+            padding: 8px;
+            border-radius: 35px;
+            background:
+                linear-gradient(145deg, #111827, #020617);
+            border: 1px solid rgba(255, 255, 255, .18);
+            box-shadow:
+                0 35px 90px rgba(15, 23, 42, .27),
+                0 0 0 5px rgba(15, 23, 42, .03);
+            position: relative;
+        }
+
+        .phone::before {
+            content: "";
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25%;
+            height: 4px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, .18);
+            z-index: 3;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 27px;
+            background: #fff;
+        }
+
+        /* =========================================================
+   EXPORT BAR
+========================================================= */
+
+        .exportBar {
+            width: min(100%, 650px);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .exportBar .btn {
+            min-height: 44px;
+        }
+
+        .hint {
+            width: min(100%, 650px);
+            margin-top: 10px;
+            padding: 9px 12px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: rgba(248, 250, 252, .7);
+            color: #64748b;
+            text-align: center;
+            font-size: 9px;
+            line-height: 1.5;
+            font-weight: 700;
+        }
+
+        /* =========================================================
+   MOBILE
+========================================================= */
+
+        @media(max-width:1050px) {
+            .layout {
+                grid-template-columns: 360px minmax(0, 1fr);
+            }
+
+            .exportBar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width:850px) {
+            .topbar {
+                position: relative;
+                top: 0;
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .preview {
+                order: -1;
+            }
+
+            .controls {
+                position: relative;
+                top: 0;
+                max-height: none;
+                overflow: visible;
+            }
+
+            .phone {
+                width: min(88vw, 410px);
+            }
+        }
+
+        @media(max-width:600px) {
+            .app {
+                padding: 8px;
+            }
+
+            .topbar {
+                border-radius: 20px;
+                padding: 9px;
+            }
+
+            .logo {
+                width: 43px;
+                height: 43px;
+                flex-basis: 43px;
+                border-radius: 13px;
+            }
+
+            .brand h1 {
+                font-size: 14px;
+            }
+
+            .brand small {
+                font-size: 7px;
+            }
+
+            .actions {
+                gap: 5px;
+            }
+
+            .actions .btn {
+                min-height: 38px;
+                padding: 7px 8px;
+                font-size: 9px;
+            }
+
+            .actions .btn:first-child {
+                display: none;
+            }
+
+            .layout {
+                margin-top: 9px;
+                gap: 9px;
+            }
+
+            .panel {
+                border-radius: 21px;
+            }
+
+            .preview,
+            .controls {
+                padding: 11px;
+            }
+
+            .previewHead {
+                min-height: 35px;
+            }
+
+            .previewTitle {
+                font-size: 9px;
+            }
+
+            .status {
+                font-size: 8px;
+                padding: 6px 8px;
+            }
+
+            .phone {
+                width: min(91vw, 390px);
+                padding: 6px;
+                border-radius: 28px;
+            }
+
+            canvas {
+                border-radius: 22px;
+            }
+
+            .themeGrid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .theme {
+                height: 47px;
+            }
+
+            .exportBar {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hint {
+                font-size: 8px;
+            }
+        }
+
+        @media(max-width:390px) {
+            .brand small {
+                display: none;
+            }
+
+            .actions .btn {
+                padding-left: 7px;
+                padding-right: 7px;
+            }
+
+            .themeGrid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .grid2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header class="topbar">
+
+            <div class="brand">
+                <div class="logo">4X</div>
+                <div class="brandText">
+                    <h1>4X LEARNER</h1>
+                    <small>PREMIUM ENGLISH MISTAKE SHORTS STUDIO</small>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn" id="randomBtn">⚡ Random</button>
+                <button class="btn" id="speakBtn">🔊 Voice</button>
+                <button class="btn primary" id="animateBtn">▶ Animate</button>
+            </div>
+
+        </header>
+
+
+        <div class="layout">
+
+            <!-- =====================================================
+     LEFT CONTROL PANEL
+===================================================== -->
+
+            <aside class="panel controls">
+
+                <div class="section">
+
+                    <div class="sectionTitle">
+                        <div class="label">Single Script Input</div>
+                        <div class="badge">AUTO PARSE</div>
+                    </div>
+
+                    <textarea id="script">STOP SAYING THIS IN ENGLISH!
+DON’T SAY: I am agree with you.
+SAY THIS: I agree with you.
+हिंदी: मैं आपसे सहमत हूँ।
+TIP: “Agree” is already a verb, so we don’t say “am agree”.</textarea>
+
+                </div>
+
+
+                <div class="section">
+
+                    <div class="sectionTitle">
+                        <div class="label">Brand & Layout</div>
+                        <div class="badge">LIVE</div>
+                    </div>
+
+                    <div class="grid2">
+
+                        <div class="field">
+                            <label class="label">Lesson</label>
+                            <input id="lesson" type="text" value="DAILY ENGLISH #01">
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Brand</label>
+                            <input id="brand" type="text" value="4X LEARNER">
+                        </div>
+
+                    </div>
+
+                    <div style="height:8px"></div>
+
+                    <div class="grid2">
+
+                        <div class="field">
+                            <label class="label">Vertical Shift</label>
+                            <input id="yShift" type="number" min="-250" max="250" step="5" value="0">
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Corner Radius</label>
+                            <input id="radius" type="number" min="15" max="60" value="32">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="section">
+
+                    <div class="sectionTitle">
+                        <div class="label">Premium Themes</div>
+                        <div class="badge">30 THEMES</div>
+                    </div>
+
+                    <div class="themeGrid" id="themes"></div>
+
+                </div>
+
+
+                <div class="section">
+
+                    <div class="sectionTitle">
+                        <div class="label">Card Scale</div>
+                        <div class="badge">SAFE FIT</div>
+                    </div>
+
+                    <div class="rangeRow">
+                        <input id="scale" type="range" min="85" max="112" value="100">
+                        <div class="rangeValue" id="scaleVal">100%</div>
+                    </div>
+
+                    <div style="height:10px"></div>
+
+                    <div class="grid2">
+
+                        <div class="field">
+                            <label class="label">Font Style</label>
+
+                            <select id="fontSel">
+                                <option value="modern">Modern Sans</option>
+                                <option value="elegant">Elegant Serif</option>
+                            </select>
+
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Image Quality</label>
+
+                            <select id="resSel">
+                                <option value="2160">4K UHD</option>
+                                <option value="1440">2K QHD</option>
+                                <option value="1080">Full HD</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="section">
+
+                    <div class="sectionTitle">
+                        <div class="label">Video Settings</div>
+                        <div class="badge">SHORTS</div>
+                    </div>
+
+                    <div class="grid2">
+
+                        <div class="field">
+                            <label class="label">Duration</label>
+
+                            <select id="durationSel">
+                                <option value="5">5 Seconds</option>
+                                <option value="7">7 Seconds</option>
+                                <option value="9">9 Seconds</option>
+                                <option value="12">12 Seconds</option>
+                            </select>
+
+                        </div>
+
+                        <div class="field">
+                            <label class="label">FPS</label>
+
+                            <select id="fpsSel">
+                                <option value="30">30 FPS</option>
+                                <option value="60">60 FPS</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="section">
+
+                    <div class="sectionTitle">
+                        <div class="label">Export</div>
+                        <div class="badge">HIGH QUALITY</div>
+                    </div>
+
+                    <div class="grid2">
+
+                        <button class="btn green" id="pngBtn">
+                            🖼️ PNG
+                        </button>
+
+                        <button class="btn" id="jpgBtn">
+                            🖼️ JPG
+                        </button>
+
+                    </div>
+
+                    <div style="height:8px"></div>
+
+                    <button class="btn primary" id="videoBtn" style="width:100%">
+                        🎬 Create Shorts Video
+                    </button>
+
+                </div>
+
+
+                <button class="btn" id="resetBtn" style="width:100%">
+                    ↺ Reset Studio
+                </button>
+
+            </aside>
+
+
+            <!-- =====================================================
+     PREVIEW PANEL
+===================================================== -->
+
+            <main class="panel preview">
+
+                <div class="previewHead">
+
+                    <div class="previewTitle">
+                        <span class="liveDot"></span>
+                        LIVE 9:16 SHORTS PREVIEW
+                    </div>
+
+                    <div class="status" id="status">
+                        Ready
+                    </div>
+
+                </div>
+
+
+                <div class="stage">
+
+                    <div class="phone">
+                        <canvas id="canvas" width="1080" height="1920"></canvas>
+                    </div>
+
+                </div>
+
+
+                <div class="exportBar">
+
+                    <button class="btn primary" id="bigPng">
+                        ⚡ 4K PNG
+                    </button>
+
+                    <button class="btn" id="copyText">
+                        📋 Copy
+                    </button>
+
+                    <button class="btn green" id="quickVoice">
+                        🔊 Voice
+                    </button>
+
+                    <button class="btn gold" id="randomMobile">
+                        ✨ Random
+                    </button>
+
+                </div>
+
+
+                <div class="hint">
+                    DON’T SAY aur SAY THIS ko separate premium cards me render kiya gaya hai.
+                    Preview aur exported image same 9:16 canvas rendering use karte hain.
+                </div>
+
+            </main>
+
+        </div>
+
+
+        <div style="
+text-align:center;
+color:#94a3b8;
+font-size:9px;
+font-weight:800;
+padding:20px 5px;
+letter-spacing:.5px;
+">
+            4X LEARNER • LEARN • SPEAK • IMPROVE
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* =========================================================
+           CORE
+        ========================================================= */
+
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d", { alpha: false });
+
+        const $ = id => document.getElementById(id);
+
+
+        /* =========================================================
+           30 PREMIUM THEMES
+           name, background1, background2, primary, secondary,
+           text, wrongBG, rightBG
+        ========================================================= */
+
+        const themes = [
+
+            ["Royal Indigo", "#f8f9ff", "#e9e7ff", "#625bff", "#06b6d4", "#101828", "#fff1f2", "#ecfdf5"],
+
+            ["Ocean Blue", "#f0f9ff", "#dff6ff", "#0284c7", "#06b6d4", "#082f49", "#fff1f2", "#ecfdf5"],
+
+            ["Mint Fresh", "#f0fdf4", "#dcfce7", "#059669", "#10b981", "#064e3b", "#fff1f2", "#ecfdf5"],
+
+            ["Rose Pink", "#fff1f2", "#ffe4e6", "#e11d48", "#f43f5e", "#4c0519", "#fff1f2", "#ecfdf5"],
+
+            ["Purple Dream", "#faf5ff", "#f3e8ff", "#7c3aed", "#a855f7", "#2e1065", "#fff1f2", "#ecfdf5"],
+
+            ["Sky Glass", "#f8fafc", "#e0f2fe", "#2563eb", "#38bdf8", "#172554", "#fff1f2", "#ecfdf5"],
+
+            ["Amber Glow", "#fffbeb", "#fef3c7", "#d97706", "#f59e0b", "#451a03", "#fff1f2", "#ecfdf5"],
+
+            ["Coral Pop", "#fff7ed", "#ffedd5", "#ea580c", "#fb923c", "#431407", "#fff1f2", "#ecfdf5"],
+
+            ["Slate Pro", "#f8fafc", "#e2e8f0", "#334155", "#64748b", "#0f172a", "#fff1f2", "#ecfdf5"],
+
+            ["Emerald Pro", "#f0fdfa", "#ccfbf1", "#0d9488", "#14b8a6", "#134e4a", "#fff1f2", "#ecfdf5"],
+
+            ["Crimson", "#fff1f2", "#fecdd3", "#be123c", "#fb7185", "#4c0519", "#fff1f2", "#ecfdf5"],
+
+            ["Midnight", "#0b1020", "#18233d", "#6366f1", "#38bdf8", "#ffffff", "#2a1220", "#0b2d22"],
+
+            ["Carbon", "#09090b", "#27272a", "#f43f5e", "#fbbf24", "#ffffff", "#281018", "#10241c"],
+
+            ["Forest Night", "#022c22", "#064e3b", "#10b981", "#34d399", "#ecfdf5", "#291018", "#052e20"],
+
+            ["Cyber Cyan", "#020617", "#0b1225", "#00f2fe", "#4facfe", "#f8fafc", "#25101a", "#062d2c"],
+
+            ["Neon Violet", "#10051c", "#24103d", "#c026d3", "#8b5cf6", "#ffffff", "#321020", "#102b25"],
+
+            ["Black Gold", "#0c0a09", "#292524", "#f59e0b", "#fde047", "#fff7ed", "#32131b", "#12261c"],
+
+            ["Dark Ocean", "#082f49", "#0c4a6e", "#38bdf8", "#22d3ee", "#f0f9ff", "#30121c", "#082f26"],
+
+            ["Dark Rose", "#1f0a12", "#4c0519", "#fb7185", "#f43f5e", "#fff1f2", "#34121b", "#10251d"],
+
+            ["Deep Purple", "#1e1033", "#312e81", "#a78bfa", "#c084fc", "#faf5ff", "#32131d", "#12271f"],
+
+            ["Ice White", "#ffffff", "#eff6ff", "#2563eb", "#06b6d4", "#0f172a", "#fff1f2", "#ecfdf5"],
+
+            ["Lavender", "#fafaff", "#ede9fe", "#8b5cf6", "#6366f1", "#1e1b4b", "#fff1f2", "#ecfdf5"],
+
+            ["Aqua Mint", "#f0fdfa", "#cffafe", "#0f766e", "#06b6d4", "#134e4a", "#fff1f2", "#ecfdf5"],
+
+            ["Sunset", "#fff7ed", "#fce7f3", "#f97316", "#ec4899", "#431407", "#fff1f2", "#ecfdf5"],
+
+            ["Candy Blue", "#eff6ff", "#e0e7ff", "#4f46e5", "#3b82f6", "#172554", "#fff1f2", "#ecfdf5"],
+
+            ["Berry Glow", "#fdf2f8", "#fce7f3", "#db2777", "#f472b6", "#500724", "#fff1f2", "#ecfdf5"],
+
+            ["Clean Pro", "#ffffff", "#f8fafc", "#475569", "#94a3b8", "#0f172a", "#fff1f2", "#ecfdf5"],
+
+            ["Aurora", "#f0fdf4", "#e0f2fe", "#059669", "#4f46e5", "#052e16", "#fff1f2", "#ecfdf5"],
+
+            ["Electric Lime", "#f7fee7", "#ecfccb", "#65a30d", "#84cc16", "#1a2e05", "#fff1f2", "#ecfdf5"],
+
+            ["Platinum Dark", "#111827", "#1f2937", "#e5e7eb", "#60a5fa", "#ffffff", "#30121d", "#0d2d22"]
+
+        ];
+
+
+        let state = {
+            theme: 0,
+            res: 2160,
+            scale: 1,
+            yShift: 0,
+            font: "modern",
+            radius: 32,
+            playing: false,
+            duration: 5,
+            fps: 30,
+            animationTime: 0
+        };
+
+
+        let parsed = {
+            hook: "STOP SAYING THIS IN ENGLISH!",
+            dont: "I am agree with you.",
+            say: "I agree with you.",
+            hindi: "मैं आपसे सहमत हूँ।",
+            tip: "“Agree” is already a verb, so we don’t say “am agree”."
+        };
+
+
+        /* =========================================================
+           PARSER
+        ========================================================= */
+
+        function parseScript() {
+
+            const lines = $("script").value
+                .split(/\r?\n/)
+                .map(x => x.trim())
+                .filter(Boolean);
+
+            if (!lines.length) return;
+
+            parsed.hook =
+                lines.find(x => /stop|never|avoid|mistake|saying/i.test(x))
+                || lines[0]
+                || parsed.hook;
+
+            const d = lines.find(x => /don.?t\s*say/i.test(x));
+
+            parsed.dont = d
+                ? d.replace(/^.*?don.?t\s*say\s*:?\s*/i, "").trim()
+                : (lines[1] || parsed.dont);
+
+            const c = lines.find(x => /say\s*this|correct/i.test(x));
+
+            parsed.say = c
+                ? c.replace(/^.*?(say\s*this|correct)\s*:?\s*/i, "").trim()
+                : (lines[2] || parsed.say);
+
+            const h = lines.find(x => /hindi|हिंदी|अर्थ|मतलब/i.test(x));
+
+            parsed.hindi = h
+                ? h.replace(/^.*?(hindi|हिंदी|अर्थ|मतलब)\s*:?\s*/i, "").trim()
+                : (lines[3] || parsed.hindi);
+
+            const p = lines.find(x => /tip|grammar|rule|because/i.test(x));
+
+            parsed.tip = p
+                ? p.replace(/^.*?(tip|grammar|rule|because)\s*:?\s*/i, "").trim()
+                : (lines[4] || parsed.tip);
+        }
+
+
+        /* =========================================================
+           ROUND RECT
+        ========================================================= */
+
+        function rr(c, x, y, w, h, r) {
+
+            r = Math.max(0, Math.min(r, Math.min(w, h) / 2));
+
+            c.beginPath();
+            c.moveTo(x + r, y);
+            c.arcTo(x + w, y, x + w, y + h, r);
+            c.arcTo(x + w, y + h, x, y + h, r);
+            c.arcTo(x, y + h, x, y, r);
+            c.arcTo(x, y, x + w, y, r);
+            c.closePath();
+        }
+
+
+        /* =========================================================
+           FONT
+        ========================================================= */
+
+        function fontFamily() {
+
+            if (state.font === "elegant") {
+                return 'Georgia,"Nirmala UI","Mangal",serif';
+            }
+
+            return '"Plus Jakarta Sans","Nirmala UI","Mangal","Segoe UI",sans-serif';
+        }
+
+
+        /* =========================================================
+           TEXT FIT
+        ========================================================= */
+
+        function fitFont(c, text, maxW, startSize, minSize, fontWeight, fontFamily) {
+
+            let size = startSize;
+
+            while (size > minSize) {
+
+                c.font = `${fontWeight} ${size}px ${fontFamily}`;
+
+                if (c.measureText(text).width <= maxW) {
+                    return size;
+                }
+
+                size -= 2;
+            }
+
+            return minSize;
+        }
+
+
+        /* =========================================================
+           SMART WRAP
+        ========================================================= */
+
+        function wrapText(c, text, maxW, size, fontFamily, fontWeight = 900, maxLines = 4) {
+
+            c.font = `${fontWeight} ${size}px ${fontFamily}`;
+
+            const words = String(text)
+                .replace(/\s+/g, " ")
+                .trim()
+                .split(" ");
+
+            const lines = [];
+            let line = "";
+
+            for (const word of words) {
+
+                const test = line ? line + " " + word : word;
+
+                if (c.measureText(test).width <= maxW) {
+
+                    line = test;
+
+                } else {
+
+                    if (line) {
+                        lines.push(line);
+                    }
+
+                    line = word;
+
+                    if (lines.length >= maxLines - 1) {
+                        break;
+                    }
+                }
+            }
+
+            if (line) {
+                lines.push(line);
+            }
+
+            return lines.slice(0, maxLines);
+        }
+
+
+        /* =========================================================
+           DRAW TEXT
+        ========================================================= */
+
+        function drawWrapped(
+            c,
+            text,
+            x,
+            y,
+            maxW,
+            size,
+            family,
+            color,
+            align = "left",
+            maxLines = 4,
+            lineHeight = 1.18,
+            weight = 900
+        ) {
+
+            const lines = wrapText(
+                c,
+                text,
+                maxW,
+                size,
+                family,
+                weight,
+                maxLines
+            );
+
+            c.fillStyle = color;
+            c.font = `${weight} ${size}px ${family}`;
+            c.textAlign = align;
+            c.textBaseline = "top";
+
+            lines.forEach((line, i) => {
+
+                c.fillText(
+                    line,
+                    x,
+                    y + i * size * lineHeight
+                );
+
+            });
+
+            return y + lines.length * size * lineHeight;
+        }
+
+
+        /* =========================================================
+           TEXT CLAMP
+        ========================================================= */
+
+        function cleanText(text) {
+
+            return String(text || "")
+                .replace(/\s+/g, " ")
+                .trim();
+        }
+
+
+        /* =========================================================
+           MAIN RENDER
+        ========================================================= */
+
+        function render(targetCtx, targetW, targetH, animationProgress = 0) {
+
+            parseScript();
+
+            const T = themes[state.theme];
+
+            const S = targetW / 1080;
+
+            const family = fontFamily();
+
+            const pad = 72 * S;
+
+            const scale = state.scale * S;
+
+            const radius = state.radius * S;
+
+            const dark =
+                state.theme >= 11 &&
+                state.theme <= 19 ||
+                state.theme === 29;
+
+            const hook = cleanText(parsed.hook);
+            const dont = cleanText(parsed.dont);
+            const say = cleanText(parsed.say);
+            const hindi = cleanText(parsed.hindi);
+            const tip = cleanText(parsed.tip);
+
+
+            /* -----------------------------------------
+               RESET
+            ----------------------------------------- */
+
+            targetCtx.setTransform(1, 0, 0, 1, 0, 0);
+
+            targetCtx.clearRect(
+                0,
+                0,
+                targetW,
+                targetH
+            );
+
+
+            /* -----------------------------------------
+               BACKGROUND
+            ----------------------------------------- */
+
+            const bg = targetCtx.createLinearGradient(
+                0,
+                0,
+                targetW,
+                targetH
+            );
+
+            bg.addColorStop(0, T[1]);
+            bg.addColorStop(.52, T[2]);
+            bg.addColorStop(1, dark ? "#020617" : "#ffffff");
+
+            targetCtx.fillStyle = bg;
+            targetCtx.fillRect(
+                0,
+                0,
+                targetW,
+                targetH
+            );
+
+
+            /* -----------------------------------------
+               AMBIENT GLOW
+            ----------------------------------------- */
+
+            const glows = [
+                [170, 220, 330, T[3]],
+                [880, 700, 300, T[4]],
+                [180, 1430, 280, T[4]],
+                [900, 1600, 360, T[3]]
+            ];
+
+            glows.forEach(gd => {
+
+                const gx = gd[0] * S;
+                const gy = gd[1] * S;
+                const gr = gd[2] * S;
+
+                const g = targetCtx.createRadialGradient(
+                    gx, gy, 0,
+                    gx, gy, gr
+                );
+
+                g.addColorStop(
+                    0,
+                    gd[3] + (dark ? "38" : "24")
+                );
+
+                g.addColorStop(
+                    1,
+                    "transparent"
+                );
+
+                targetCtx.fillStyle = g;
+
+                targetCtx.fillRect(
+                    gx - gr,
+                    gy - gr,
+                    gr * 2,
+                    gr * 2
+                );
+            });
+
+
+            /* -----------------------------------------
+               ANIMATION PARTICLES
+            ----------------------------------------- */
+
+            if (animationProgress > 0) {
+
+                for (let i = 0; i < 18; i++) {
+
+                    const x = (
+                        (i * 173 +
+                            animationProgress * 250) %
+                        1080
+                    ) * S;
+
+                    const y = (
+                        (i * 97 +
+                            animationProgress * 180) %
+                        1920
+                    ) * S;
+
+                    const r = (2 + (i % 4)) * S;
+
+                    targetCtx.globalAlpha = .10 + (i % 3) * .04;
+
+                    targetCtx.fillStyle = i % 2 ? T[3] : T[4];
+
+                    targetCtx.beginPath();
+                    targetCtx.arc(x, y, r, 0, Math.PI * 2);
+                    targetCtx.fill();
+
+                }
+
+                targetCtx.globalAlpha = 1;
+            }
+
+
+            /* -----------------------------------------
+               GLOBAL SHIFT
+            ----------------------------------------- */
+
+            targetCtx.save();
+
+            targetCtx.translate(
+                0,
+                state.yShift * S
+            );
+
+
+            /* -----------------------------------------
+               TOP META
+            ----------------------------------------- */
+
+            targetCtx.fillStyle =
+                dark
+                    ? "rgba(255,255,255,.58)"
+                    : "#64748b";
+
+            targetCtx.font =
+                `800 ${25 * S}px ${family}`;
+
+            targetCtx.textAlign = "left";
+            targetCtx.textBaseline = "top";
+
+            targetCtx.fillText(
+                cleanText($("lesson").value) || "DAILY ENGLISH",
+                pad,
+                48 * S
+            );
+
+
+            targetCtx.fillStyle =
+                dark
+                    ? "#ffffff"
+                    : "#0f172a";
+
+            targetCtx.font =
+                `900 ${27 * S}px ${family}`;
+
+            targetCtx.textAlign = "right";
+
+            targetCtx.fillText(
+                cleanText($("brand").value) || "4X LEARNER",
+                targetW - pad,
+                46 * S
+            );
+
+
+            /* -----------------------------------------
+               HOOK
+            ----------------------------------------- */
+
+            let hookSize =
+                fitFont(
+                    targetCtx,
+                    hook,
+                    targetW - pad * 2,
+                    66 * scale,
+                    42 * S,
+                    900,
+                    family
+                );
+
+            drawWrapped(
+                targetCtx,
+                hook,
+                pad,
+                104 * S,
+                targetW - pad * 2,
+                hookSize,
+                family,
+                dark ? "#ffffff" : "#0f172a",
+                "left",
+                2,
+                1.12,
+                900
+            );
+
+
+            /* -----------------------------------------
+               PREMIUM DIVIDER
+            ----------------------------------------- */
+
+            const divider =
+                targetCtx.createLinearGradient(
+                    pad,
+                    0,
+                    targetW - pad,
+                    0
+                );
+
+            divider.addColorStop(0, T[3]);
+            divider.addColorStop(.5, T[4]);
+            divider.addColorStop(1, T[3]);
+
+            targetCtx.fillStyle = divider;
+
+            targetCtx.fillRect(
+                pad,
+                258 * S,
+                targetW - pad * 2,
+                5 * S
+            );
+
+
+            /* -----------------------------------------
+               MAIN CARD
+            ----------------------------------------- */
+
+            const boxX = pad;
+            const boxY = 292 * S;
+            const boxW = targetW - pad * 2;
+            const boxH = 1460 * S;
+
+            targetCtx.save();
+
+            targetCtx.shadowColor =
+                dark
+                    ? "rgba(0,0,0,.55)"
+                    : "rgba(15,23,42,.14)";
+
+            targetCtx.shadowBlur = 42 * S;
+            targetCtx.shadowOffsetY = 18 * S;
+
+            rr(
+                targetCtx,
+                boxX,
+                boxY,
+                boxW,
+                boxH,
+                radius
+            );
+
+            targetCtx.fillStyle =
+                dark
+                    ? "rgba(15,23,42,.92)"
+                    : "rgba(255,255,255,.96)";
+
+            targetCtx.fill();
+
+            targetCtx.restore();
+
+
+            targetCtx.lineWidth = 2 * S;
+
+            targetCtx.strokeStyle =
+                dark
+                    ? "rgba(255,255,255,.12)"
+                    : "rgba(226,232,240,.95)";
+
+            rr(
+                targetCtx,
+                boxX,
+                boxY,
+                boxW,
+                boxH,
+                radius
+            );
+
+            targetCtx.stroke();
+
+
+            /* -----------------------------------------
+               CARD HEADER
+            ----------------------------------------- */
+
+            targetCtx.fillStyle =
+                dark
+                    ? "rgba(255,255,255,.38)"
+                    : "#94a3b8";
+
+            targetCtx.font =
+                `900 ${18 * S}px ${family}`;
+
+            targetCtx.textAlign = "left";
+
+            targetCtx.fillText(
+                "ENGLISH MISTAKE FIX",
+                boxX + 35 * S,
+                boxY + 30 * S
+            );
+
+
+            targetCtx.textAlign = "right";
+
+            targetCtx.fillStyle = T[3];
+
+            targetCtx.fillText(
+                "4X",
+                boxX + boxW - 35 * S,
+                boxY + 30 * S
+            );
+
+
+            /* -----------------------------------------
+               INNER BOXES
+            ----------------------------------------- */
+
+            const innerX = boxX + 28 * S;
+
+            const innerW = boxW - 56 * S;
+
+            const innerH = 505 * S;
+
+            const wrongY = boxY + 73 * S;
+
+            const rightY = boxY + 660 * S;
+
+
+            /* =========================================
+               WRONG BOX
+            ========================================= */
+
+            targetCtx.save();
+
+            targetCtx.shadowColor =
+                dark
+                    ? "rgba(225,29,72,.16)"
+                    : "rgba(225,29,72,.10)";
+
+            targetCtx.shadowBlur = 25 * S;
+
+            rr(
+                targetCtx,
+                innerX,
+                wrongY,
+                innerW,
+                innerH,
+                radius * .68
+            );
+
+            targetCtx.fillStyle =
+                dark
+                    ? "rgba(127,29,55,.18)"
+                    : T[6];
+
+            targetCtx.fill();
+
+            targetCtx.restore();
+
+
+            targetCtx.lineWidth = 2 * S;
+
+            targetCtx.strokeStyle =
+                dark
+                    ? "rgba(251,113,133,.30)"
+                    : "#fecdd3";
+
+            rr(
+                targetCtx,
+                innerX,
+                wrongY,
+                innerW,
+                innerH,
+                radius * .68
+            );
+
+            targetCtx.stroke();
+
+
+            /* WRONG TOP ACCENT */
+
+            const wrongAccent =
+                targetCtx.createLinearGradient(
+                    innerX,
+                    0,
+                    innerX + innerW,
+                    0
+                );
+
+            wrongAccent.addColorStop(0, "#e11d48");
+            wrongAccent.addColorStop(1, "#fb7185");
+
+            targetCtx.fillStyle = wrongAccent;
+
+            rr(
+                targetCtx,
+                innerX,
+                wrongY,
+                innerW,
+                8 * S,
+                8 * S
+            );
+
+            targetCtx.fill();
+
+
+            /* WRONG BADGE */
+
+            const wrongBadgeX = innerX + 28 * S;
+            const wrongBadgeY = wrongY + 28 * S;
+
+            const wrongBadgeW = 220 * S;
+            const badgeH = 46 * S;
+
+            rr(
+                targetCtx,
+                wrongBadgeX,
+                wrongBadgeY,
+                wrongBadgeW,
+                badgeH,
+                badgeH / 2
+            );
+
+            targetCtx.fillStyle = "#e11d48";
+
+            targetCtx.fill();
+
+
+            targetCtx.fillStyle = "#fff";
+
+            targetCtx.font =
+                `900 ${20 * S}px ${family}`;
+
+            targetCtx.textAlign = "center";
+            targetCtx.textBaseline = "middle";
+
+            targetCtx.fillText(
+                "✕  DON'T SAY",
+                wrongBadgeX + wrongBadgeW / 2,
+                wrongBadgeY + badgeH / 2
+            );
+
+
+            /* WRONG SENTENCE */
+
+            const wrongTextY = wrongY + 105 * S;
+
+            let wrongSize =
+                fitFont(
+                    targetCtx,
+                    `“${dont}”`,
+                    innerW - 62 * S,
+                    58 * scale,
+                    34 * S,
+                    900,
+                    family
+                );
+
+            const afterWrong =
+                drawWrapped(
+                    targetCtx,
+                    `“${dont}”`,
+                    innerX + 31 * S,
+                    wrongTextY,
+                    innerW - 62 * S,
+                    wrongSize,
+                    family,
+                    dark ? "#fb7185" : "#be123c",
+                    "left",
+                    3,
+                    1.16,
+                    900
+                );
+
+
+            /* WRONG HINDI */
+
+            drawWrapped(
+                targetCtx,
+                `(${hindi})`,
+                innerX + 32 * S,
+                afterWrong + 15 * S,
+                innerW - 64 * S,
+                31 * scale,
+                family,
+                dark ? "#fda4af" : "#9f1239",
+                "left",
+                2,
+                1.18,
+                800
+            );
+
+
+            /* =========================================
+               CENTER CONNECTOR
+            ========================================= */
+
+            const connectorY = boxY + 620 * S;
+
+            targetCtx.beginPath();
+
+            targetCtx.arc(
+                targetW / 2,
+                connectorY,
+                30 * S,
+                0,
+                Math.PI * 2
+            );
+
+            targetCtx.fillStyle =
+                dark
+                    ? "rgba(255,255,255,.06)"
+                    : "#fff";
+
+            targetCtx.fill();
+
+            targetCtx.lineWidth = 2.5 * S;
+
+            targetCtx.strokeStyle = T[3];
+
+            targetCtx.stroke();
+
+
+            targetCtx.fillStyle = T[3];
+
+            targetCtx.font =
+                `900 ${25 * S}px ${family}`;
+
+            targetCtx.textAlign = "center";
+            targetCtx.textBaseline = "middle";
+
+            targetCtx.fillText(
+                "↓",
+                targetW / 2,
+                connectorY
+            );
+
+
+            /* =========================================
+               RIGHT BOX
+            ========================================= */
+
+            targetCtx.save();
+
+            targetCtx.shadowColor =
+                dark
+                    ? "rgba(16,185,129,.14)"
+                    : "rgba(5,150,105,.10)";
+
+            targetCtx.shadowBlur = 25 * S;
+
+            rr(
+                targetCtx,
+                innerX,
+                rightY,
+                innerW,
+                innerH,
+                radius * .68
+            );
+
+            targetCtx.fillStyle =
+                dark
+                    ? "rgba(5,150,105,.15)"
+                    : T[7];
+
+            targetCtx.fill();
+
+            targetCtx.restore();
+
+
+            targetCtx.lineWidth = 2 * S;
+
+            targetCtx.strokeStyle =
+                dark
+                    ? "rgba(52,211,153,.30)"
+                    : "#bbf7d0";
+
+            rr(
+                targetCtx,
+                innerX,
+                rightY,
+                innerW,
+                innerH,
+                radius * .68
+            );
+
+            targetCtx.stroke();
+
+
+            /* RIGHT ACCENT */
+
+            const rightAccent =
+                targetCtx.createLinearGradient(
+                    innerX,
+                    0,
+                    innerX + innerW,
+                    0
+                );
+
+            rightAccent.addColorStop(0, "#059669");
+            rightAccent.addColorStop(1, "#10b981");
+
+            targetCtx.fillStyle = rightAccent;
+
+            rr(
+                targetCtx,
+                innerX,
+                rightY,
+                innerW,
+                8 * S,
+                8 * S
+            );
+
+            targetCtx.fill();
+
+
+            /* RIGHT BADGE */
+
+            const rightBadgeX = innerX + 28 * S;
+            const rightBadgeY = rightY + 28 * S;
+            const rightBadgeW = 210 * S;
+
+            rr(
+                targetCtx,
+                rightBadgeX,
+                rightBadgeY,
+                rightBadgeW,
+                badgeH,
+                badgeH / 2
+            );
+
+            targetCtx.fillStyle = "#059669";
+
+            targetCtx.fill();
+
+            targetCtx.fillStyle = "#fff";
+
+            targetCtx.font =
+                `900 ${20 * S}px ${family}`;
+
+            targetCtx.textAlign = "center";
+            targetCtx.textBaseline = "middle";
+
+            targetCtx.fillText(
+                "✓  SAY THIS",
+                rightBadgeX + rightBadgeW / 2,
+                rightBadgeY + badgeH / 2
+            );
+
+
+            /* RIGHT SENTENCE */
+
+            const rightTextY = rightY + 105 * S;
+
+            let rightSize =
+                fitFont(
+                    targetCtx,
+                    `“${say}”`,
+                    innerW - 62 * S,
+                    60 * scale,
+                    34 * S,
+                    900,
+                    family
+                );
+
+            const afterRight =
+                drawWrapped(
+                    targetCtx,
+                    `“${say}”`,
+                    innerX + 31 * S,
+                    rightTextY,
+                    innerW - 62 * S,
+                    rightSize,
+                    family,
+                    dark ? "#34d399" : "#047857",
+                    "left",
+                    3,
+                    1.16,
+                    900
+                );
+
+
+            /* RIGHT HINDI */
+
+            drawWrapped(
+                targetCtx,
+                `(${hindi})`,
+                innerX + 32 * S,
+                afterRight + 15 * S,
+                innerW - 64 * S,
+                31 * scale,
+                family,
+                dark ? "#6ee7b7" : "#065f46",
+                "left",
+                2,
+                1.18,
+                800
+            );
+
+
+            /* =========================================
+               TIP
+            ========================================= */
+
+            const tipY = boxY + 1265 * S;
+
+            targetCtx.fillStyle =
+                dark
+                    ? "rgba(255,255,255,.08)"
+                    : "#fffbeb";
+
+            rr(
+                targetCtx,
+                innerX,
+                tipY,
+                innerW,
+                145 * S,
+                18 * S
+            );
+
+            targetCtx.fill();
+
+
+            targetCtx.lineWidth = 1.5 * S;
+
+            targetCtx.strokeStyle =
+                dark
+                    ? "rgba(245,158,11,.20)"
+                    : "#fde68a";
+
+            rr(
+                targetCtx,
+                innerX,
+                tipY,
+                innerW,
+                145 * S,
+                18 * S
+            );
+
+            targetCtx.stroke();
+
+
+            /* TIP LABEL */
+
+            targetCtx.fillStyle = "#d97706";
+
+            targetCtx.font =
+                `900 ${19 * S}px ${family}`;
+
+            targetCtx.textAlign = "left";
+            targetCtx.textBaseline = "top";
+
+            targetCtx.fillText(
+                "💡 QUICK TIP",
+                innerX + 20 * S,
+                tipY + 20 * S
+            );
+
+
+            /* TIP CONTENT */
+
+            drawWrapped(
+                targetCtx,
+                tip,
+                innerX + 20 * S,
+                tipY + 54 * S,
+                innerW - 40 * S,
+                25 * scale,
+                family,
+                dark ? "#cbd5e1" : "#475569",
+                "left",
+                3,
+                1.22,
+                800
+            );
+
+
+            targetCtx.restore();
+
+
+            /* -----------------------------------------
+               FOOTER
+            ----------------------------------------- */
+
+            targetCtx.fillStyle =
+                dark
+                    ? "rgba(255,255,255,.45)"
+                    : "#94a3b8";
+
+            targetCtx.font =
+                `800 ${21 * S}px ${family}`;
+
+            targetCtx.textAlign = "center";
+            targetCtx.textBaseline = "middle";
+
+            targetCtx.fillText(
+                "LEARN  •  SPEAK  •  IMPROVE",
+                targetW / 2,
+                targetH - 47 * S
+            );
+
+        }
+
+
+        /* =========================================================
+           NORMAL DRAW
+        ========================================================= */
+
+        function draw() {
+
+            render(
+                ctx,
+                canvas.width,
+                canvas.height,
+                state.playing ? state.animationTime : 0
+            );
+
+        }
+
+
+        /* =========================================================
+           THEMES
+        ========================================================= */
+
+        function buildThemes() {
+
+            const box = $("themes");
+
+            box.innerHTML = "";
+
+            themes.forEach((t, i) => {
+
+                const b = document.createElement("button");
+
+                b.className =
+                    "theme" +
+                    (i === state.theme ? " active" : "");
+
+                b.title = t[0];
+
+                b.style.background =
+                    `radial-gradient(circle at 25% 20%,${t[3]},transparent 45%),
+       linear-gradient(135deg,${t[1]},${t[2]})`;
+
+                b.innerHTML =
+                    `<span>${t[0]}</span>`;
+
+                b.onclick = () => {
+
+                    state.theme = i;
+
+                    document
+                        .querySelectorAll(".theme")
+                        .forEach(x => x.classList.remove("active"));
+
+                    b.classList.add("active");
+
+                    draw();
+
+                };
+
+                box.appendChild(b);
+
+            });
+
+        }
+
+
+        /* =========================================================
+           VOICE
+        ========================================================= */
+
+        function speak() {
+
+            parseScript();
+
+            if (!("speechSynthesis" in window)) {
+
+                alert(
+                    "Speech synthesis is not supported in this browser."
+                );
+
+                return;
+            }
+
+            speechSynthesis.cancel();
+
+            const a =
+                new SpeechSynthesisUtterance(
+                    parsed.dont
+                );
+
+            a.lang = "en-US";
+            a.rate = 1.04;
+            a.pitch = .95;
+
+            const b =
+                new SpeechSynthesisUtterance(
+                    parsed.say
+                );
+
+            b.lang = "en-US";
+            b.rate = 1.06;
+            b.pitch = 1.05;
+
+            const c =
+                new SpeechSynthesisUtterance(
+                    parsed.hindi
+                );
+
+            c.lang = "hi-IN";
+            c.rate = 1.0;
+            c.pitch = 1.0;
+
+            a.onstart = () => {
+                $("status").textContent = "Wrong sentence...";
+            };
+
+            b.onstart = () => {
+                $("status").textContent = "Correct sentence...";
+            };
+
+            c.onstart = () => {
+                $("status").textContent = "Hindi meaning...";
+            };
+
+            c.onend = () => {
+                $("status").textContent = "Voice complete";
+            };
+
+            speechSynthesis.speak(a);
+            speechSynthesis.speak(b);
+            speechSynthesis.speak(c);
+        }
+
+
+        /* =========================================================
+           PREVIEW ANIMATION
+        ========================================================= */
+
+        let animationStart = 0;
+
+        function animatePreview() {
+
+            if (state.playing) {
+
+                state.playing = false;
+
+                $("animateBtn").textContent = "▶ Animate";
+
+                $("status").textContent = "Ready";
+
+                draw();
+
+                return;
+            }
+
+            state.playing = true;
+
+            $("animateBtn").textContent = "■ Stop";
+
+            $("status").textContent = "Live animation";
+
+            animationStart = performance.now();
+
+            function loop(now) {
+
+                if (!state.playing) {
+                    return;
+                }
+
+                state.animationTime =
+                    ((now - animationStart) / 3000) % 1;
+
+                draw();
+
+                requestAnimationFrame(loop);
+            }
+
+            requestAnimationFrame(loop);
+        }
+
+
+        /* =========================================================
+           IMAGE EXPORT
+        ========================================================= */
+
+        function exportImage(type) {
+
+            parseScript();
+
+            const w = Number(state.res);
+
+            const h = Math.round(w * 16 / 9);
+
+            const out = document.createElement("canvas");
+
+            out.width = w;
+            out.height = h;
+
+            const outCtx =
+                out.getContext("2d", { alpha: false });
+
+            render(
+                outCtx,
+                w,
+                h,
+                0
+            );
+
+            $("status").textContent =
+                `Rendering ${w}×${h}...`;
+
+            setTimeout(() => {
+
+                out.toBlob(
+                    blob => {
+
+                        if (!blob) {
+
+                            $("status").textContent =
+                                "Export failed";
+
+                            alert("Image export failed.");
+
+                            return;
+                        }
+
+                        const url =
+                            URL.createObjectURL(blob);
+
+                        const a =
+                            document.createElement("a");
+
+                        a.href = url;
+
+                        a.download =
+                            `4X-Learner-${w}p-${Date.now()}.${type}`;
+
+                        document.body.appendChild(a);
+
+                        a.click();
+
+                        a.remove();
+
+                        setTimeout(
+                            () => URL.revokeObjectURL(url),
+                            3000
+                        );
+
+                        $("status").textContent =
+                            `${w}×${h} ${type.toUpperCase()} exported`;
+
+                    },
+                    type === "png"
+                        ? "image/png"
+                        : "image/jpeg",
+                    .98
+                );
+
+            }, 40);
+
+        }
+
+
+        /* =========================================================
+           VIDEO EXPORT
+        ========================================================= */
+
+        function recordVideo() {
+
+            if (
+                !canvas.captureStream ||
+                !window.MediaRecorder
+            ) {
+
+                alert(
+                    "Video recording is not supported here. Please use the latest Chrome or Microsoft Edge."
+                );
+
+                return;
+            }
+
+
+            if (state.playing) {
+                state.playing = false;
+                $("animateBtn").textContent = "▶ Animate";
+            }
+
+
+            const fps =
+                Number(state.fps);
+
+            const duration =
+                Number(state.duration) * 1000;
+
+
+            $("videoBtn").disabled = true;
+
+            $("status").textContent =
+                `Preparing ${fps}FPS video...`;
+
+
+            const stream =
+                canvas.captureStream(fps);
+
+
+            let mime = "";
+
+            const types = [
+                "video/webm;codecs=vp9",
+                "video/webm;codecs=vp8",
+                "video/webm"
+            ];
+
+
+            for (const t of types) {
+
+                if (
+                    MediaRecorder.isTypeSupported(t)
+                ) {
+
+                    mime = t;
+                    break;
+                }
+            }
+
+
+            if (!mime) {
+
+                alert(
+                    "This browser does not support WebM recording."
+                );
+
+                $("videoBtn").disabled = false;
+
+                return;
+            }
+
+
+            const chunks = [];
+
+
+            let recorder;
+
+            try {
+
+                recorder =
+                    new MediaRecorder(
+                        stream,
+                        {
+                            mimeType: mime,
+                            videoBitsPerSecond:
+                                fps === 60
+                                    ? 24000000
+                                    : 18000000
+                        }
+                    );
+
+            } catch (err) {
+
+                alert(
+                    "Video recorder error: " +
+                    err.message
+                );
+
+                $("videoBtn").disabled = false;
+
+                return;
+            }
+
+
+            recorder.ondataavailable = e => {
+
+                if (e.data && e.data.size) {
+
+                    chunks.push(e.data);
+
+                }
+
+            };
+
+
+            recorder.onerror = e => {
+
+                console.error(e);
+
+                $("videoBtn").disabled = false;
+
+                $("status").textContent =
+                    "Video error";
+
+            };
+
+
+            recorder.onstop = () => {
+
+                const blob =
+                    new Blob(
+                        chunks,
+                        { type: "video/webm" }
+                    );
+
+
+                const url =
+                    URL.createObjectURL(blob);
+
+                const a =
+                    document.createElement("a");
+
+                a.href = url;
+
+                a.download =
+                    `4X-Learner-Short-${Date.now()}.webm`;
+
+                document.body.appendChild(a);
+
+                a.click();
+
+                a.remove();
+
+
+                setTimeout(
+                    () => URL.revokeObjectURL(url),
+                    5000
+                );
+
+
+                stream
+                    .getTracks()
+                    .forEach(track => track.stop());
+
+
+                $("videoBtn").disabled = false;
+
+                $("status").textContent =
+                    "Shorts video exported";
+
+                draw();
+
+            };
+
+
+            recorder.start(250);
+
+
+            const start =
+                performance.now();
+
+
+            function frame(now) {
+
+                const elapsed =
+                    now - start;
+
+                const progress =
+                    Math.min(
+                        elapsed / duration,
+                        1
+                    );
+
+
+                render(
+                    ctx,
+                    canvas.width,
+                    canvas.height,
+                    progress
+                );
+
+
+                $("status").textContent =
+                    `Recording ${Math.round(progress * 100)}%`;
+
+
+                if (elapsed < duration) {
+
+                    requestAnimationFrame(frame);
+
+                } else {
+
+                    setTimeout(
+                        () => recorder.stop(),
+                        100
+                    );
+
+                }
+
+            }
+
+
+            requestAnimationFrame(frame);
+        }
+
+
+        /* =========================================================
+           RANDOM SAMPLES
+        ========================================================= */
+
+        const samples = [
+
+            `STOP SAYING THIS IN ENGLISH!
+DON’T SAY: I am agree with you.
+SAY THIS: I agree with you.
+हिंदी: मैं आपसे सहमत हूँ।
+TIP: “Agree” is already a verb, so we don’t say “am agree”.`,
+
+            `STOP SAYING THIS IN ENGLISH!
+DON’T SAY: He don’t know anything.
+SAY THIS: He doesn’t know anything.
+हिंदी: वह कुछ नहीं जानता।
+TIP: With he, she, and it, use “doesn’t” instead of “don’t”.`,
+
+            `STOP SAYING THIS IN ENGLISH!
+DON’T SAY: I didn’t went there yesterday.
+SAY THIS: I didn’t go there yesterday.
+हिंदी: मैं कल वहाँ नहीं गया।
+TIP: After “didn’t”, always use the base form of the verb.`,
+
+            `STOP SAYING THIS IN ENGLISH!
+DON’T SAY: Myself Amit.
+SAY THIS: My name is Amit.
+हिंदी: मेरा नाम अमित है।
+TIP: Use “My name is…” or “I am…” for a natural introduction.`,
+
+            `STOP SAYING THIS IN ENGLISH!
+DON’T SAY: I am having two brothers.
+SAY THIS: I have two brothers.
+हिंदी: मेरे दो भाई हैं।
+TIP: Use “have” to talk about possession and family relationships.`,
+
+            `STOP SAYING THIS IN ENGLISH!
+DON’T SAY: She is knowing me.
+SAY THIS: She knows me.
+हिंदी: वह मुझे जानती है।
+TIP: Use “know” as a stative verb, not normally in the continuous form.`,
+
+            `STOP SAYING THIS IN ENGLISH!
+DON’T SAY: I am understanding.
+SAY THIS: I understand.
+हिंदी: मैं समझ रहा हूँ।
+TIP: “Understand” is normally used in the simple form.`,
+
+            `STOP SAYING THIS IN ENGLISH!
+DON’T SAY: Discuss about this.
+SAY THIS: Discuss this.
+हिंदी: इस पर चर्चा करो।
+TIP: The verb “discuss” does not normally need “about” after it.`
+
+        ];
+
+
+        /* =========================================================
+           RANDOM
+        ========================================================= */
+
+        function randomScript() {
+
+            $("script").value =
+                samples[
+                Math.floor(
+                    Math.random() * samples.length
+                )
+                ];
+
+            draw();
+
+            $("status").textContent =
+                "New lesson loaded";
+
+        }
+
+
+        /* =========================================================
+           COPY
+        ========================================================= */
+
+        async function copyScript() {
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    $("script").value
+                );
+
+                $("status").textContent =
+                    "Script copied";
+
+            } catch (e) {
+
+                $("script").focus();
+                $("script").select();
+
+                $("status").textContent =
+                    "Select & copy manually";
+
+            }
+
+        }
+
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        function resetStudio() {
+
+            state = {
+                theme: 0,
+                res: 2160,
+                scale: 1,
+                yShift: 0,
+                font: "modern",
+                radius: 32,
+                playing: false,
+                duration: 5,
+                fps: 30,
+                animationTime: 0
+            };
+
+
+            $("lesson").value =
+                "DAILY ENGLISH #01";
+
+            $("brand").value =
+                "4X LEARNER";
+
+            $("yShift").value = 0;
+
+            $("radius").value = 32;
+
+            $("scale").value = 100;
+
+            $("scaleVal").textContent = "100%";
+
+            $("fontSel").value = "modern";
+
+            $("resSel").value = "2160";
+
+            $("durationSel").value = "5";
+
+            $("fpsSel").value = "30";
+
+
+            buildThemes();
+
+            $("animateBtn").textContent =
+                "▶ Animate";
+
+            $("status").textContent =
+                "Ready";
+
+            draw();
+
+        }
+
+
+        /* =========================================================
+           EVENTS
+        ========================================================= */
+
+        $("script")
+            .addEventListener(
+                "input",
+                draw
+            );
+
+        $("lesson")
+            .addEventListener(
+                "input",
+                draw
+            );
+
+        $("brand")
+            .addEventListener(
+                "input",
+                draw
+            );
+
+
+        $("yShift").oninput = e => {
+
+            state.yShift =
+                Number(e.target.value) || 0;
+
+            draw();
+
+        };
+
+
+        $("radius").oninput = e => {
+
+            state.radius =
+                Number(e.target.value) || 32;
+
+            draw();
+
+        };
+
+
+        $("scale").oninput = e => {
+
+            state.scale =
+                Number(e.target.value) / 100;
+
+            $("scaleVal").textContent =
+                e.target.value + "%";
+
+            draw();
+
+        };
+
+
+        $("fontSel").onchange = e => {
+
+            state.font = e.target.value;
+
+            draw();
+
+        };
+
+
+        $("resSel").onchange = e => {
+
+            state.res =
+                Number(e.target.value);
+
+            $("status").textContent =
+                `Export: ${state.res}p`;
+
+        };
+
+
+        $("durationSel").onchange = e => {
+
+            state.duration =
+                Number(e.target.value);
+
+        };
+
+
+        $("fpsSel").onchange = e => {
+
+            state.fps =
+                Number(e.target.value);
+
+        };
+
+
+        /* =========================================================
+           BUTTON EVENTS
+        ========================================================= */
+
+        $("speakBtn").onclick = speak;
+
+        $("quickVoice").onclick = speak;
+
+        $("animateBtn").onclick =
+            animatePreview;
+
+        $("pngBtn").onclick =
+            () => exportImage("png");
+
+        $("jpgBtn").onclick =
+            () => exportImage("jpg");
+
+        $("bigPng").onclick =
+            () => exportImage("png");
+
+        $("videoBtn").onclick =
+            recordVideo;
+
+        $("copyText").onclick =
+            copyScript;
+
+        $("randomBtn").onclick =
+            randomScript;
+
+        $("randomMobile").onclick =
+            randomScript;
+
+        $("resetBtn").onclick =
+            resetStudio;
+
+
+        /* =========================================================
+           INITIALIZE
+        ========================================================= */
+
+        buildThemes();
+
+        draw();
+
+    </script>
+
+</body>
+
+</html>

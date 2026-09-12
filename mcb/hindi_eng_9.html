@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>4X Learner - Top 5 Words Reels Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Cabinet+Grotesk:wght@800;900&family=Inter:wght@700;800;900&family=Montserrat:wght@700;800;900&family=Oswald:wght@600;700&family=Poppins:wght@600;700;800;900&family=Teko:wght@600;700&family=Yantramanav:wght@700;900&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg-base: #05070c;
+            --panel-bg: #0c1322;
+            --border-ui: #1e293b;
+            --accent-glow: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-base);
+            color: var(--text-main);
+            height: 100dvh;
+            width: 100vw;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Fixed Mobile Header Controls */
+        .mobile-nav-bar {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 54px;
+            background: rgba(12, 19, 34, 0.9);
+            backdrop-filter: blur(14px);
+            z-index: 150;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .mobile-nav-bar .brand {
+            font-weight: 900;
+            font-size: 0.95rem;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-menu-btn {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+        }
+
+        /* Sidebar Control Panel */
+        .controls-panel {
+            width: 410px;
+            min-width: 410px;
+            background: var(--panel-bg);
+            border-right: 1px solid var(--border-ui);
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            z-index: 200;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .controls-panel::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .controls-panel::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        .panel-brand {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 12px;
+        }
+
+        .panel-brand h2 {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-panel-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        input,
+        select,
+        textarea {
+            background: #060911;
+            color: #fff;
+            border: 1px solid #23314d;
+            padding: 9px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 125px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            line-height: 1.45;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent-glow);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-ui {
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.82rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: none;
+            transition: 0.2s all;
+        }
+
+        .btn-ui:active {
+            transform: scale(0.97);
+        }
+
+        .btn-dark {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 1px solid #334155;
+        }
+
+        .btn-blue {
+            background: #0284c7;
+            color: #fff;
+        }
+
+        .btn-red-video {
+            background: linear-gradient(135deg, #e11d48, #be123c);
+            color: #fff;
+            padding: 13px;
+            font-size: 0.92rem;
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.35);
+            border-radius: 12px;
+        }
+
+        .drawer-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 180;
+        }
+
+        /* Preview Stage Area */
+        .preview-stage {
+            flex: 1;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #030508;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 9:16 Scaler */
+        .reels-viewport {
+            height: 94dvh;
+            aspect-ratio: 9 / 16;
+            max-width: 100%;
+            border-radius: 28px;
+            box-shadow: 0 25px 65px rgba(0, 0, 0, 0.95), 0 0 0 2px #1e293b;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 22px 18px 18px 18px;
+            user-select: none;
+        }
+
+        /* Reel Top Bar */
+        .reel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .reel-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(10px);
+            padding: 6px 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: #fff;
+            font-weight: 900;
+            font-size: 0.8rem;
+            padding: 2px 7px;
+            border-radius: 6px;
+        }
+
+        .logo-text {
+            font-size: 0.82rem;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            color: #fff;
+        }
+
+        .social-pill {
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 800;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Main Heading Section */
+        .title-box {
+            text-align: center;
+            z-index: 10;
+            margin: 6px 0 2px;
+        }
+
+        .category-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 900;
+            letter-spacing: 1.4px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            margin-bottom: 4px;
+        }
+
+        .main-heading {
+            font-size: 1.15rem;
+            font-weight: 900;
+            line-height: 1.3;
+        }
+
+        .sub-heading {
+            font-size: 0.78rem;
+            font-weight: 700;
+            opacity: 0.85;
+            margin-top: 3px;
+        }
+
+        /* Top 5 Vocabulary Cards */
+        .words-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .word-card {
+            display: flex;
+            align-items: center;
+            border-radius: 16px;
+            overflow: hidden;
+            min-height: 60px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease;
+        }
+
+        .word-number {
+            width: 58px;
+            min-width: 58px;
+            height: 100%;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.35rem;
+            font-weight: 900;
+            clip-path: polygon(0% 0%, 78% 0%, 100% 50%, 78% 100%, 0% 100%);
+            padding-right: 6px;
+        }
+
+        .word-hindi-col {
+            flex: 1;
+            padding: 4px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hindi-main {
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hindi-sub {
+            font-size: 0.7rem;
+            font-weight: 700;
+            opacity: 0.85;
+        }
+
+        .word-english-col {
+            padding: 6px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            text-align: right;
+            border-left: 1px dashed rgba(0, 0, 0, 0.12);
+        }
+
+        .eng-main {
+            font-size: 0.95rem;
+            font-weight: 900;
+            letter-spacing: 0.3px;
+        }
+
+        .eng-sub {
+            font-size: 0.68rem;
+            font-weight: 700;
+            opacity: 0.9;
+        }
+
+        .word-icon {
+            margin-right: 10px;
+            width: 36px;
+            height: 42px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+
+        /* Engagement Footer */
+        .footer-hook {
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            width: fit-content;
+            margin: 0 auto;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animations */
+        @keyframes landInLeft {
+            0% {
+                transform: translateX(-320px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes landInRight {
+            0% {
+                transform: translateX(320px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Mobile Layout Optimization */
+        @media (max-width: 880px) {
+            body {
+                flex-direction: column;
+            }
+
+            .mobile-nav-bar {
+                display: flex;
+            }
+
+            .drawer-backdrop.active {
+                display: block;
+            }
+
+            .controls-panel {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                top: 0;
+                width: 86%;
+                max-width: 350px;
+                min-width: unset;
+                transform: translateX(-100%);
+                box-shadow: 20px 0 50px rgba(0, 0, 0, 0.95);
+            }
+
+            .controls-panel.open {
+                transform: translateX(0);
+            }
+
+            .close-panel-btn {
+                display: block;
+            }
+
+            .preview-stage {
+                padding-top: 60px;
+                padding-bottom: 12px;
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+
+            .reels-viewport {
+                height: calc(100dvh - 78px);
+                max-width: calc((100dvh - 78px) * 9 / 16);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="mobile-nav-bar">
+        <div class="brand">
+            <i class="fa-solid fa-graduation-cap"></i> 4X English Reels
+        </div>
+        <button class="toggle-menu-btn" onclick="toggleDrawer()">
+            <i class="fa-solid fa-sliders"></i> Edit Content
+        </button>
+    </header>
+
+    <div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+    <aside class="controls-panel" id="sidebar">
+        <div class="panel-brand">
+            <h2><i class="fa-solid fa-layer-group"></i> Word Reel Studio</h2>
+            <button class="close-panel-btn" onclick="toggleDrawer()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="form-group">
+            <label>Badge / Category Tag</label>
+            <input type="text" id="badgeTag" value="TOP 5 VEGETABLES NAME" oninput="syncText()" />
+        </div>
+
+        <div class="form-group">
+            <label>Header Title (Hindi / English)</label>
+            <input type="text" id="headTitle" value="सब्जियों के नाम अंग्रेजी में सीखें" oninput="syncText()" />
+        </div>
+
+        <div class="form-group">
+            <label>Subtitle / Hook</label>
+            <input type="text" id="subTitle" value="Learn Top 5 Daily Vegetables in English" oninput="syncText()" />
+        </div>
+
+        <div class="form-group">
+            <label>Top 5 Words (No | Hindi | English | Pronunciation | Icon)</label>
+            <textarea id="wordsInput">1 | बैंगन | Brinjal / Eggplant | (ब्रिंजल) | fa-pepper-hot
+2 | भिंडी | Ladyfinger / Okra | (लेडीफिंगर) | fa-leaf
+3 | पत्तागोभी | Cabbage | (कैबेज) | fa-seedling
+4 | फूलगोभी | Cauliflower | (कॉलीफ्लावर) | fa-spa
+5 | अदरक | Ginger | (जिंजर) | fa-carrot</textarea>
+        </div>
+
+        <div class="grid-2">
+            <button class="btn-ui btn-dark" onclick="renderCards()">Apply Data</button>
+            <button class="btn-ui btn-dark" onclick="loadNextTopic()">Next Topic</button>
+        </div>
+
+        <div class="form-group">
+            <label>20 Viral Gradient Themes</label>
+            <select id="themeSelector" onchange="applyTheme()"></select>
+        </div>
+
+        <div class="grid-2">
+            <button class="btn-ui btn-blue" onclick="playLandingAnimation()">
+                <i class="fa-solid fa-play"></i> Replay Landing
+            </button>
+            <button class="btn-ui btn-dark" onclick="downloadHDImage()">
+                <i class="fa-solid fa-image"></i> HD Image
+            </button>
+        </div>
+
+        <div class="form-group">
+            <button class="btn-ui btn-red-video" id="videoBtn" onclick="exportReelVideo()">
+                <i class="fa-solid fa-circle-play"></i> Export 1080x1920 60FPS Video
+            </button>
+        </div>
+    </aside>
+
+    <main class="preview-stage">
+        <div class="reels-viewport" id="reelsScreen">
+            <div class="reel-header">
+                <div class="reel-logo">
+                    <span class="logo-badge">4X</span>
+                    <span class="logo-text">LEARNER</span>
+                </div>
+                <div class="social-pill">@4xlearner</div>
+            </div>
+
+            <div class="title-box">
+                <div class="category-badge" id="dispBadge">TOP 5 VEGETABLES NAME</div>
+                <div class="main-heading" id="dispHead">सब्जियों के नाम अंग्रेजी में सीखें</div>
+                <div class="sub-heading" id="dispSub">Learn Top 5 Daily Vegetables in English</div>
+            </div>
+
+            <div class="words-container" id="cardsList"></div>
+
+            <div class="footer-hook">
+                🎯 Save for later & Follow @4xlearner!
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 20 High-Contrast Themes
+        const THEMES = [
+            { name: "01. Electric Deep Navy", bg: "linear-gradient(180deg, #090d16 0%, #172554 100%)", text: "#f8fafc", cardBg: "#ffffff", cardText: "#0f172a", colors: ["#2563eb", "#7c3aed", "#e11d48", "#f59e0b", "#059669"] },
+            { name: "02. Emerald Fresh Green", bg: "linear-gradient(180deg, #022c22 0%, #064e3b 100%)", text: "#a7f3d0", cardBg: "#ffffff", cardText: "#064e3b", colors: ["#059669", "#10b981", "#34d399", "#0d9488", "#16a34a"] },
+            { name: "03. Sunset Fiery Red", bg: "linear-gradient(180deg, #431407 0%, #180202 100%)", text: "#fef08a", cardBg: "#ffffff", cardText: "#1c1917", colors: ["#ea580c", "#f97316", "#fbbf24", "#f43f5e", "#e11d48"] },
+            { name: "04. Cyber Dark Neon", bg: "linear-gradient(180deg, #05050a 0%, #0d1117 100%)", text: "#00f0ff", cardBg: "#111827", cardText: "#f9fafb", colors: ["#00f0ff", "#ff0055", "#ffe600", "#a855f7", "#38bdf8"] },
+            { name: "05. Royal Violet Night", bg: "linear-gradient(180deg, #2e1065 0%, #17072b 100%)", text: "#e9d5ff", cardBg: "#ffffff", cardText: "#1e1b4b", colors: ["#7e22ce", "#9333ea", "#c084fc", "#d946ef", "#6366f1"] },
+            { name: "06. Charcoal & Flame", bg: "linear-gradient(180deg, #18181b 0%, #09090b 100%)", text: "#fafafa", cardBg: "#ffffff", cardText: "#18181b", colors: ["#dc2626", "#ea580c", "#f59e0b", "#e11d48", "#b91c1c"] },
+            { name: "07. Slate Clean Tech", bg: "linear-gradient(180deg, #1e293b 0%, #0f172a 100%)", text: "#cbd5e1", cardBg: "#ffffff", cardText: "#0f172a", colors: ["#0284c7", "#0d9488", "#475569", "#64748b", "#2563eb"] },
+            { name: "08. Luxury Black & Gold", bg: "linear-gradient(180deg, #18181b 0%, #000000 100%)", text: "#fde047", cardBg: "#27272a", cardText: "#fef08a", colors: ["#ca8a04", "#eab308", "#facc15", "#a16207", "#d97706"] },
+            { name: "09. Dark Indigo Aura", bg: "linear-gradient(180deg, #172554 0%, #081026 100%)", text: "#bfdbfe", cardBg: "#ffffff", cardText: "#172554", colors: ["#1d4ed8", "#2563eb", "#3b82f6", "#1e40af", "#4338ca"] },
+            { name: "10. Synthwave 80s", bg: "linear-gradient(180deg, #2b0938 0%, #0d0114 100%)", text: "#f0abfc", cardBg: "#180829", cardText: "#fdf4ff", colors: ["#d946ef", "#06b6d4", "#f43f5e", "#eab308", "#8b5cf6"] },
+            { name: "11. Solar Magma Blast", bg: "linear-gradient(180deg, #451a03 0%, #1c0800 100%)", text: "#fed7aa", cardBg: "#ffffff", cardText: "#451a03", colors: ["#dc2626", "#ea580c", "#f97316", "#e11d48", "#c2410c"] },
+            { name: "12. Matrix Green Glitch", bg: "linear-gradient(180deg, #021e0a 0%, #000903 100%)", text: "#86efac", cardBg: "#052e16", cardText: "#bbf7d0", colors: ["#16a34a", "#22c55e", "#4ade80", "#15803d", "#166534"] },
+            { name: "13. Bubblegum Dark Pink", bg: "linear-gradient(180deg, #831843 0%, #3e071e 100%)", text: "#fbcfe8", cardBg: "#ffffff", cardText: "#500724", colors: ["#db2777", "#ec4899", "#f472b6", "#be185d", "#9d174d"] },
+            { name: "14. Dracula Pro Theme", bg: "linear-gradient(180deg, #21222c 0%, #15161c 100%)", text: "#f8f8f2", cardBg: "#282a36", cardText: "#f8f8f2", colors: ["#bd93f9", "#ff79c6", "#50fa7b", "#8be9fd", "#f1fa8c"] },
+            { name: "15. Arctic Blue Glacier", bg: "linear-gradient(180deg, #0f2b36 0%, #041217 100%)", text: "#a5f3fc", cardBg: "#ffffff", cardText: "#083344", colors: ["#0891b2", "#06b6d4", "#22d3ee", "#0e7490", "#0284c7"] },
+            { name: "16. Tokyo Midnight Club", bg: "linear-gradient(180deg, #16161e 0%, #0d0d12 100%)", text: "#7aa2f7", cardBg: "#1a1b26", cardText: "#c0caf5", colors: ["#f7768e", "#bb9af7", "#7dcfff", "#e0af68", "#2ac3de"] },
+            { name: "17. Deep Forest Moss", bg: "linear-gradient(180deg, #132418 0%, #07100a 100%)", text: "#dcfce7", cardBg: "#ffffff", cardText: "#132418", colors: ["#15803d", "#16a34a", "#22c55e", "#166534", "#14532d"] },
+            { name: "18. Minimal Titanium Dark", bg: "linear-gradient(180deg, #171717 0%, #0a0a0a 100%)", text: "#f5f5f5", cardBg: "#262626", cardText: "#ffffff", colors: ["#fbbf24", "#38bdf8", "#4ade80", "#f43f5e", "#a855f7"] },
+            { name: "19. Velvet Crimson Berry", bg: "linear-gradient(180deg, #3b0712 0%, #000000 100%)", text: "#fecdd3", cardBg: "#ffffff", cardText: "#3b0712", colors: ["#9f1239", "#be123c", "#e11d48", "#f43f5e", "#881337"] },
+            { name: "20. Hyper Horizon Yellow", bg: "linear-gradient(180deg, #18181b 0%, #09090b 100%)", text: "#facc15", cardBg: "#ffffff", cardText: "#18181b", colors: ["#eab308", "#ca8a04", "#a16207", "#713f12", "#854d0e"] }
+        ];
+
+        let activeTheme = THEMES[0];
+
+        // Populate Themes
+        const themeSelector = document.getElementById("themeSelector");
+        THEMES.forEach((t, i) => {
+            const opt = document.createElement("option");
+            opt.value = i;
+            opt.textContent = t.name;
+            themeSelector.appendChild(opt);
+        });
+
+        function toggleDrawer() {
+            document.getElementById("sidebar").classList.toggle("open");
+            document.getElementById("backdrop").classList.toggle("active");
+        }
+
+        function syncText() {
+            document.getElementById("dispBadge").innerText = document.getElementById("badgeTag").value;
+            document.getElementById("dispHead").innerText = document.getElementById("headTitle").value;
+            document.getElementById("dispSub").innerText = document.getElementById("subTitle").value;
+        }
+
+        function parseData() {
+            const lines = document.getElementById("wordsInput").value.trim().split("\n").filter(l => l.trim().length > 0);
+            return lines.map((line, idx) => {
+                const parts = line.split("|");
+                return {
+                    num: parts[0] ? parts[0].trim() : `${idx + 1}`,
+                    hindi: parts[1] ? parts[1].trim() : `शब्द ${idx + 1}`,
+                    english: parts[2] ? parts[2].trim() : `Word ${idx + 1}`,
+                    pronounce: parts[3] ? parts[3].trim() : ``,
+                    icon: parts[4] ? parts[4].trim() : `fa-check`
+                };
+            });
+        }
+
+        function renderCards() {
+            const container = document.getElementById("cardsList");
+            container.innerHTML = "";
+            const data = parseData();
+
+            data.forEach((item, idx) => {
+                const color = activeTheme.colors[idx % activeTheme.colors.length];
+                const card = document.createElement("div");
+                card.className = "word-card";
+                card.style.background = activeTheme.cardBg;
+
+                const iconClass = (item.icon && item.icon.startsWith("fa")) ? item.icon : `fa-solid ${item.icon || 'fa-check'}`;
+
+                card.innerHTML = `
+                    <div class="word-number" style="background: ${color};">${item.num}</div>
+                    <div class="word-hindi-col">
+                        <div class="hindi-main" style="color: ${activeTheme.cardText};">${item.hindi}</div>
+                        <div class="hindi-sub" style="color: ${color};">${item.pronounce}</div>
+                    </div>
+                    <div class="word-english-col">
+                        <div class="eng-main" style="color: ${activeTheme.cardText};">${item.english}</div>
+                        <div class="eng-sub" style="color: ${color};">English Word</div>
+                    </div>
+                    <div class="word-icon" style="background: ${color};">
+                        <i class="${iconClass}"></i>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function applyTheme() {
+            const idx = parseInt(document.getElementById("themeSelector").value, 10);
+            activeTheme = THEMES[idx];
+
+            const screen = document.getElementById("reelsScreen");
+            screen.style.background = activeTheme.bg;
+            screen.style.color = activeTheme.text;
+
+            renderCards();
+        }
+
+        function playLandingAnimation() {
+            const cards = document.querySelectorAll(".word-card");
+            cards.forEach((card, i) => {
+                card.style.animation = "none";
+                card.offsetHeight;
+                const anim = (i % 2 === 0) ? "landInLeft" : "landInRight";
+                card.style.animation = `${anim} 0.38s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.07}s both`;
+            });
+        }
+
+        function loadNextTopic() {
+            const topics = [
+                {
+                    badge: "TOP 5 DAILY SPICES NAME",
+                    head: "मसालों के नाम अंग्रेजी में सीखें",
+                    sub: "Learn Daily Essential Spices in English",
+                    data: "1 | हल्दी | Turmeric | (टर्मरिक) | fa-mortar-pestle\n2 | जीरा | Cumin Seeds | (क्यूमिन सीड्स) | fa-seedling\n3 | धनिया | Coriander | (कोरिएंडर) | fa-leaf\n4 | काली मिर्च | Black Pepper | (ब्लैक पेपर) | fa-circle-dot\n5 | इलायची | Cardamom | (कार्डमम) | fa-star"
+                },
+                {
+                    badge: "TOP 5 DAILY VEGETABLES",
+                    head: "सब्जियों के नाम अंग्रेजी में सीखें",
+                    sub: "Learn Top 5 Daily Vegetables in English",
+                    data: "1 | बैंगन | Brinjal / Eggplant | (ब्रिंजल) | fa-pepper-hot\n2 | भिंडी | Ladyfinger / Okra | (लेडीफिंगर) | fa-leaf\n3 | पत्तागोभी | Cabbage | (कैबेज) | fa-seedling\n4 | फूलगोभी | Cauliflower | (कॉलीफ्लावर) | fa-spa\n5 | अदरक | Ginger | (जिंजर) | fa-carrot"
+                },
+                {
+                    badge: "TOP 5 RELATIONS VOCABULARY",
+                    head: "रिश्तों के नाम अंग्रेजी में सीखें",
+                    sub: "Learn Family Relations in English",
+                    data: "1 | दामाद | Son-in-law | (सन-इन-लॉ) | fa-user-tie\n2 | बहू | Daughter-in-law | (डॉटर-इन-लॉ) | fa-heart\n3 | भतीजा / भांजा | Nephew | (नेफ्यू) | fa-child\n4 | भतीजी / भांजी | Niece | (नीस) | fa-child-dress\n5 | ससुराल | In-laws' House | (इन-लॉज़ हाउस) | fa-house"
+                },
+                {
+                    badge: "TOP 5 DRY FRUITS NAME",
+                    head: "मेवों के नाम अंग्रेजी में सीखें",
+                    sub: "Learn Healthy Dry Fruits in English",
+                    data: "1 | बादाम | Almond | (आल्मंड / आमंड) | fa-seedling\n2 | काजू | Cashew | (कैशू) | fa-cookie\n3 | अखरोट | Walnut | (वॉलनेट) | fa-brain\n4 | किशमिश | Raisins | (रेजिन्स) | fa-cubes-stacked\n5 | खजूर | Dates | (डेट्स) | fa-calendar-day"
+                }
+            ];
+
+            const currentBadge = document.getElementById("badgeTag").value;
+            const available = topics.filter(t => t.badge !== currentBadge);
+            const picked = available[Math.floor(Math.random() * available.length)] || topics[0];
+
+            document.getElementById("badgeTag").value = picked.badge;
+            document.getElementById("headTitle").value = picked.head;
+            document.getElementById("subTitle").value = picked.sub;
+            document.getElementById("wordsInput").value = picked.data;
+
+            syncText();
+            renderCards();
+            playLandingAnimation();
+        }
+
+        // Draw 1080x1920 Frame for High Res Export
+        function drawCanvas(ctx, W, H, progress = 1.0) {
+            // Background Gradient
+            ctx.save();
+            const grad = ctx.createLinearGradient(0, 0, 0, H);
+            const matches = activeTheme.bg.match(/#[0-9a-fA-F]{6}/g);
+            if (matches && matches.length >= 2) {
+                grad.addColorStop(0, matches[0]);
+                grad.addColorStop(1, matches[1]);
+            } else {
+                grad.addColorStop(0, "#090d16");
+                grad.addColorStop(1, "#172554");
+            }
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+
+            // Top Header Bar
+            ctx.save();
+            ctx.fillStyle = "rgba(0,0,0,0.45)";
+            drawRoundedRect(ctx, 60, 75, 360, 84, 42, true);
+
+            const bGrad = ctx.createLinearGradient(72, 85, 175, 145);
+            bGrad.addColorStop(0, "#f59e0b");
+            bGrad.addColorStop(1, "#ef4444");
+            ctx.fillStyle = bGrad;
+            drawRoundedRect(ctx, 72, 85, 95, 64, 18, true);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "900 38px 'Poppins', sans-serif";
+            ctx.fillText("4X", 94, 131);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "900 36px 'Poppins', sans-serif";
+            ctx.fillText("LEARNER", 182, 131);
+
+            ctx.fillStyle = "rgba(255,255,255,0.9)";
+            ctx.font = "800 30px 'Poppins', sans-serif";
+            ctx.fillText("@4xlearner", W - 245, 130);
+            ctx.restore();
+
+            // Heading Box
+            ctx.save();
+            ctx.textAlign = "center";
+            ctx.fillStyle = "rgba(245, 158, 11, 0.25)";
+            drawRoundedRect(ctx, W / 2 - 220, 205, 440, 52, 26, true);
+            ctx.fillStyle = "#fbbf24";
+            ctx.font = "900 24px 'Poppins', sans-serif";
+            ctx.fillText(document.getElementById("badgeTag").value, W / 2, 240);
+
+            ctx.fillStyle = activeTheme.text;
+            ctx.font = "900 48px 'Montserrat', sans-serif";
+            ctx.fillText(document.getElementById("headTitle").value, W / 2, 315);
+
+            ctx.font = "700 32px 'Poppins', sans-serif";
+            ctx.globalAlpha = 0.85;
+            ctx.fillText(document.getElementById("subTitle").value, W / 2, 365);
+            ctx.restore();
+
+            // Top 5 Cards
+            const data = parseData();
+            const startY = 445;
+            const cardH = 205;
+            const gap = 34;
+
+            data.forEach((item, idx) => {
+                const y = startY + idx * (cardH + gap);
+                const color = activeTheme.colors[idx % activeTheme.colors.length];
+
+                let itemProgress = Math.min(1, Math.max(0, (progress - (idx * 0.09)) / 0.38));
+                let ease = 1 - Math.pow(1 - itemProgress, 3);
+                let currentX = 60 + (1 - ease) * (idx % 2 === 0 ? -700 : 700);
+
+                ctx.save();
+                ctx.globalAlpha = itemProgress;
+                ctx.translate(currentX, y);
+
+                // Card Box
+                ctx.fillStyle = activeTheme.cardBg;
+                ctx.shadowColor = "rgba(0,0,0,0.25)";
+                ctx.shadowBlur = 24;
+                ctx.shadowOffsetY = 8;
+                drawRoundedRect(ctx, 0, 0, 960, cardH, 36, true);
+                ctx.shadowColor = "transparent";
+
+                // Number Notch
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(150, 0);
+                ctx.lineTo(190, cardH / 2);
+                ctx.lineTo(150, cardH);
+                ctx.lineTo(0, cardH);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "900 70px 'Montserrat', sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText(item.num, 80, cardH / 2 + 25);
+
+                // Hindi Word
+                ctx.fillStyle = activeTheme.cardText;
+                ctx.font = "900 44px 'Montserrat', sans-serif";
+                ctx.textAlign = "left";
+                ctx.fillText(item.hindi, 225, 90);
+
+                ctx.fillStyle = color;
+                ctx.font = "700 30px 'Poppins', sans-serif";
+                ctx.fillText(item.pronounce, 225, 145);
+
+                // English Word (Right Aligned)
+                ctx.fillStyle = activeTheme.cardText;
+                ctx.font = "900 42px 'Montserrat', sans-serif";
+                ctx.textAlign = "right";
+                ctx.fillText(item.english, 830, 90);
+
+                ctx.fillStyle = color;
+                ctx.font = "700 28px 'Poppins', sans-serif";
+                ctx.fillText("English Word", 830, 140);
+
+                // Side Badge Pill
+                ctx.fillStyle = color;
+                drawRoundedRect(ctx, 860, 42, 70, 120, 35, true);
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "900 40px 'Montserrat', sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("✓", 895, 115);
+
+                ctx.restore();
+            });
+
+            // Engagement Footer
+            ctx.save();
+            ctx.fillStyle = "rgba(0,0,0,0.45)";
+            drawRoundedRect(ctx, W / 2 - 380, H - 160, 760, 72, 36, true);
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "800 28px 'Poppins', sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("🎯 Save for later & Follow @4xlearner!", W / 2, H - 116);
+            ctx.restore();
+        }
+
+        function drawRoundedRect(ctx, x, y, width, height, radius, fill) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            if (fill) ctx.fill();
+        }
+
+        function downloadHDImage() {
+            const canvas = document.createElement("canvas");
+            canvas.width = 1080;
+            canvas.height = 1920;
+            const ctx = canvas.getContext("2d");
+            drawCanvas(ctx, 1080, 1920, 1.0);
+
+            const a = document.createElement("a");
+            a.download = `4XLearner_Vocabulary_${Date.now()}.png`;
+            a.href = canvas.toDataURL("image/png", 1.0);
+            a.click();
+        }
+
+        async function exportReelVideo() {
+            if (document.getElementById("sidebar").classList.contains("open")) {
+                toggleDrawer();
+            }
+
+            const btn = document.getElementById("videoBtn");
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Rendering 60FPS Video...`;
+            btn.disabled = true;
+
+            const W = 1080, H = 1920;
+            const canvas = document.createElement("canvas");
+            canvas.width = W;
+            canvas.height = H;
+            const ctx = canvas.getContext("2d");
+
+            const stream = canvas.captureStream(60);
+            const recorder = new MediaRecorder(stream, {
+                mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm'
+            });
+            const chunks = [];
+
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: "video/webm" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `4XLearner_Top5_${Date.now()}.webm`;
+                a.click();
+                btn.innerHTML = `<i class="fa-solid fa-circle-play"></i> Export 1080x1920 60FPS Video`;
+                btn.disabled = false;
+            };
+
+            recorder.start();
+            const totalDuration = 4500; // 4.5 seconds reel
+            const startTime = performance.now();
+
+            function frameStep(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(1.0, elapsed / 1800);
+
+                drawCanvas(ctx, W, H, progress);
+
+                if (elapsed < totalDuration) {
+                    requestAnimationFrame(frameStep);
+                } else {
+                    recorder.stop();
+                }
+            }
+            requestAnimationFrame(frameStep);
+        }
+
+        // Init Default
+        applyTheme();
+        playLandingAnimation();
+    </script>
+</body>
+
+</html>

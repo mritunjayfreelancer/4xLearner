@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>4X Learner — Top 50 Quiz Studio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap');
+
+        :root {
+            --bg: #070b14;
+            --panel: #111827;
+            --panel2: #0d1423;
+            --line: #263247;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --accent: #22d3ee;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Outfit, Arial, sans-serif
+        }
+
+        body {
+            overflow-x: hidden
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        .topbar {
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background: rgba(9, 14, 25, .94);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(18px)
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+            letter-spacing: .5px
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #22d3ee, #8b5cf6, #ec4899);
+            box-shadow: 0 8px 24px #0008
+        }
+
+        .brand span {
+            font-size: 18px
+        }
+
+        .menuBtn,
+        .smallBtn,
+        .primaryBtn {
+            border: 0;
+            color: #fff;
+            border-radius: 12px;
+            font-weight: 800;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #0891b2, #7c3aed);
+            box-shadow: 0 8px 25px #0005
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 390px;
+            height: calc(100vh - 64px)
+        }
+
+        .stage {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background:
+                radial-gradient(circle at 20% 20%, #172554 0, transparent 35%),
+                radial-gradient(circle at 80% 80%, #3b0764 0, transparent 30%), #050811;
+            overflow: auto
+        }
+
+        .previewWrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 100%;
+            max-height: 100%
+        }
+
+        #canvas {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: calc(100vw - 430px);
+            max-height: calc(100vh - 100px);
+            border-radius: 24px;
+            box-shadow: 0 25px 80px #000b
+        }
+
+        .drawer {
+            background: linear-gradient(180deg, #111827, #0b1220);
+            border-left: 1px solid var(--line);
+            overflow-y: auto;
+            padding: 18px
+        }
+
+        .section {
+            background: #0c1422;
+            border: 1px solid #243149;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px
+        }
+
+        .section h3 {
+            font-size: 13px;
+            color: #67e8f9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 11px
+        }
+
+        label {
+            display: block;
+            color: #9fb0c8;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            margin: 11px 0 5px
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #30405a;
+            background: #070d18;
+            color: #fff;
+            border-radius: 10px;
+            outline: 0;
+            padding: 10px 11px
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #22d3ee;
+            box-shadow: 0 0 0 3px #22d3ee18
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 116px;
+            line-height: 1.45
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px
+        }
+
+        .rangeRow {
+            display: grid;
+            grid-template-columns: 1fr 58px;
+            gap: 8px;
+            align-items: center
+        }
+
+        input[type=range] {
+            padding: 0;
+            accent-color: #22d3ee
+        }
+
+        .value {
+            background: #07101c;
+            border: 1px solid #27354b;
+            border-radius: 9px;
+            padding: 7px;
+            text-align: center;
+            font-size: 12px
+        }
+
+        .swatches {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 7px
+        }
+
+        .swatch {
+            height: 34px;
+            border: 2px solid transparent;
+            border-radius: 9px;
+            padding: 0
+        }
+
+        .swatch.active {
+            border-color: #fff;
+            box-shadow: 0 0 0 2px #22d3ee
+        }
+
+        .styles {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 7px;
+            max-height: 190px;
+            overflow: auto
+        }
+
+        .styleBtn {
+            border: 1px solid #293850;
+            background: #101a2b;
+            color: #dbeafe;
+            border-radius: 10px;
+            padding: 8px 6px;
+            font-size: 11px;
+            font-weight: 800
+        }
+
+        .styleBtn.active {
+            border-color: #67e8f9;
+            background: #123040;
+            box-shadow: 0 0 18px #22d3ee25
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px
+        }
+
+        .primaryBtn {
+            grid-column: 1/-1;
+            padding: 13px;
+            background: linear-gradient(135deg, #06b6d4, #7c3aed, #ec4899)
+        }
+
+        .danger {
+            background: linear-gradient(135deg, #ef4444, #be123c)
+        }
+
+        .hint {
+            font-size: 10px;
+            color: #71819a;
+            line-height: 1.4;
+            margin-top: 7px
+        }
+
+        .mobileOnly {
+            display: none
+        }
+
+        @media(max-width:860px) {
+            .topbar {
+                height: 58px;
+                padding: 0 10px
+            }
+
+            .logo {
+                width: 34px;
+                height: 34px
+            }
+
+            .brand span {
+                font-size: 15px
+            }
+
+            .app {
+                display: block;
+                height: auto
+            }
+
+            .stage {
+                height: calc(100vh - 58px);
+                min-height: 540px;
+                padding: 10px
+            }
+
+            #canvas {
+                max-width: calc(100vw - 20px);
+                max-height: calc(100vh - 82px);
+                border-radius: 18px
+            }
+
+            .drawer {
+                position: fixed;
+                z-index: 900;
+                right: 0;
+                top: 58px;
+                bottom: 0;
+                width: min(390px, 94vw);
+                transform: translateX(105%);
+                transition: transform .25s ease;
+                box-shadow: -25px 0 70px #000b
+            }
+
+            .drawer.open {
+                transform: translateX(0)
+            }
+
+            .mobileOnly {
+                display: block
+            }
+        }
+
+        @media(max-width:430px) {
+            .stage {
+                min-height: 500px
+            }
+
+            .menuBtn {
+                padding: 9px 10px;
+                font-size: 12px
+            }
+
+            .brand span {
+                font-size: 13px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">4X</div><span>4X LEARNER • QUIZ STUDIO</span>
+        </div>
+        <button class="menuBtn" onclick="toggleDrawer()">⚙️ Edit</button>
+    </header>
+
+    <div class="app">
+        <main class="stage">
+            <div class="previewWrap"><canvas id="canvas" width="1080" height="1920"></canvas></div>
+        </main>
+
+        <aside class="drawer" id="drawer">
+            <div class="section">
+                <h3>Content</h3>
+                <label>Heading</label><input id="title" value="DAILY QUIZ">
+                <label>Question + 4 options — one box</label>
+                <textarea id="raw">What is the meaning of “Brave”?
+A. Coward
+B. Fearless
+C. Weak
+D. Lazy</textarea>
+                <label>Watermark</label><input id="watermark" value="@4xlearner">
+            </div>
+
+            <div class="section">
+                <h3>Format</h3>
+                <select id="ratio">
+                    <option value="9:16">9:16 • Shorts / Reels • 1080×1920</option>
+                    <option value="1:1">1:1 • Square • 1080×1080</option>
+                    <option value="4:5">4:5 • Feed • 1080×1350</option>
+                    <option value="16:9">16:9 • Landscape • 1920×1080</option>
+                </select>
+            </div>
+
+            <div class="section">
+                <h3>20 Color Themes</h3>
+                <div id="themes" class="swatches"></div>
+            </div>
+
+            <div class="section">
+                <h3>Top 50 Styles</h3>
+                <div id="styles" class="styles"></div>
+            </div>
+
+            <div class="section">
+                <h3>Position & Size</h3>
+                <label>Content vertical position</label>
+                <div class="rangeRow"><input id="contentY" type="range" min="-250" max="250" value="0">
+                    <div class="value" id="contentYv">0</div>
+                </div>
+                <label>Title vertical position</label>
+                <div class="rangeRow"><input id="titleY" type="range" min="-150" max="150" value="0">
+                    <div class="value" id="titleYv">0</div>
+                </div>
+                <label>Question vertical position</label>
+                <div class="rangeRow"><input id="questionY" type="range" min="-180" max="180" value="0">
+                    <div class="value" id="questionYv">0</div>
+                </div>
+                <label>Options vertical position</label>
+                <div class="rangeRow"><input id="optionsY" type="range" min="-180" max="180" value="0">
+                    <div class="value" id="optionsYv">0</div>
+                </div>
+                <div class="row">
+                    <div><label>Scale</label>
+                        <div class="rangeRow"><input id="scale" type="range" min="80" max="115" value="100">
+                            <div class="value" id="scalev">100%</div>
+                        </div>
+                    </div>
+                    <div><label>Glow</label>
+                        <div class="rangeRow"><input id="glow" type="range" min="0" max="100" value="65">
+                            <div class="value" id="glowv">65</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Quick Actions</h3>
+                <div class="actions">
+                    <button class="smallBtn" onclick="randomStyle()">🎲 Random Style</button>
+                    <button class="smallBtn" onclick="resetAll()">↺ Reset</button>
+                    <button class="primaryBtn" onclick="downloadPNG()">⬇ Download Perfect 4K PNG</button>
+                </div>
+                <div class="hint">Export is rendered directly at high resolution, instead of stretching a small preview.
+                    The same renderer is used for preview and download.</div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const C = document.getElementById('canvas'), ctx = C.getContext('2d', { alpha: false });
+        const $ = id => document.getElementById(id);
+        const themes = [
+            ['#06b6d4', '#8b5cf6', '#ec4899', '#07111f'], ['#22c55e', '#14b8a6', '#0ea5e9', '#06140f'],
+            ['#f97316', '#ef4444', '#7c2d12', '#180a05'], ['#eab308', '#f59e0b', '#92400e', '#171006'],
+            ['#ec4899', '#a855f7', '#4c1d95', '#16091c'], ['#3b82f6', '#6366f1', '#1e3a8a', '#070d22'],
+            ['#14b8a6', '#2dd4bf', '#0f766e', '#061513'], ['#f43f5e', '#fb7185', '#9f1239', '#18070d'],
+            ['#84cc16', '#22c55e', '#166534', '#091507'], ['#06b6d4', '#2563eb', '#1e40af', '#06101d'],
+            ['#f59e0b', '#facc15', '#a16207', '#171003'], ['#8b5cf6', '#d946ef', '#701a75', '#110716'],
+            ['#ef4444', '#f97316', '#991b1b', '#170806'], ['#0ea5e9', '#38bdf8', '#075985', '#06111b'],
+            ['#10b981', '#34d399', '#065f46', '#06140f'], ['#6366f1', '#818cf8', '#312e81', '#080a1b'],
+            ['#e11d48', '#fb7185', '#831843', '#17070e'], ['#7c3aed', '#4f46e5', '#3730a3', '#09081b'],
+            ['#06b6d4', '#84cc16', '#166534', '#071411'], ['#f43f5e', '#f59e0b', '#7f1d1d', '#170806']
+        ];
+        const styleNames = [
+            'Neon Glass', '3D Clay', 'Cyber Grid', 'Candy Pop', 'Royal Glow', 'Sunset', 'Ocean Wave', 'Aurora',
+            'Midnight', 'Electric', 'Lava', 'Galaxy', 'Emerald', 'Pink Flash', 'Blue Ice', 'Golden',
+            'Retro Card', 'Soft Bubble', 'Prism', 'Minimal', 'Chrome', 'Comic', 'Violet Beam', 'Mint 3D',
+            'Fire Glow', 'Deep Space', 'Fresh Pop', 'Dark Glass', 'Color Burst', 'Luxury',
+            'Arcade', 'Dreamy', 'Tech Box', 'Punchy', 'Pastel 3D', 'Matrix', 'Rainbow', 'Studio',
+            'Bold Frame', 'Glow Pill', 'Paper Cut', 'Crystal', 'Liquid', 'Street', 'Viral Black', 'Viral White',
+            'Clean Pro', 'Ultra Pop', 'Quiz Master', '4X Signature'
+        ];
+        let theme = 0, style = 0;
+
+        function makeControls() {
+            themes.forEach((t, i) => {
+                const b = document.createElement('button'); b.className = 'swatch'; b.title = 'Theme ' + (i + 1);
+                b.style.background = `linear-gradient(135deg,${t[0]},${t[1]},${t[2]})`;
+                b.onclick = () => { theme = i; sync(); render(); }; $('themes').appendChild(b);
+            });
+            styleNames.forEach((n, i) => {
+                const b = document.createElement('button'); b.className = 'styleBtn'; b.textContent = String(i + 1).padStart(2, '0') + ' ' + n;
+                b.onclick = () => { style = i; sync(); render(); }; $('styles').appendChild(b);
+            });
+        }
+        makeControls();
+
+        function toggleDrawer() { $('drawer').classList.toggle('open'); }
+        function sync() {
+            [...$('themes').children].forEach((b, i) => b.classList.toggle('active', i === theme));
+            [...$('styles').children].forEach((b, i) => b.classList.toggle('active', i === style));
+            ['contentY', 'titleY', 'questionY', 'optionsY', 'scale', 'glow'].forEach(id => {
+                const v = $(id).value; $(id + 'v').textContent = id === 'scale' ? v + '%' : v;
+            });
+        }
+        ['title', 'raw', 'watermark', 'ratio', 'contentY', 'titleY', 'questionY', 'optionsY', 'scale', 'glow'].forEach(id => {
+            $(id).addEventListener(id === 'ratio' ? 'change' : 'input', render);
+        });
+        ['contentY', 'titleY', 'questionY', 'optionsY', 'scale', 'glow'].forEach(id => $(id).addEventListener('input', sync));
+
+        function setSize() {
+            const r = $('ratio').value;
+            if (r === '9:16') { C.width = 1080; C.height = 1920 }
+            if (r === '1:1') { C.width = 1080; C.height = 1080 }
+            if (r === '4:5') { C.width = 1080; C.height = 1350 }
+            if (r === '16:9') { C.width = 1920; C.height = 1080 }
+        }
+        function roundRect(c, x, y, w, h, r) {
+            r = Math.min(r, w / 2, h / 2); c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r);
+            c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
+        }
+        function shadowBox(c, x, y, w, h, r, color, blur, dy = 10) {
+            c.save(); c.shadowColor = color; c.shadowBlur = blur; c.shadowOffsetY = dy; c.fillStyle = color;
+            roundRect(c, x, y, w, h, r); c.fill(); c.restore();
+        }
+        function wrap(c, text, max) {
+            const words = text.split(/\s+/), out = []; let line = '';
+            for (const w of words) { const test = line ? line + ' ' + w : w; if (c.measureText(test).width > max && line) { out.push(line); line = w } else line = test }
+            if (line) out.push(line); return out;
+        }
+        function parsed() {
+            const ls = $('raw').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+            let q = ls[0] || 'Your question here?';
+            let opts = [];
+            for (let i = 1; i < 5; i++)opts.push((ls[i] || ['A. Option A', 'B. Option B', 'C. Option C', 'D. Option D'][i - 1]).replace(/^[A-Da-d][\.\)\:\-\s]+/, ''));
+            return { q, opts };
+        }
+        function styleProfile() {
+            const s = style;
+            return {
+                cardRadius: [70, 90, 45, 75, 80, 55, 65, 100, 35, 55, 30, 90, 70, 65, 80, 40, 25, 110, 50, 28][s % 20],
+                pattern: s % 5, card: s % 4, compact: s % 7 === 0, tilt: s % 6 === 0, dark: s >= 40
+            };
+        }
+        function background(c, W, H, t, s, p) {
+            const g = c.createLinearGradient(0, 0, W, H); g.addColorStop(0, t[3]); g.addColorStop(.5, t[0]); g.addColorStop(1, t[2]);
+            c.fillStyle = g; c.fillRect(0, 0, W, H);
+            c.save(); c.globalAlpha = .16;
+            for (let i = 0; i < 18; i++) {
+                const x = (i * 137 % W), y = (i * 311 % H), r = 40 + (i * 23 % 150);
+                const rg = c.createRadialGradient(x, y, 0, x, y, r); rg.addColorStop(0, t[i % 3]); rg.addColorStop(1, 'transparent');
+                c.fillStyle = rg; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
+            }
+            c.globalAlpha = .09; c.strokeStyle = '#fff'; c.lineWidth = 2;
+            if (p.pattern === 0) { for (let x = -H; x < W; x += 80) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x + H, H); c.stroke() } }
+            if (p.pattern === 1) { for (let x = 0; x < W; x += 90)for (let y = 0; y < H; y += 90)c.strokeRect(x, y, 45, 45) }
+            if (p.pattern === 2) { c.setLineDash([18, 22]); for (let y = 50; y < H; y += 110) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke() } c.setLineDash([]) }
+            c.restore();
+        }
+        function pill(c, x, y, w, h, fill, stroke, glow) {
+            c.save(); c.shadowColor = glow; c.shadowBlur = 24; c.shadowOffsetY = 10; c.fillStyle = fill;
+            roundRect(c, x, y, w, h, h / 2); c.fill(); c.shadowBlur = 0; c.lineWidth = 2; c.strokeStyle = stroke; c.stroke(); c.restore();
+        }
+        function render() {
+            setSize();
+            const W = C.width, H = C.height, t = themes[theme], p = styleProfile(), d = deviceScale();
+            background(ctx, W, H, t, style, p);
+            const compact = H < 1300;
+            const base = Math.min(W, H);
+            const scale = +$('scale').value / 100;
+            const contentShift = +$('contentY').value * (H / 1920);
+            const titleShift = +$('titleY').value * (H / 1920);
+            const qShift = +$('questionY').value * (H / 1920);
+            const optShift = +$('optionsY').value * (H / 1920);
+            const glow = +$('glow').value / 100;
+            const cardW = W * (W > H ? .78 : .86) * scale;
+            const cardH = Math.min(H * .72, H * .72 * scale);
+            const cardX = (W - cardW) / 2;
+            const cardY = (H - cardH) / 2 + contentShift;
+            const r = p.cardRadius * (W / 1080);
+            const dark = p.dark || theme % 6 === 5;
+            const cardGrad = ctx.createLinearGradient(cardX, cardY, cardX + cardW, cardY + cardH);
+            cardGrad.addColorStop(0, t[0]); cardGrad.addColorStop(1, t[1]);
+            ctx.save();
+            if (p.tilt) { ctx.translate(W / 2, H / 2); ctx.rotate(-.012); ctx.translate(-W / 2, -H / 2) }
+            shadowBox(ctx, cardX + 22, cardY + 28, cardW, cardH, r, '#0008', 55, 18);
+            ctx.fillStyle = dark ? 'rgba(7,12,24,.82)' : 'rgba(255,255,255,.18)';
+            roundRect(ctx, cardX - 10, cardY - 10, cardW + 20, cardH + 20, r + 8); ctx.fill();
+            ctx.shadowColor = t[0] + 'aa'; ctx.shadowBlur = 65 * glow; ctx.shadowOffsetY = 18;
+            ctx.fillStyle = cardGrad; roundRect(ctx, cardX, cardY, cardW, cardH, r); ctx.fill();
+            ctx.shadowBlur = 0; ctx.lineWidth = 4; ctx.strokeStyle = '#ffffff66'; ctx.stroke(); ctx.restore();
+
+            // top badge
+            const wm = $('watermark').value || '@4xlearner';
+            ctx.font = `800 ${Math.round(base * .035)}px Outfit`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            const bw = ctx.measureText(wm).width + base * .055, bh = base * .075, bx = (W - bw) / 2, by = Math.max(20, cardY - base * .11);
+            pill(ctx, bx, by, bw, bh, '#ffffffee', '#ffffff55', t[0] + '99');
+            ctx.fillStyle = '#07111f'; ctx.fillText(wm, W / 2, by + bh / 2);
+
+            // title
+            const title = $('title').value || 'DAILY QUIZ';
+            const titleSize = Math.max(28, Math.round(base * .075));
+            ctx.font = `900 ${titleSize}px "Baloo 2",Outfit`; ctx.fillStyle = dark ? '#fff' : '#06212a';
+            ctx.shadowColor = '#0005'; ctx.shadowBlur = 8; ctx.fillText(title.toUpperCase(), W / 2, cardY + cardH * .17 + titleShift); ctx.shadowBlur = 0;
+
+            // accent line
+            const lineW = cardW * .25; ctx.fillStyle = '#ffffffaa'; roundRect(ctx, W / 2 - lineW / 2, cardY + cardH * .22 + titleShift, lineW, 8, 4); ctx.fill();
+
+            // question
+            const { q, opts } = parsed(); const qSize = Math.max(25, Math.round(base * (compact ? .042 : .045)));
+            ctx.font = `800 ${qSize}px Outfit`; ctx.fillStyle = dark ? '#fff' : '#062a34';
+            let qLines = wrap(ctx, q, cardW * .78), qY = cardY + cardH * .30 + qShift;
+            const qLH = qSize * 1.25;
+            qLines = qLines.slice(0, 4);
+            qLines.forEach((line, i) => ctx.fillText(line, W / 2, qY + i * qLH));
+
+            // options
+            const optTop = cardY + cardH * (compact ? .54 : .52) + optShift;
+            const gap = base * .025, gridW = cardW * .84, bw2 = (gridW - gap) / 2;
+            const bh2 = Math.max(76, Math.min(120, cardH * .12));
+            const letters = ['A', 'B', 'C', 'D'];
+            const optionColors = [
+                [t[0], t[1]], [t[1], t[2]], [t[2], t[0]], [t[0], t[2]]
+            ];
+            opts.forEach((txt, i) => {
+                const col = i % 2, row = Math.floor(i / 2), x = W / 2 - gridW / 2 + col * (bw2 + gap), y = optTop + row * (bh2 + gap);
+                const og = ctx.createLinearGradient(x, y, x + bw2, y + bh2); og.addColorStop(0, optionColors[i][0]); og.addColorStop(1, optionColors[i][1]);
+                pill(ctx, x, y, bw2, bh2, og, '#ffffff80', optionColors[i][1] + 'cc');
+                const rr = bh2 * .34;
+                ctx.fillStyle = '#ffffffdd'; ctx.beginPath(); ctx.arc(x + rr + 12, y + bh2 / 2, rr, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#07111f'; ctx.font = `900 ${Math.round(rr * .78)}px Outfit`; ctx.fillText(letters[i], x + rr + 12, y + bh2 / 2 + 1);
+                ctx.textAlign = 'left'; ctx.font = `800 ${Math.round(base * .034)}px Outfit`; ctx.fillStyle = '#fff';
+                let lines = wrap(ctx, txt, bw2 - rr - 35).slice(0, 2), ty = y + bh2 / 2 - (lines.length - 1) * base * .021;
+                lines.forEach((ln, j) => ctx.fillText(ln, x + rr * 2 + 12, ty + j * base * .042));
+                ctx.textAlign = 'center';
+            });
+            // bottom signature
+            ctx.font = `900 ${Math.round(base * .03)}px Outfit`; ctx.fillStyle = '#ffffffcc';
+            ctx.fillText('4X LEARNER  •  DAILY QUIZ', W / 2, H - Math.max(38, base * .055));
+        }
+        function deviceScale() { return 1 }
+        function renderExport(scale) {
+            const e = document.createElement('canvas'); e.width = C.width * scale; e.height = C.height * scale;
+            const old = C; // render a temporary context by swapping canvas is unnecessary: draw preview at current dimensions then rerender manually
+            return e;
+        }
+        function downloadPNG() {
+            // Direct high-resolution rendering: temporarily enlarge the actual canvas, render, export, then restore.
+            const ow = C.width, oh = C.height;
+            const sc = 2;
+            const r = $('ratio').value;
+            let w = 1080, h = 1920;
+            if (r === '1:1') { w = 1080; h = 1080 }
+            if (r === '4:5') { w = 1080; h = 1350 }
+            if (r === '16:9') { w = 1920; h = 1080 }
+            C.width = w * sc; C.height = h * sc; render();
+            const url = C.toDataURL('image/png');
+            const a = document.createElement('a'); a.href = url; a.download = `4X-Learner-Quiz-${Date.now()}.png`;
+            document.body.appendChild(a); a.click(); a.remove();
+            C.width = ow; C.height = oh; render();
+        }
+        function randomStyle() { style = Math.floor(Math.random() * 50); theme = Math.floor(Math.random() * 20); sync(); render() }
+        function resetAll() {
+            $('title').value = 'DAILY QUIZ';
+            $('raw').value = 'What is the meaning of “Brave”?\nA. Coward\nB. Fearless\nC. Weak\nD. Lazy';
+            $('watermark').value = '@4xlearner'; $('ratio').value = '9:16';
+            ['contentY', 'titleY', 'questionY', 'optionsY'].forEach(x => $(x).value = 0);
+            $('scale').value = 100; $('glow').value = 65; theme = 0; style = 0; sync(); render();
+        }
+        sync(); render();
+        window.addEventListener('resize', () => requestAnimationFrame(render));
+    </script>
+</body>
+
+</html>

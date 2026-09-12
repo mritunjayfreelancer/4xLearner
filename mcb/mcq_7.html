@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>4X Learner • Wave Quiz Studio (Draggable + 20 Themes)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@800;900&family=Outfit:wght@600;700;800;900&family=Quicksand:wght@700;800&display=swap');
+
+        :root {
+            --bg: #070b14;
+            --panel: #111827;
+            --line: #263247;
+            --text: #f8fafc;
+            --accent: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Outfit, Arial, sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .topbar {
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background: rgba(9, 14, 25, .95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(18px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+            letter-spacing: .5px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #f97316, #eab308, #22c55e);
+            box-shadow: 0 8px 24px #0008;
+            color: #000;
+            font-weight: 900;
+            font-size: 15px;
+        }
+
+        .brand span {
+            font-size: 18px;
+        }
+
+        .menuBtn,
+        .smallBtn,
+        .primaryBtn {
+            border: 0;
+            color: #fff;
+            border-radius: 12px;
+            font-weight: 800;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            box-shadow: 0 8px 25px #0005;
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 390px;
+            height: calc(100vh - 64px);
+        }
+
+        .stage {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0, #050811 100%);
+            overflow: auto;
+            position: relative;
+        }
+
+        .previewWrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #canvas {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: calc(100vw - 430px);
+            max-height: calc(100vh - 100px);
+            border-radius: 24px;
+            box-shadow: 0 25px 80px #000b;
+            cursor: grab;
+            touch-action: none;
+        }
+
+        #canvas:active {
+            cursor: grabbing;
+        }
+
+        .drawer {
+            background: linear-gradient(180deg, #111827, #0b1220);
+            border-left: 1px solid var(--line);
+            overflow-y: auto;
+            padding: 18px;
+        }
+
+        .section {
+            background: #0c1422;
+            border: 1px solid #243149;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .section h3 {
+            font-size: 13px;
+            color: #4ade80;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 11px;
+        }
+
+        label {
+            display: block;
+            color: #9fb0c8;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            margin: 11px 0 5px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #30405a;
+            background: #070d18;
+            color: #fff;
+            border-radius: 10px;
+            outline: 0;
+            padding: 10px 11px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 116px;
+            line-height: 1.45;
+        }
+
+        .rangeRow {
+            display: grid;
+            grid-template-columns: 1fr 58px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        input[type=range] {
+            padding: 0;
+            accent-color: #22c55e;
+        }
+
+        .value {
+            background: #07101c;
+            border: 1px solid #27354b;
+            border-radius: 9px;
+            padding: 7px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .swatches {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 7px;
+        }
+
+        .swatch {
+            height: 36px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 0;
+            position: relative;
+            transition: transform 0.15s;
+        }
+
+        .swatch:hover {
+            transform: scale(1.06);
+        }
+
+        .swatch.active {
+            border-color: #fff;
+            box-shadow: 0 0 12px #22c55e;
+        }
+
+        .fileUploadBtn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e293b;
+            border: 2px dashed #475569;
+            color: #cbd5e1;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 13px;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .fileUploadBtn:hover {
+            border-color: #22c55e;
+            color: #fff;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .primaryBtn {
+            grid-column: 1/-1;
+            padding: 13px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+            font-size: 14px;
+        }
+
+        .drag-tip {
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px dashed #22c55e;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 11px;
+            color: #86efac;
+            line-height: 1.4;
+            margin-top: 8px;
+        }
+
+        @media(max-width:860px) {
+            .topbar {
+                height: 58px;
+                padding: 0 10px;
+            }
+
+            .logo {
+                width: 34px;
+                height: 34px;
+            }
+
+            .brand span {
+                font-size: 15px;
+            }
+
+            .app {
+                display: block;
+                height: auto;
+            }
+
+            .stage {
+                height: calc(100vh - 58px);
+                min-height: 540px;
+                padding: 10px;
+            }
+
+            #canvas {
+                max-width: calc(100vw - 20px);
+                max-height: calc(100vh - 82px);
+                border-radius: 18px;
+            }
+
+            .drawer {
+                position: fixed;
+                z-index: 900;
+                right: 0;
+                top: 58px;
+                bottom: 0;
+                width: min(390px, 94vw);
+                transform: translateX(105%);
+                transition: transform .25s ease;
+                box-shadow: -25px 0 70px #000b;
+            }
+
+            .drawer.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">4X</div><span>4X LEARNER • WAVE QUIZ STUDIO</span>
+        </div>
+        <button class="menuBtn" onclick="toggleDrawer()">⚙️ Controls</button>
+    </header>
+
+    <div class="app">
+        <main class="stage">
+            <div class="previewWrap"><canvas id="canvas" width="1080" height="1920"></canvas></div>
+        </main>
+
+        <aside class="drawer" id="drawer">
+            <div class="drag-tip">
+                ✨ <b>Live Dragging:</b> स्क्रीन पर <b>Question</b>, <b>Question Circles (???)</b> या <b>Options</b> को
+                हाथ/माउस से पकड़कर ऊपर-नीचे खिसका सकते हैं!
+            </div>
+
+            <!-- TOP 20 THEMES -->
+            <div class="section" style="margin-top:12px;">
+                <h3>Top 20 Ultra-Glow Themes</h3>
+                <div id="themes" class="swatches"></div>
+            </div>
+
+            <!-- MANUAL POSITION CONTROLS -->
+            <div class="section">
+                <h3>Position & Layout Sliders</h3>
+                <label>Glow Intensity</label>
+                <div class="rangeRow">
+                    <input id="glowIntensity" type="range" min="0" max="150" value="70">
+                    <div class="value" id="glowIntensityv">70%</div>
+                </div>
+
+                <label>Options Group Position (Y)</label>
+                <div class="rangeRow">
+                    <input id="optionsY" type="range" min="-300" max="300" value="0">
+                    <div class="value" id="optionsYv">0</div>
+                </div>
+
+                <label>Middle ??? Circles Position (Y)</label>
+                <div class="rangeRow">
+                    <input id="circlesY" type="range" min="-300" max="300" value="0">
+                    <div class="value" id="circlesYv">0</div>
+                </div>
+
+                <label>Question Text Position (Y)</label>
+                <div class="rangeRow">
+                    <input id="questionY" type="range" min="-300" max="300" value="0">
+                    <div class="value" id="questionYv">0</div>
+                </div>
+
+                <label>Overall Scale</label>
+                <div class="rangeRow">
+                    <input id="scale" type="range" min="80" max="115" value="100">
+                    <div class="value" id="scalev">100%</div>
+                </div>
+            </div>
+
+            <!-- CONTENT INPUT -->
+            <div class="section">
+                <h3>Content</h3>
+                <label>Title Header</label>
+                <input id="title" value="Daily Quiz">
+                <label>Question + 4 Options (One Box)</label>
+                <textarea id="raw">What’s your favorite way to spend free time?
+A. Reading
+B. Watching movies
+C. Traveling
+D. Listening to music</textarea>
+                <label>Watermark</label>
+                <input id="watermark" value="@4xlearner">
+            </div>
+
+            <!-- CUSTOM BACKGROUND UPLOAD -->
+            <div class="section">
+                <h3>Custom Background Image</h3>
+                <label>Upload Own Image (Optional)</label>
+                <label class="fileUploadBtn" for="bgUpload">
+                    📁 <span>Choose Custom Image</span>
+                </label>
+                <input type="file" id="bgUpload" accept="image/*" style="display:none">
+
+                <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <button class="smallBtn" style="padding:6px 10px; font-size:11px;" onclick="removeBgImage()">✕
+                        Remove Image</button>
+                </div>
+
+                <label>Background Dim</label>
+                <div class="rangeRow">
+                    <input id="bgDim" type="range" min="0" max="90" value="0">
+                    <div class="value" id="bgDimv">0%</div>
+                </div>
+
+                <label>Background Blur</label>
+                <div class="rangeRow">
+                    <input id="bgBlur" type="range" min="0" max="25" value="0">
+                    <div class="value" id="bgBlurv">0px</div>
+                </div>
+            </div>
+
+            <!-- ASPECT RATIO -->
+            <div class="section">
+                <h3>Format</h3>
+                <select id="ratio">
+                    <option value="9:16">9:16 • Shorts / Reels • 1080×1920</option>
+                    <option value="1:1">1:1 • Square • 1080×1080</option>
+                    <option value="4:5">4:5 • Feed • 1080×1350</option>
+                    <option value="16:9">16:9 • Landscape • 1920×1080</option>
+                </select>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="section">
+                <h3>Actions</h3>
+                <div class="actions">
+                    <button class="smallBtn" onclick="resetAll()">↺ Reset</button>
+                    <button class="primaryBtn" onclick="downloadPNG()">⬇ Download Perfect 4K PNG</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const C = document.getElementById('canvas'), ctx = C.getContext('2d', { alpha: false });
+        const $ = id => document.getElementById(id);
+
+        let customBgImg = null;
+
+        // TOP 20 GLOW THEMES (Top Stars, Circles, Bottom Cuts, Badges)
+        const themes = [
+            // 0. Screenshot Original (Orange, Yellow, Green, Cream)
+            {
+                topBg: '#ffffff',
+                botBg: '#f6f2e9',
+                star1: '#ea580c', star2: '#22c55e',
+                circ1: '#ea580c', circ2: '#eab308', circ3: '#22c55e',
+                cut1: '#22c55e', cut2: '#ea580c',
+                badges: ['#22c55e', '#eab308', '#22c55e', '#eab308'],
+                title: '#000000', question: '#1e293b', optionText: '#1e293b'
+            },
+            // 1. Cyber Neon Pulse
+            {
+                topBg: '#090d16',
+                botBg: '#05070d',
+                star1: '#00ffcc', star2: '#ff007f',
+                circ1: '#ff007f', circ2: '#00ffcc', circ3: '#38bdf8',
+                cut1: '#00ffcc', cut2: '#ff007f',
+                badges: ['#00ffcc', '#ff007f', '#00ffcc', '#ff007f'],
+                title: '#ffffff', question: '#94a3b8', optionText: '#0f172a'
+            },
+            // 2. Sunset Flame
+            {
+                topBg: '#fffaf5',
+                botBg: '#ffedd5',
+                star1: '#f97316', star2: '#ef4444',
+                circ1: '#ef4444', circ2: '#f97316', circ3: '#facc15',
+                cut1: '#f97316', cut2: '#ef4444',
+                badges: ['#ef4444', '#f97316', '#ef4444', '#f97316'],
+                title: '#7c2d12', question: '#9a3412', optionText: '#1c1917'
+            },
+            // 3. Deep Emerald Mint
+            {
+                topBg: '#f0fdf4',
+                botBg: '#dcfce7',
+                star1: '#10b981', star2: '#06b6d4',
+                circ1: '#059669', circ2: '#10b981', circ3: '#34d399',
+                cut1: '#10b981', cut2: '#059669',
+                badges: ['#059669', '#10b981', '#059669', '#10b981'],
+                title: '#064e3b', question: '#065f46', optionText: '#022c22'
+            },
+            // 4. Electric Violet
+            {
+                topBg: '#faf5ff',
+                botBg: '#f3e8ff',
+                star1: '#a855f7', star2: '#ec4899',
+                circ1: '#8b5cf6', circ2: '#a855f7', circ3: '#ec4899',
+                cut1: '#a855f7', cut2: '#8b5cf6',
+                badges: ['#8b5cf6', '#ec4899', '#8b5cf6', '#ec4899'],
+                title: '#4c1d95', question: '#6b21a8', optionText: '#2e1065'
+            },
+            // 5. Ocean Sapphire
+            {
+                topBg: '#f0f9ff',
+                botBg: '#e0f2fe',
+                star1: '#0284c7', star2: '#06b6d4',
+                circ1: '#0284c7', circ2: '#38bdf8', circ3: '#06b6d4',
+                cut1: '#0284c7', cut2: '#06b6d4',
+                badges: ['#0284c7', '#06b6d4', '#0284c7', '#06b6d4'],
+                title: '#0c4a6e', question: '#0369a1', optionText: '#082f49'
+            },
+            // 6. Bubblegum Pastel
+            {
+                topBg: '#fff1f2',
+                botBg: '#ffe4e6',
+                star1: '#f43f5e', star2: '#fb7185',
+                circ1: '#f43f5e', circ2: '#fb7185', circ3: '#fda4af',
+                cut1: '#f43f5e', cut2: '#fb7185',
+                badges: ['#f43f5e', '#fb7185', '#f43f5e', '#fb7185'],
+                title: '#881337', question: '#9f1239', optionText: '#4c0519'
+            },
+            // 7. Royal Gold
+            {
+                topBg: '#fffbeb',
+                botBg: '#fef3c7',
+                star1: '#b45309', star2: '#d97706',
+                circ1: '#b45309', circ2: '#f59e0b', circ3: '#d97706',
+                cut1: '#d97706', cut2: '#b45309',
+                badges: ['#b45309', '#f59e0b', '#b45309', '#f59e0b'],
+                title: '#451a03', question: '#78350f', optionText: '#1c1917'
+            },
+            // 8. Dark Neon Velvet
+            {
+                topBg: '#120522',
+                botBg: '#090114',
+                star1: '#d946ef', star2: '#38bdf8',
+                circ1: '#d946ef', circ2: '#a855f7', circ3: '#38bdf8',
+                cut1: '#38bdf8', cut2: '#d946ef',
+                badges: ['#d946ef', '#38bdf8', '#d946ef', '#38bdf8'],
+                title: '#ffffff', question: '#c084fc', optionText: '#0f172a'
+            },
+            // 9. Toxic Lime
+            {
+                topBg: '#f7fee7',
+                botBg: '#ecfccb',
+                star1: '#84cc16', star2: '#10b981',
+                circ1: '#65a30d', circ2: '#84cc16', circ3: '#10b981',
+                cut1: '#84cc16', cut2: '#65a30d',
+                badges: ['#65a30d', '#84cc16', '#65a30d', '#84cc16'],
+                title: '#365314', question: '#4d7c0f', optionText: '#1a2e05'
+            },
+            // 10. Arctic Glacier
+            {
+                topBg: '#ffffff',
+                botBg: '#e2e8f0',
+                star1: '#0ea5e9', star2: '#64748b',
+                circ1: '#0ea5e9', circ2: '#38bdf8', circ3: '#64748b',
+                cut1: '#64748b', cut2: '#0ea5e9',
+                badges: ['#0ea5e9', '#64748b', '#0ea5e9', '#64748b'],
+                title: '#0f172a', question: '#334155', optionText: '#0f172a'
+            },
+            // 11. Crimson Night
+            {
+                topBg: '#180404',
+                botBg: '#0a0101',
+                star1: '#ef4444', star2: '#f97316',
+                circ1: '#ef4444', circ2: '#f87171', circ3: '#f97316',
+                cut1: '#ef4444', cut2: '#f97316',
+                badges: ['#ef4444', '#f97316', '#ef4444', '#f97316'],
+                title: '#ffffff', question: '#fca5a5', optionText: '#0f172a'
+            },
+            // 12. Lavender Dream
+            {
+                topBg: '#faf5ff',
+                botBg: '#ede9fe',
+                star1: '#8b5cf6', star2: '#c084fc',
+                circ1: '#7c3aed', circ2: '#8b5cf6', circ3: '#c084fc',
+                cut1: '#8b5cf6', cut2: '#7c3aed',
+                badges: ['#7c3aed', '#c084fc', '#7c3aed', '#c084fc'],
+                title: '#4c1d95', question: '#6d28d9', optionText: '#2e1065'
+            },
+            // 13. Minimal Studio Dark
+            {
+                topBg: '#1e293b',
+                botBg: '#0f172a',
+                star1: '#f8fafc', star2: '#94a3b8',
+                circ1: '#3b82f6', circ2: '#f8fafc', circ3: '#10b981',
+                cut1: '#10b981', cut2: '#3b82f6',
+                badges: ['#3b82f6', '#10b981', '#3b82f6', '#10b981'],
+                title: '#ffffff', question: '#cbd5e1', optionText: '#0f172a'
+            },
+            // 14. Amber Rust
+            {
+                topBg: '#fffbeb',
+                botBg: '#fef3c7',
+                star1: '#ea580c', star2: '#c2410c',
+                circ1: '#c2410c', circ2: '#ea580c', circ3: '#f59e0b',
+                cut1: '#c2410c', cut2: '#ea580c',
+                badges: ['#c2410c', '#f59e0b', '#c2410c', '#f59e0b'],
+                title: '#431407', question: '#7c2d12', optionText: '#270802'
+            },
+            // 15. Sky Cyan Fresh
+            {
+                topBg: '#f0fdfa',
+                botBg: '#ccfbf1',
+                star1: '#14b8a6', star2: '#0ea5e9',
+                circ1: '#0f766e', circ2: '#14b8a6', circ3: '#0ea5e9',
+                cut1: '#14b8a6', cut2: '#0ea5e9',
+                badges: ['#0f766e', '#14b8a6', '#0f766e', '#14b8a6'],
+                title: '#134e4a', question: '#115e59', optionText: '#042f2e'
+            },
+            // 16. Magenta Pop
+            {
+                topBg: '#fdf4ff',
+                botBg: '#fae8ff',
+                star1: '#c026d3', star2: '#e879f9',
+                circ1: '#a21caf', circ2: '#c026d3', circ3: '#e879f9',
+                cut1: '#c026d3', cut2: '#a21caf',
+                badges: ['#a21caf', '#e879f9', '#a21caf', '#e879f9'],
+                title: '#701a75', question: '#86198f', optionText: '#4a044e'
+            },
+            // 17. Indigo Galaxy
+            {
+                topBg: '#090a16',
+                botBg: '#03040a',
+                star1: '#6366f1', star2: '#38bdf8',
+                circ1: '#4f46e5', circ2: '#6366f1', circ3: '#38bdf8',
+                cut1: '#38bdf8', cut2: '#4f46e5',
+                badges: ['#4f46e5', '#38bdf8', '#4f46e5', '#38bdf8'],
+                title: '#ffffff', question: '#a5b4fc', optionText: '#0f172a'
+            },
+            // 18. Peachy Glow
+            {
+                topBg: '#fff7ed',
+                botBg: '#ffedd5',
+                star1: '#f97316', star2: '#fb7185',
+                circ1: '#fb7185', circ2: '#f97316', circ3: '#fdba74',
+                cut1: '#fb7185', cut2: '#f97316',
+                badges: ['#fb7185', '#f97316', '#fb7185', '#f97316'],
+                title: '#7c2d12', question: '#9a3412', optionText: '#431407'
+            },
+            // 19. Pure Neo-Brutalist
+            {
+                topBg: '#ffffff',
+                botBg: '#f8fafc',
+                star1: '#000000', star2: '#22c55e',
+                circ1: '#000000', circ2: '#facc15', circ3: '#22c55e',
+                cut1: '#22c55e', cut2: '#000000',
+                badges: ['#000000', '#22c55e', '#000000', '#22c55e'],
+                title: '#000000', question: '#334155', optionText: '#000000'
+            }
+        ];
+
+        let currentThemeIndex = 0;
+
+        function createThemeSwatches() {
+            const container = $('themes');
+            themes.forEach((t, i) => {
+                const b = document.createElement('button');
+                b.className = 'swatch' + (i === 0 ? ' active' : '');
+                b.title = 'Theme ' + (i + 1);
+                b.style.background = `linear-gradient(135deg, ${t.circ1}, ${t.circ2}, ${t.circ3})`;
+                b.onclick = () => {
+                    currentThemeIndex = i;
+                    document.querySelectorAll('.swatch').forEach((el, idx) => el.classList.toggle('active', idx === i));
+                    render();
+                };
+                container.appendChild(b);
+            });
+        }
+        createThemeSwatches();
+
+        // Interactive Hitboxes for Dragging
+        let hitRegions = {
+            question: { x: 0, y: 0, w: 0, h: 0 },
+            circles: { x: 0, y: 0, w: 0, h: 0 },
+            options: { x: 0, y: 0, w: 0, h: 0 }
+        };
+
+        let draggingTarget = null;
+        let dragStartY = 0;
+        let initialValY = 0;
+
+        function toggleDrawer() { $('drawer').classList.toggle('open'); }
+
+        function sync() {
+            ['questionY', 'circlesY', 'optionsY', 'scale', 'glowIntensity', 'bgDim', 'bgBlur'].forEach(id => {
+                const v = $(id).value;
+                if (id === 'scale' || id === 'bgDim' || id === 'glowIntensity') $(id + 'v').textContent = v + '%';
+                else if (id === 'bgBlur') $(id + 'v').textContent = v + 'px';
+                else $(id + 'v').textContent = v;
+            });
+        }
+
+        ['title', 'raw', 'watermark', 'ratio', 'questionY', 'circlesY', 'optionsY', 'scale', 'glowIntensity', 'bgDim', 'bgBlur'].forEach(id => {
+            $(id).addEventListener(id === 'ratio' ? 'change' : 'input', render);
+        });
+        ['questionY', 'circlesY', 'optionsY', 'scale', 'glowIntensity', 'bgDim', 'bgBlur'].forEach(id => $(id).addEventListener('input', sync));
+
+        // Background Upload
+        $('bgUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                const img = new Image();
+                img.onload = () => {
+                    customBgImg = img;
+                    render();
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function removeBgImage() {
+            customBgImg = null;
+            $('bgUpload').value = '';
+            render();
+        }
+
+        function setSize() {
+            const r = $('ratio').value;
+            if (r === '9:16') { C.width = 1080; C.height = 1920; }
+            if (r === '1:1') { C.width = 1080; C.height = 1080; }
+            if (r === '4:5') { C.width = 1080; C.height = 1350; }
+            if (r === '16:9') { C.width = 1920; C.height = 1080; }
+        }
+
+        function drawRoundRect(c, x, y, w, h, r) {
+            r = Math.min(r, w / 2, h / 2);
+            c.beginPath(); c.moveTo(x + r, y);
+            c.lineTo(x + w - r, y); c.quadraticCurveTo(x + w, y, x + w, y + r);
+            c.lineTo(x + w, y + h - r); c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            c.lineTo(x + r, y + h); c.quadraticCurveTo(x, y + h, x, y + h - r);
+            c.lineTo(x, y + r); c.quadraticCurveTo(x, y, x + r, y);
+            c.closePath();
+        }
+
+        function wrapText(c, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(/\s+/);
+            let line = '';
+            let currentY = y;
+            for (let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                if (c.measureText(testLine).width > maxWidth && n > 0) {
+                    c.fillText(line, x, currentY);
+                    line = words[n] + ' ';
+                    currentY += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            c.fillText(line, x, currentY);
+            return currentY;
+        }
+
+        // Draw 4-Pointed Sparkle Star (Top Corners in Screenshot)
+        function draw4PointStar(c, cx, cy, outerRadius, innerRadius, color, glowFactor) {
+            c.save();
+            c.beginPath();
+            for (let i = 0; i < 8; i++) {
+                const r = (i % 2 === 0) ? outerRadius : innerRadius;
+                const angle = (i * Math.PI) / 4;
+                const x = cx + Math.cos(angle) * r;
+                const y = cy + Math.sin(angle) * r;
+                if (i === 0) c.moveTo(x, y);
+                else c.lineTo(x, y);
+            }
+            c.closePath();
+
+            c.shadowColor = color;
+            c.shadowBlur = 25 * glowFactor;
+            c.fillStyle = color;
+            c.fill();
+            c.restore();
+        }
+
+        function parsed() {
+            const ls = $('raw').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+            let q = ls[0] || 'What’s your favorite way to spend free time?';
+            let opts = [];
+            for (let i = 1; i < 5; i++) {
+                opts.push((ls[i] || ['A. Reading', 'B. Watching movies', 'C. Traveling', 'D. Listening to music'][i - 1]).replace(/^[A-Da-d][\.\)\:\-\s]+/, ''));
+            }
+            return { q, opts };
+        }
+
+        // MASTER RENDER
+        function render() {
+            setSize();
+            const W = C.width, H = C.height;
+            const theme = themes[currentThemeIndex];
+            const glow = +$('glowIntensity').value / 100;
+            const scale = +$('scale').value / 100;
+
+            const questionShift = +$('questionY').value * (H / 1920);
+            const circlesShift = +$('circlesY').value * (H / 1920);
+            const optionsShift = +$('optionsY').value * (H / 1920);
+
+            // 1. BASE BACKGROUND & THEMATIC WAVE
+            if (customBgImg) {
+                ctx.save();
+                if (+$('bgBlur').value > 0) {
+                    ctx.filter = `blur(${+$('bgBlur').value}px)`;
+                }
+                ctx.drawImage(customBgImg, 0, 0, W, H);
+                ctx.filter = 'none';
+
+                const dim = +$('bgDim').value / 100;
+                if (dim > 0) {
+                    ctx.fillStyle = `rgba(0, 0, 0, ${dim})`;
+                    ctx.fillRect(0, 0, W, H);
+                }
+                ctx.restore();
+            } else {
+                // Top Light Card/Area
+                ctx.fillStyle = theme.topBg;
+                ctx.fillRect(0, 0, W, H);
+
+                // Curvy Wave Split (Bottom Area)
+                ctx.save();
+                ctx.fillStyle = theme.botBg;
+                ctx.beginPath();
+                const waveY = H * 0.46;
+                ctx.moveTo(0, waveY);
+                // Smooth aesthetic curve
+                ctx.bezierCurveTo(W * 0.25, waveY + (55 * scale), W * 0.75, waveY - (55 * scale), W, waveY);
+                ctx.lineTo(W, H);
+                ctx.lineTo(0, H);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // 2. Corner Stars (Top-Left & Top-Right)
+            draw4PointStar(ctx, W * 0.12, H * 0.07, 75 * scale, 18 * scale, theme.star1, glow);
+            draw4PointStar(ctx, W * 0.88, H * 0.07, 75 * scale, 18 * scale, theme.star2, glow);
+
+            // 3. Bottom Corner Circular Wave Cuts
+            ctx.save();
+            ctx.shadowColor = theme.cut1;
+            ctx.shadowBlur = 25 * glow;
+            ctx.fillStyle = theme.cut1;
+            ctx.beginPath();
+            ctx.arc(-20, H + 20, 160 * scale, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.shadowColor = theme.cut2;
+            ctx.fillStyle = theme.cut2;
+            ctx.beginPath();
+            ctx.arc(W + 20, H + 20, 170 * scale, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // 4. Header Title ("Daily Quiz")
+            const titleText = $('title').value || "Daily Quiz";
+            ctx.save();
+            ctx.font = `900 ${Math.round(110 * scale)}px "Montserrat", sans-serif`;
+            ctx.fillStyle = theme.title;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillText(titleText, W / 2, (180 * (H / 1920)));
+            ctx.restore();
+
+            // 5. Question Text (Draggable)
+            const { q, opts } = parsed();
+            const qStartY = (320 * (H / 1920)) + questionShift;
+            ctx.save();
+            ctx.font = `800 ${Math.round(44 * scale)}px "Outfit", sans-serif`;
+            ctx.fillStyle = theme.question;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            const lastQY = wrapText(ctx, q, W / 2, qStartY, W * 0.78, 56 * scale);
+            ctx.restore();
+
+            hitRegions.question = {
+                x: W * 0.1,
+                y: qStartY - 10,
+                w: W * 0.8,
+                h: (lastQY - qStartY) + 30
+            };
+
+            // 6. Overlapping 3D Question Mark Circles (Orange, Big Yellow, Green)
+            const circlesCenterY = (H * 0.45) + circlesShift;
+            const cRadius = 90 * scale;
+            const bigRadius = 115 * scale;
+
+            ctx.save();
+            // Left Circle (Orange)
+            ctx.shadowColor = theme.circ1;
+            ctx.shadowBlur = 30 * glow;
+            ctx.fillStyle = theme.circ1;
+            ctx.beginPath();
+            ctx.arc(W / 2 - (115 * scale), circlesCenterY, cRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Right Circle (Green)
+            ctx.shadowColor = theme.circ3;
+            ctx.shadowBlur = 30 * glow;
+            ctx.fillStyle = theme.circ3;
+            ctx.beginPath();
+            ctx.arc(W / 2 + (115 * scale), circlesCenterY, cRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Center Big Circle (Yellow)
+            ctx.shadowColor = theme.circ2;
+            ctx.shadowBlur = 35 * glow;
+            ctx.fillStyle = theme.circ2;
+            ctx.beginPath();
+            ctx.arc(W / 2, circlesCenterY, bigRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Render '?' inside circles
+            ctx.fillStyle = '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowBlur = 0;
+
+            // Small Left '?'
+            ctx.font = `900 ${Math.round(92 * scale)}px "Fredoka One", sans-serif`;
+            ctx.fillText('?', W / 2 - (115 * scale), circlesCenterY + 4);
+
+            // Small Right '?'
+            ctx.fillText('?', W / 2 + (115 * scale), circlesCenterY + 4);
+
+            // Big Center '?'
+            ctx.font = `900 ${Math.round(135 * scale)}px "Fredoka One", sans-serif`;
+            ctx.fillText('?', W / 2, circlesCenterY + 6);
+            ctx.restore();
+
+            hitRegions.circles = {
+                x: W / 2 - (220 * scale),
+                y: circlesCenterY - bigRadius,
+                w: 440 * scale,
+                h: bigRadius * 2
+            };
+
+            // 7. 4 Vertical White Option Pills
+            const optW = W * 0.74 * scale;
+            const optH = 94 * scale;
+            const optGap = 26 * scale;
+            const optStartX = (W - optW) / 2;
+            const optStartY = (H * 0.58) + optionsShift;
+
+            const optBadges = ['A', 'B', 'C', 'D'];
+
+            for (let i = 0; i < 4; i++) {
+                const by = optStartY + i * (optH + optGap);
+
+                // White Pill Base
+                ctx.save();
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.08)';
+                ctx.shadowBlur = 18;
+                ctx.shadowOffsetY = 6;
+                ctx.fillStyle = '#ffffff';
+                drawRoundRect(ctx, optStartX, by, optW, optH, optH / 2);
+                ctx.fill();
+
+                // Left Circle Badge
+                const badgeRadius = 35 * scale;
+                const badgeX = optStartX + badgeRadius + (12 * scale);
+                const badgeY = by + optH / 2;
+
+                ctx.shadowColor = theme.badges[i];
+                ctx.shadowBlur = 18 * glow;
+                ctx.fillStyle = theme.badges[i];
+                ctx.beginPath();
+                ctx.arc(badgeX, badgeY, badgeRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Option Letter
+                ctx.shadowBlur = 0;
+                ctx.font = `900 ${Math.round(36 * scale)}px "Montserrat", sans-serif`;
+                ctx.fillStyle = '#000000';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(optBadges[i], badgeX, badgeY + (2 * scale));
+
+                // Option Text
+                ctx.font = `700 ${Math.round(38 * scale)}px "Outfit", sans-serif`;
+                ctx.fillStyle = theme.optionText;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                let txt = opts[i];
+                const maxTxtW = optW - (badgeRadius * 2) - (80 * scale);
+                if (ctx.measureText(txt).width > maxTxtW) {
+                    while (ctx.measureText(txt + '...').width > maxTxtW && txt.length > 0) {
+                        txt = txt.slice(0, -1);
+                    }
+                    txt += '...';
+                }
+                ctx.fillText(txt, optStartX + optW / 2 + (15 * scale), by + optH / 2);
+
+                ctx.restore();
+            }
+
+            hitRegions.options = {
+                x: optStartX,
+                y: optStartY,
+                w: optW,
+                h: 4 * optH + (3 * optGap)
+            };
+
+            // 8. Watermark Badge
+            const wm = $('watermark').value || '@4xlearner';
+            ctx.save();
+            ctx.font = `800 ${Math.round(36 * scale)}px "Outfit", sans-serif`;
+            const wmW = ctx.measureText(wm).width + 50;
+            const wmH = 55 * scale;
+            const wmX = (W - wmW) / 2;
+            const wmY = H - (90 * (H / 1920));
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+            drawRoundRect(ctx, wmX, wmY, wmW, wmH, 25);
+            ctx.fill();
+
+            ctx.fillStyle = '#1e293b';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(wm, W / 2, wmY + wmH / 2);
+            ctx.restore();
+        }
+
+        // TOUCH & MOUSE DRAGGING ENGINE
+        function getCanvasCoordinates(e) {
+            const rect = C.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const scaleX = C.width / rect.width;
+            const scaleY = C.height / rect.height;
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY,
+                rawY: clientY
+            };
+        }
+
+        function onPointerDown(e) {
+            const pos = getCanvasCoordinates(e);
+
+            if (pos.x >= hitRegions.options.x && pos.x <= hitRegions.options.x + hitRegions.options.w &&
+                pos.y >= hitRegions.options.y && pos.y <= hitRegions.options.y + hitRegions.options.h) {
+                draggingTarget = 'options';
+                dragStartY = pos.rawY;
+                initialValY = +$('optionsY').value;
+                return;
+            }
+
+            if (pos.x >= hitRegions.circles.x && pos.x <= hitRegions.circles.x + hitRegions.circles.w &&
+                pos.y >= hitRegions.circles.y && pos.y <= hitRegions.circles.y + hitRegions.circles.h) {
+                draggingTarget = 'circles';
+                dragStartY = pos.rawY;
+                initialValY = +$('circlesY').value;
+                return;
+            }
+
+            if (pos.x >= hitRegions.question.x && pos.x <= hitRegions.question.x + hitRegions.question.w &&
+                pos.y >= hitRegions.question.y && pos.y <= hitRegions.question.y + hitRegions.question.h) {
+                draggingTarget = 'question';
+                dragStartY = pos.rawY;
+                initialValY = +$('questionY').value;
+                return;
+            }
+        }
+
+        function onPointerMove(e) {
+            if (!draggingTarget) return;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const deltaY = clientY - dragStartY;
+
+            const rect = C.getBoundingClientRect();
+            const scaleFactor = (C.height / rect.height) * (1920 / C.height);
+            const computedY = Math.round(initialValY + deltaY * scaleFactor);
+
+            if (draggingTarget === 'options') {
+                $('optionsY').value = Math.max(-300, Math.min(300, computedY));
+            } else if (draggingTarget === 'circles') {
+                $('circlesY').value = Math.max(-300, Math.min(300, computedY));
+            } else if (draggingTarget === 'question') {
+                $('questionY').value = Math.max(-300, Math.min(300, computedY));
+            }
+
+            sync();
+            render();
+        }
+
+        function onPointerUp() {
+            draggingTarget = null;
+        }
+
+        C.addEventListener('mousedown', onPointerDown);
+        window.addEventListener('mousemove', onPointerMove);
+        window.addEventListener('mouseup', onPointerUp);
+
+        C.addEventListener('touchstart', onPointerDown, { passive: true });
+        window.addEventListener('touchmove', onPointerMove, { passive: true });
+        window.addEventListener('touchend', onPointerUp);
+
+        // TRUE 4K DIRECT DOWNLOAD
+        function downloadPNG() {
+            const ow = C.width, oh = C.height;
+            const sc = 2; // True 4K scale
+            const r = $('ratio').value;
+            let w = 1080, h = 1920;
+            if (r === '1:1') { w = 1080; h = 1080; }
+            if (r === '4:5') { w = 1080; h = 1350; }
+            if (r === '16:9') { w = 1920; h = 1080; }
+
+            C.width = w * sc; C.height = h * sc;
+            render();
+
+            const url = C.toDataURL('image/png', 1.0);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `4X-WaveQuiz-4K-${Date.now()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            C.width = ow; C.height = oh;
+            render();
+        }
+
+        function resetAll() {
+            $('title').value = "Daily Quiz";
+            $('raw').value = "What’s your favorite way to spend free time?\nA. Reading\nB. Watching movies\nC. Traveling\nD. Listening to music";
+            $('watermark').value = '@4xlearner';
+            $('ratio').value = '9:16';
+            $('questionY').value = 0;
+            $('circlesY').value = 0;
+            $('optionsY').value = 0;
+            $('scale').value = 100;
+            $('glowIntensity').value = 70;
+            $('bgDim').value = 0;
+            $('bgBlur').value = 0;
+            currentThemeIndex = 0;
+            removeBgImage();
+            sync();
+            render();
+        }
+
+        document.fonts.ready.then(() => {
+            sync();
+            render();
+        });
+
+        window.addEventListener('resize', () => requestAnimationFrame(render));
+    </script>
+</body>
+
+</html>

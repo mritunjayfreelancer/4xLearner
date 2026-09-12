@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>4X Learner • 3D Browser Quiz (Top 20 Glow Themes)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@800;900&family=Outfit:wght@600;700;800;900&family=Quicksand:wght@700;800&display=swap');
+
+        :root {
+            --bg: #070b14;
+            --panel: #111827;
+            --line: #263247;
+            --text: #f8fafc;
+            --accent: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Outfit, Arial, sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .topbar {
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background: rgba(9, 14, 25, .95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(18px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+            letter-spacing: .5px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #f59e0b, #06b6d4, #ec4899);
+            box-shadow: 0 8px 24px #0008;
+            color: #000;
+            font-weight: 900;
+            font-size: 15px;
+        }
+
+        .brand span {
+            font-size: 18px;
+        }
+
+        .menuBtn,
+        .smallBtn,
+        .primaryBtn {
+            border: 0;
+            color: #fff;
+            border-radius: 12px;
+            font-weight: 800;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #0891b2, #7c3aed);
+            box-shadow: 0 8px 25px #0005;
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 390px;
+            height: calc(100vh - 64px);
+        }
+
+        .stage {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: radial-gradient(circle at 50% 50%, #172554 0, #050811 100%);
+            overflow: auto;
+            position: relative;
+        }
+
+        .previewWrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #canvas {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: calc(100vw - 430px);
+            max-height: calc(100vh - 100px);
+            border-radius: 24px;
+            box-shadow: 0 25px 80px #000b;
+            cursor: grab;
+            touch-action: none;
+        }
+
+        #canvas:active {
+            cursor: grabbing;
+        }
+
+        .drawer {
+            background: linear-gradient(180deg, #111827, #0b1220);
+            border-left: 1px solid var(--line);
+            overflow-y: auto;
+            padding: 18px;
+        }
+
+        .section {
+            background: #0c1422;
+            border: 1px solid #243149;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .section h3 {
+            font-size: 13px;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 11px;
+        }
+
+        label {
+            display: block;
+            color: #9fb0c8;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            margin: 11px 0 5px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #30405a;
+            background: #070d18;
+            color: #fff;
+            border-radius: 10px;
+            outline: 0;
+            padding: 10px 11px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 116px;
+            line-height: 1.45;
+        }
+
+        .rangeRow {
+            display: grid;
+            grid-template-columns: 1fr 58px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        input[type=range] {
+            padding: 0;
+            accent-color: #38bdf8;
+        }
+
+        .value {
+            background: #07101c;
+            border: 1px solid #27354b;
+            border-radius: 9px;
+            padding: 7px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        /* 20 GLOW THEME SWATCHES */
+        .swatches {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 7px;
+        }
+
+        .swatch {
+            height: 36px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 0;
+            position: relative;
+            transition: transform 0.15s, border-color 0.15s;
+        }
+
+        .swatch:hover {
+            transform: scale(1.05);
+        }
+
+        .swatch.active {
+            border-color: #fff;
+            box-shadow: 0 0 12px #38bdf8;
+        }
+
+        .fileUploadBtn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e293b;
+            border: 2px dashed #475569;
+            color: #cbd5e1;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 13px;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .fileUploadBtn:hover {
+            border-color: #38bdf8;
+            color: #fff;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .primaryBtn {
+            grid-column: 1/-1;
+            padding: 13px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+            font-size: 14px;
+        }
+
+        .primaryBtn:active {
+            transform: scale(0.98);
+        }
+
+        .drag-tip {
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px dashed #38bdf8;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 11px;
+            color: #bae6fd;
+            line-height: 1.4;
+            margin-top: 8px;
+        }
+
+        @media(max-width:860px) {
+            .topbar {
+                height: 58px;
+                padding: 0 10px;
+            }
+
+            .logo {
+                width: 34px;
+                height: 34px;
+            }
+
+            .brand span {
+                font-size: 15px;
+            }
+
+            .app {
+                display: block;
+                height: auto;
+            }
+
+            .stage {
+                height: calc(100vh - 58px);
+                min-height: 540px;
+                padding: 10px;
+            }
+
+            #canvas {
+                max-width: calc(100vw - 20px);
+                max-height: calc(100vh - 82px);
+                border-radius: 18px;
+            }
+
+            .drawer {
+                position: fixed;
+                z-index: 900;
+                right: 0;
+                top: 58px;
+                bottom: 0;
+                width: min(390px, 94vw);
+                transform: translateX(105%);
+                transition: transform .25s ease;
+                box-shadow: -25px 0 70px #000b;
+            }
+
+            .drawer.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">4X</div><span>4X LEARNER • 20 GLOW STUDIO</span>
+        </div>
+        <button class="menuBtn" onclick="toggleDrawer()">⚙️ Controls</button>
+    </header>
+
+    <div class="app">
+        <main class="stage">
+            <div class="previewWrap"><canvas id="canvas" width="1080" height="1920"></canvas></div>
+        </main>
+
+        <aside class="drawer" id="drawer">
+            <!-- DRAGGING TIP -->
+            <div class="drag-tip">
+                ✨ <b>Live Interactive Drag:</b> स्क्रीन पर <b>Question</b> या <b>Option Buttons</b> को अपनी उंगली या
+                माउस से पकड़कर सीधे ऊपर-नीचे ड्रैग कर सकते हैं!
+            </div>
+
+            <!-- TOP 20 GLOW THEMES -->
+            <div class="section" style="margin-top:12px;">
+                <h3>Top 20 Ultra-Glow Themes</h3>
+                <div id="themes" class="swatches"></div>
+            </div>
+
+            <!-- GLOW INTENSITY & ADJUSTMENTS -->
+            <div class="section">
+                <h3>Glow & Position Controls</h3>
+                <label>Neon Glow Intensity</label>
+                <div class="rangeRow">
+                    <input id="glowIntensity" type="range" min="20" max="150" value="80">
+                    <div class="value" id="glowIntensityv">80%</div>
+                </div>
+
+                <label>Options Group Y-Position</label>
+                <div class="rangeRow">
+                    <input id="optionsY" type="range" min="-400" max="300" value="-90">
+                    <div class="value" id="optionsYv">-90</div>
+                </div>
+
+                <label>Question Y-Position</label>
+                <div class="rangeRow">
+                    <input id="questionY" type="range" min="-300" max="300" value="0">
+                    <div class="value" id="questionYv">0</div>
+                </div>
+
+                <label>Card Stack Y-Position</label>
+                <div class="rangeRow">
+                    <input id="contentY" type="range" min="-250" max="250" value="0">
+                    <div class="value" id="contentYv">0</div>
+                </div>
+
+                <label>Overall Scale</label>
+                <div class="rangeRow">
+                    <input id="scale" type="range" min="80" max="115" value="100">
+                    <div class="value" id="scalev">100%</div>
+                </div>
+            </div>
+
+            <!-- CONTENT SECTION -->
+            <div class="section">
+                <h3>Content</h3>
+                <label>Window Title</label>
+                <input id="title" value="QUIZ TIME">
+                <label>Question + 4 Options (One Box)</label>
+                <textarea id="raw">Which color do you like the most?
+A. Red
+B. Blue
+C. Green
+D. Yellow</textarea>
+                <label>Channel Watermark</label>
+                <input id="watermark" value="@4xlearner">
+            </div>
+
+            <!-- BACKGROUND IMAGE UPLOAD -->
+            <div class="section">
+                <h3>Custom Background Image</h3>
+                <label>Upload Image (Optional)</label>
+                <label class="fileUploadBtn" for="bgUpload">
+                    📁 <span>Choose Custom Image</span>
+                </label>
+                <input type="file" id="bgUpload" accept="image/*" style="display:none">
+
+                <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <button class="smallBtn" style="padding:6px 10px; font-size:11px;" onclick="removeBgImage()">✕
+                        Remove Image</button>
+                </div>
+
+                <label>Background Dim</label>
+                <div class="rangeRow">
+                    <input id="bgDim" type="range" min="0" max="90" value="0">
+                    <div class="value" id="bgDimv">0%</div>
+                </div>
+
+                <label>Background Blur</label>
+                <div class="rangeRow">
+                    <input id="bgBlur" type="range" min="0" max="25" value="0">
+                    <div class="value" id="bgBlurv">0px</div>
+                </div>
+            </div>
+
+            <!-- FORMAT SECTION -->
+            <div class="section">
+                <h3>Aspect Ratio</h3>
+                <select id="ratio">
+                    <option value="9:16">9:16 • Shorts / Reels • 1080×1920</option>
+                    <option value="1:1">1:1 • Square • 1080×1080</option>
+                    <option value="4:5">4:5 • Feed • 1080×1350</option>
+                    <option value="16:9">16:9 • Landscape • 1920×1080</option>
+                </select>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="section">
+                <h3>Actions</h3>
+                <div class="actions">
+                    <button class="smallBtn" onclick="resetAll()">↺ Reset</button>
+                    <button class="primaryBtn" onclick="downloadPNG()">⬇ Download Perfect 4K PNG</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const C = document.getElementById('canvas'), ctx = C.getContext('2d', { alpha: false });
+        const $ = id => document.getElementById(id);
+
+        let customBgImg = null;
+
+        // TOP 20 GLOW THEMES PALETTE
+        // Structure: [
+        //   frameGradient: [c1, c2], 
+        //   bgGradient: [c1, c2], 
+        //   decorColors: [bulb, bubble, tube],
+        //   optionBadges: [A, B, C, D],
+        //   optionGlows: [A_glow, B_glow, C_glow, D_glow],
+        //   cardInnerBg,
+        //   titleBoxBorder
+        // ]
+        const glowThemes = [
+            // 0. Golden Clay (Original Screenshot)
+            {
+                frame: ['#fbbf24', '#d97706'],
+                bg: ['#c2e9fb', '#a1c4fd'],
+                decor: ['#f59e0b', '#93c5fd', '#60a5fa'],
+                opts: ['#ef4444', '#3b82f6', '#10b981', '#f59e0b'],
+                glows: ['rgba(239,68,68,0.7)', 'rgba(59,130,246,0.7)', 'rgba(16,185,129,0.7)', 'rgba(245,158,11,0.7)'],
+                cardBg: '#fbf7ee',
+                headerBorder: '#2b4c6f',
+                titleColor: '#244569'
+            },
+            // 1. Cyber Neon Pulse
+            {
+                frame: ['#00ffcc', '#0099ff'],
+                bg: ['#050816', '#0f172a'],
+                decor: ['#00ffcc', '#00e5ff', '#0077ff'],
+                opts: ['#ff0055', '#00e5ff', '#00ff66', '#ffcc00'],
+                glows: ['rgba(255,0,85,0.85)', 'rgba(0,229,255,0.85)', 'rgba(0,255,102,0.85)', 'rgba(255,204,0,0.85)'],
+                cardBg: '#090d1c',
+                headerBorder: '#00ffcc',
+                titleColor: '#00ffcc'
+            },
+            // 2. Synthwave Sunset
+            {
+                frame: ['#ff007f', '#7928ca'],
+                bg: ['#1e0533', '#0a0014'],
+                decor: ['#ff007f', '#a855f7', '#ec4899'],
+                opts: ['#ff007f', '#38bdf8', '#a855f7', '#facc15'],
+                glows: ['rgba(255,0,127,0.85)', 'rgba(56,189,248,0.85)', 'rgba(168,85,247,0.85)', 'rgba(250,204,21,0.85)'],
+                cardBg: '#130424',
+                headerBorder: '#ff007f',
+                titleColor: '#f43f5e'
+            },
+            // 3. Royal Emerald Tech
+            {
+                frame: ['#10b981', '#047857'],
+                bg: ['#022c22', '#061a14'],
+                decor: ['#34d399', '#6ee7b7', '#059669'],
+                opts: ['#f43f5e', '#06b6d4', '#10b981', '#fbbf24'],
+                glows: ['rgba(244,63,94,0.8)', 'rgba(6,182,212,0.8)', 'rgba(16,185,129,0.8)', 'rgba(251,191,36,0.8)'],
+                cardBg: '#031f18',
+                headerBorder: '#10b981',
+                titleColor: '#10b981'
+            },
+            // 4. Electric Violet
+            {
+                frame: ['#8b5cf6', '#4c1d95'],
+                bg: ['#0f051d', '#1e0836'],
+                decor: ['#c084fc', '#d8b4fe', '#7c3aed'],
+                opts: ['#ef4444', '#8b5cf6', '#06b6d4', '#f59e0b'],
+                glows: ['rgba(239,68,68,0.8)', 'rgba(139,92,246,0.85)', 'rgba(6,182,212,0.8)', 'rgba(245,158,11,0.8)'],
+                cardBg: '#16082b',
+                headerBorder: '#a855f7',
+                titleColor: '#c084fc'
+            },
+            // 5. Crimson Inferno
+            {
+                frame: ['#ef4444', '#991b1b'],
+                bg: ['#2b0707', '#0f0202'],
+                decor: ['#f87171', '#fca5a5', '#dc2626'],
+                opts: ['#ef4444', '#f97316', '#3b82f6', '#facc15'],
+                glows: ['rgba(239,68,68,0.9)', 'rgba(249,115,22,0.85)', 'rgba(59,130,246,0.8)', 'rgba(250,204,21,0.85)'],
+                cardBg: '#1a0404',
+                headerBorder: '#ef4444',
+                titleColor: '#ef4444'
+            },
+            // 6. Deep Ocean Cyan
+            {
+                frame: ['#06b6d4', '#0e7490'],
+                bg: ['#082f49', '#02131e'],
+                decor: ['#22d3ee', '#67e8f9', '#0284c7'],
+                opts: ['#f43f5e', '#06b6d4', '#10b981', '#eab308'],
+                glows: ['rgba(244,63,94,0.8)', 'rgba(6,182,212,0.9)', 'rgba(16,185,129,0.8)', 'rgba(234,179,8,0.8)'],
+                cardBg: '#052236',
+                headerBorder: '#06b6d4',
+                titleColor: '#22d3ee'
+            },
+            // 7. Bubblegum Pop
+            {
+                frame: ['#ec4899', '#be185d'],
+                bg: ['#fce7f3', '#fbcfe8'],
+                decor: ['#f472b6', '#f9a8d4', '#db2777'],
+                opts: ['#e11d48', '#8b5cf6', '#10b981', '#f59e0b'],
+                glows: ['rgba(225,29,72,0.8)', 'rgba(139,92,246,0.8)', 'rgba(16,185,129,0.8)', 'rgba(245,158,11,0.8)'],
+                cardBg: '#fff1f2',
+                headerBorder: '#db2777',
+                titleColor: '#9d174d'
+            },
+            // 8. Toxic Lime Gaming
+            {
+                frame: ['#a3e635', '#65a30d'],
+                bg: ['#0c1405', '#020501'],
+                decor: ['#bef264', '#d9f99d', '#4d7c0f'],
+                opts: ['#f43f5e', '#38bdf8', '#a3e635', '#facc15'],
+                glows: ['rgba(244,63,94,0.8)', 'rgba(56,189,248,0.8)', 'rgba(163,230,53,0.9)', 'rgba(250,204,21,0.8)'],
+                cardBg: '#081003',
+                headerBorder: '#a3e635',
+                titleColor: '#a3e635'
+            },
+            // 9. Solar Flare Amber
+            {
+                frame: ['#f97316', '#c2410c'],
+                bg: ['#2a1003', '#120501'],
+                decor: ['#fb923c', '#fdba74', '#ea580c'],
+                opts: ['#ef4444', '#06b6d4', '#22c55e', '#f97316'],
+                glows: ['rgba(239,68,68,0.8)', 'rgba(6,182,212,0.8)', 'rgba(34,197,94,0.8)', 'rgba(249,115,22,0.9)'],
+                cardBg: '#1f0a02',
+                headerBorder: '#f97316',
+                titleColor: '#f97316'
+            },
+            // 10. Arctic Ice Blue
+            {
+                frame: ['#38bdf8', '#0284c7'],
+                bg: ['#e0f2fe', '#bae6fd'],
+                decor: ['#7dd3fc', '#bae6fd', '#0369a1'],
+                opts: ['#f43f5e', '#0284c7', '#10b981', '#f59e0b'],
+                glows: ['rgba(244,63,94,0.8)', 'rgba(2,132,199,0.9)', 'rgba(16,185,129,0.8)', 'rgba(245,158,11,0.8)'],
+                cardBg: '#f0f9ff',
+                headerBorder: '#0284c7',
+                titleColor: '#0369a1'
+            },
+            // 11. Midnight Purple Velvet
+            {
+                frame: ['#c084fc', '#7e22ce'],
+                bg: ['#1e1b4b', '#0f0a2a'],
+                decor: ['#d8b4fe', '#e9d5ff', '#6b21a8'],
+                opts: ['#f43f5e', '#38bdf8', '#a855f7', '#eab308'],
+                glows: ['rgba(244,63,94,0.8)', 'rgba(56,189,248,0.8)', 'rgba(168,85,247,0.9)', 'rgba(234,179,8,0.8)'],
+                cardBg: '#170b2c',
+                headerBorder: '#a855f7',
+                titleColor: '#c084fc'
+            },
+            // 12. Golden Luxury Baroque
+            {
+                frame: ['#eab308', '#854d0e'],
+                bg: ['#1c1605', '#0a0802'],
+                decor: ['#fde047', '#fef08a', '#a16207'],
+                opts: ['#ef4444', '#3b82f6', '#10b981', '#eab308'],
+                glows: ['rgba(239,68,68,0.8)', 'rgba(59,130,246,0.8)', 'rgba(16,185,129,0.8)', 'rgba(234,179,8,0.9)'],
+                cardBg: '#140f03',
+                headerBorder: '#eab308',
+                titleColor: '#facc15'
+            },
+            // 13. Clean Studio Matte
+            {
+                frame: ['#94a3b8', '#334155'],
+                bg: ['#0f172a', '#020617'],
+                decor: ['#cbd5e1', '#e2e8f0', '#475569'],
+                opts: ['#ef4444', '#3b82f6', '#10b981', '#f59e0b'],
+                glows: ['rgba(239,68,68,0.7)', 'rgba(59,130,246,0.7)', 'rgba(16,185,129,0.7)', 'rgba(245,158,11,0.7)'],
+                cardBg: '#1e293b',
+                headerBorder: '#64748b',
+                titleColor: '#f8fafc'
+            },
+            // 14. Neon Candy Dream
+            {
+                frame: ['#f43f5e', '#a855f7'],
+                bg: ['#2e0854', '#0d001a'],
+                decor: ['#fb7185', '#c084fc', '#db2777'],
+                opts: ['#f43f5e', '#38bdf8', '#4ade80', '#fbbf24'],
+                glows: ['rgba(244,63,94,0.9)', 'rgba(56,189,248,0.9)', 'rgba(74,222,128,0.9)', 'rgba(251,191,36,0.9)'],
+                cardBg: '#1c0336',
+                headerBorder: '#f43f5e',
+                titleColor: '#f43f5e'
+            },
+            // 15. Forest Fresh Mint
+            {
+                frame: ['#2dd4bf', '#0f766e'],
+                bg: ['#042f2e', '#011615'],
+                decor: ['#5eead4', '#99f6e4', '#115e59'],
+                opts: ['#f43f5e', '#0ea5e9', '#2dd4bf', '#f59e0b'],
+                glows: ['rgba(244,63,94,0.8)', 'rgba(14,165,233,0.8)', 'rgba(45,212,191,0.9)', 'rgba(245,158,11,0.8)'],
+                cardBg: '#062423',
+                headerBorder: '#2dd4bf',
+                titleColor: '#5eead4'
+            },
+            // 16. Magenta Flash
+            {
+                frame: ['#d946ef', '#86198f'],
+                bg: ['#2c0638', '#0f0114'],
+                decor: ['#e879f9', '#f0abfc', '#a21caf'],
+                opts: ['#ef4444', '#06b6d4', '#d946ef', '#facc15'],
+                glows: ['rgba(239,68,68,0.8)', 'rgba(6,182,212,0.8)', 'rgba(217,70,239,0.9)', 'rgba(250,204,21,0.8)'],
+                cardBg: '#1b0324',
+                headerBorder: '#d946ef',
+                titleColor: '#e879f9'
+            },
+            // 17. Electric Rose
+            {
+                frame: ['#fb7185', '#be123c'],
+                bg: ['#2e0817', '#120208'],
+                decor: ['#fda4af', '#fecdd3', '#9f1239'],
+                opts: ['#fb7185', '#38bdf8', '#10b981', '#f59e0b'],
+                glows: ['rgba(251,113,133,0.9)', 'rgba(56,189,248,0.8)', 'rgba(16,185,129,0.8)', 'rgba(245,158,11,0.8)'],
+                cardBg: '#1f040f',
+                headerBorder: '#fb7185',
+                titleColor: '#fda4af'
+            },
+            // 18. Rainbow Prism Neon
+            {
+                frame: ['#38bdf8', '#ec4899'],
+                bg: ['#0f172a', '#030712'],
+                decor: ['#facc15', '#a855f7', '#38bdf8'],
+                opts: ['#ef4444', '#38bdf8', '#22c55e', '#eab308'],
+                glows: ['rgba(239,68,68,0.9)', 'rgba(56,189,248,0.9)', 'rgba(34,197,94,0.9)', 'rgba(234,179,8,0.9)'],
+                cardBg: '#111827',
+                headerBorder: '#38bdf8',
+                titleColor: '#38bdf8'
+            },
+            // 19. Ultra Violet Blacklight
+            {
+                frame: ['#6366f1', '#312e81'],
+                bg: ['#0b0c1e', '#03030d'],
+                decor: ['#818cf8', '#a5b4fc', '#3730a3'],
+                opts: ['#f43f5e', '#6366f1', '#10b981', '#fbbf24'],
+                glows: ['rgba(244,63,94,0.85)', 'rgba(99,102,241,0.95)', 'rgba(16,185,129,0.85)', 'rgba(251,191,36,0.85)'],
+                cardBg: '#0e0f26',
+                headerBorder: '#6366f1',
+                titleColor: '#818cf8'
+            }
+        ];
+
+        let currentThemeIndex = 0;
+
+        // Populate Swatches
+        function createThemeSwatches() {
+            const container = $('themes');
+            glowThemes.forEach((t, i) => {
+                const b = document.createElement('button');
+                b.className = 'swatch' + (i === 0 ? ' active' : '');
+                b.title = 'Theme ' + (i + 1);
+                b.style.background = `linear-gradient(135deg, ${t.frame[0]}, ${t.opts[1]}, ${t.opts[0]})`;
+                b.onclick = () => {
+                    currentThemeIndex = i;
+                    document.querySelectorAll('.swatch').forEach((el, idx) => el.classList.toggle('active', idx === i));
+                    render();
+                };
+                container.appendChild(b);
+            });
+        }
+        createThemeSwatches();
+
+        // Interactive Hitboxes
+        let hitRegions = {
+            question: { x: 0, y: 0, w: 0, h: 0 },
+            options: { x: 0, y: 0, w: 0, h: 0 }
+        };
+
+        let draggingTarget = null;
+        let dragStartY = 0;
+        let initialValY = 0;
+
+        function toggleDrawer() { $('drawer').classList.toggle('open'); }
+
+        function sync() {
+            ['contentY', 'questionY', 'optionsY', 'scale', 'glowIntensity', 'bgDim', 'bgBlur'].forEach(id => {
+                const v = $(id).value;
+                if (id === 'scale' || id === 'bgDim' || id === 'glowIntensity') $(id + 'v').textContent = v + '%';
+                else if (id === 'bgBlur') $(id + 'v').textContent = v + 'px';
+                else $(id + 'v').textContent = v;
+            });
+        }
+
+        ['title', 'raw', 'watermark', 'ratio', 'contentY', 'questionY', 'optionsY', 'scale', 'glowIntensity', 'bgDim', 'bgBlur'].forEach(id => {
+            $(id).addEventListener(id === 'ratio' ? 'change' : 'input', render);
+        });
+        ['contentY', 'questionY', 'optionsY', 'scale', 'glowIntensity', 'bgDim', 'bgBlur'].forEach(id => $(id).addEventListener('input', sync));
+
+        // Background Upload Listener
+        $('bgUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                const img = new Image();
+                img.onload = () => {
+                    customBgImg = img;
+                    render();
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function removeBgImage() {
+            customBgImg = null;
+            $('bgUpload').value = '';
+            render();
+        }
+
+        function setSize() {
+            const r = $('ratio').value;
+            if (r === '9:16') { C.width = 1080; C.height = 1920; }
+            if (r === '1:1') { C.width = 1080; C.height = 1080; }
+            if (r === '4:5') { C.width = 1080; C.height = 1350; }
+            if (r === '16:9') { C.width = 1920; C.height = 1080; }
+        }
+
+        function drawRoundRect(c, x, y, w, h, r) {
+            r = Math.min(r, w / 2, h / 2);
+            c.beginPath(); c.moveTo(x + r, y);
+            c.lineTo(x + w - r, y); c.quadraticCurveTo(x + w, y, x + w, y + r);
+            c.lineTo(x + w, y + h - r); c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            c.lineTo(x + r, y + h); c.quadraticCurveTo(x, y + h, x, y + h - r);
+            c.lineTo(x, y + r); c.quadraticCurveTo(x, y, x + r, y);
+            c.closePath();
+        }
+
+        function wrapText(c, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(/\s+/);
+            let line = '';
+            let currentY = y;
+            for (let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                if (c.measureText(testLine).width > maxWidth && n > 0) {
+                    c.fillText(line, x, currentY);
+                    line = words[n] + ' ';
+                    currentY += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            c.fillText(line, x, currentY);
+            return currentY;
+        }
+
+        // Draw 3D Light Bulb with Theme Accent Rays
+        function draw3DBulb(c, cx, cy, radius, bulbColor, glowFactor, rotation = 0) {
+            c.save();
+            c.translate(cx, cy);
+            c.rotate(rotation);
+
+            // Rays
+            c.strokeStyle = bulbColor;
+            c.lineWidth = 12;
+            c.lineCap = 'round';
+            c.shadowColor = bulbColor;
+            c.shadowBlur = 20 * glowFactor;
+            for (let i = 0; i < 7; i++) {
+                const angle = -Math.PI * 0.85 + (i * (Math.PI * 0.7) / 6);
+                const r1 = radius * 1.25;
+                const r2 = radius * 1.55;
+                c.beginPath();
+                c.moveTo(Math.cos(angle) * r1, Math.sin(angle) * r1);
+                c.lineTo(Math.cos(angle) * r2, Math.sin(angle) * r2);
+                c.stroke();
+            }
+
+            // Glow
+            c.shadowColor = bulbColor;
+            c.shadowBlur = 45 * glowFactor;
+
+            // Bulb Head
+            const grad = c.createRadialGradient(-radius * 0.3, -radius * 0.3, 10, 0, 0, radius);
+            grad.addColorStop(0, '#fff');
+            grad.addColorStop(0.35, bulbColor);
+            grad.addColorStop(1, '#0f172a');
+            c.fillStyle = grad;
+            c.beginPath();
+            c.arc(0, 0, radius, 0, Math.PI * 2);
+            c.fill();
+
+            // Screw Base
+            c.shadowBlur = 10;
+            c.fillStyle = '#1e293b';
+            drawRoundRect(c, -radius * 0.45, radius * 0.75, radius * 0.9, radius * 0.55, 12);
+            c.fill();
+
+            c.strokeStyle = bulbColor;
+            c.lineWidth = 4;
+            c.beginPath();
+            c.moveTo(-radius * 0.4, radius * 0.95); c.lineTo(radius * 0.4, radius * 0.95);
+            c.moveTo(-radius * 0.35, radius * 1.15); c.lineTo(radius * 0.35, radius * 1.15);
+            c.stroke();
+
+            c.restore();
+        }
+
+        // Draw 3D Chat Speech Bubble with '?'
+        function draw3DQuestionBubble(c, cx, cy, size, bubbleColor, glowFactor, angle = 0) {
+            c.save();
+            c.translate(cx, cy);
+            c.rotate(angle);
+
+            c.shadowColor = bubbleColor;
+            c.shadowBlur = 35 * glowFactor;
+            c.shadowOffsetX = 8;
+            c.shadowOffsetY = 12;
+
+            c.fillStyle = bubbleColor;
+            drawRoundRect(c, -size / 2, -size / 2, size, size, size * 0.35);
+            c.fill();
+
+            c.beginPath();
+            c.moveTo(-size * 0.2, size * 0.45);
+            c.lineTo(-size * 0.4, size * 0.8);
+            c.lineTo(0, size * 0.45);
+            c.closePath();
+            c.fill();
+
+            c.lineWidth = 4;
+            c.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+            c.stroke();
+
+            c.font = `900 ${Math.round(size * 0.65)}px "Fredoka One", sans-serif`;
+            c.fillStyle = '#ffffff';
+            c.textAlign = 'center';
+            c.textBaseline = 'middle';
+            c.shadowBlur = 10;
+            c.shadowColor = '#fff';
+            c.fillText('?', 0, 0);
+
+            c.restore();
+        }
+
+        // Draw 3D Tube with Glowing Specular
+        function draw3DTube(c, points, width, tubeColor, glowFactor) {
+            c.save();
+            c.lineCap = 'round';
+            c.lineJoin = 'round';
+
+            c.shadowColor = tubeColor;
+            c.shadowBlur = 40 * glowFactor;
+            c.shadowOffsetY = 10;
+
+            c.strokeStyle = tubeColor;
+            c.lineWidth = width;
+            c.beginPath();
+            c.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                c.lineTo(points[i].x, points[i].y);
+            }
+            c.stroke();
+
+            c.shadowBlur = 0;
+            c.strokeStyle = '#ffffff';
+            c.lineWidth = width * 0.3;
+            c.stroke();
+
+            c.restore();
+        }
+
+        function parsed() {
+            const ls = $('raw').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+            let q = ls[0] || 'Which color do you like the most?';
+            let opts = [];
+            for (let i = 1; i < 5; i++) {
+                opts.push((ls[i] || ['A. Red', 'B. Blue', 'C. Green', 'D. Yellow'][i - 1]).replace(/^[A-Da-d][\.\)\:\-\s]+/, ''));
+            }
+            return { q, opts };
+        }
+
+        // MASTER GRAPHICS RENDER
+        function render() {
+            setSize();
+            const W = C.width, H = C.height;
+            const theme = glowThemes[currentThemeIndex];
+            const glowFactor = +$('glowIntensity').value / 100;
+            const scale = +$('scale').value / 100;
+            const contentShift = +$('contentY').value * (H / 1920);
+            const questionShift = +$('questionY').value * (H / 1920);
+            const optionsShift = +$('optionsY').value * (H / 1920);
+
+            // 1. BACKGROUND
+            if (customBgImg) {
+                ctx.save();
+                if (+$('bgBlur').value > 0) {
+                    ctx.filter = `blur(${+$('bgBlur').value}px)`;
+                }
+                ctx.drawImage(customBgImg, 0, 0, W, H);
+                ctx.filter = 'none';
+
+                const dim = +$('bgDim').value / 100;
+                if (dim > 0) {
+                    ctx.fillStyle = `rgba(0, 0, 0, ${dim})`;
+                    ctx.fillRect(0, 0, W, H);
+                }
+                ctx.restore();
+            } else {
+                const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+                bgGrad.addColorStop(0, theme.bg[0]);
+                bgGrad.addColorStop(1, theme.bg[1]);
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, W, H);
+            }
+
+            // 2. 3D Tubes
+            draw3DTube(ctx, [
+                { x: W * 0.72, y: H * 0.05 },
+                { x: W * 0.88, y: H * 0.09 },
+                { x: W * 0.82, y: H * 0.16 },
+                { x: W * 0.96, y: H * 0.22 }
+            ], 60, theme.decor[2], glowFactor);
+
+            draw3DTube(ctx, [
+                { x: W * 0.06, y: H * 0.84 },
+                { x: W * 0.14, y: H * 0.88 },
+                { x: W * 0.08, y: H * 0.95 },
+                { x: W * 0.22, y: H * 0.98 }
+            ], 60, theme.decor[2], glowFactor);
+
+            // 3. 3D Corner Bulbs
+            draw3DBulb(ctx, W * 0.12, H * 0.11, 46 * scale, theme.decor[0], glowFactor, -0.2);
+            draw3DBulb(ctx, W * 0.90, H * 0.90, 48 * scale, theme.decor[0], glowFactor, 0.35);
+
+            // 4. MAIN BROWSER WINDOW CARD
+            const cardW = W * 0.78 * scale;
+            const cardH = H * 0.64 * scale;
+            const cardX = (W - cardW) / 2;
+            const cardY = (H - cardH) / 2 + contentShift;
+
+            // Outer Clay & Neon Glow Frame
+            ctx.save();
+            ctx.shadowColor = theme.frame[0];
+            ctx.shadowBlur = 60 * glowFactor;
+            ctx.shadowOffsetY = 24;
+
+            const frameGrad = ctx.createLinearGradient(cardX, cardY, cardX + cardW, cardY + cardH);
+            frameGrad.addColorStop(0, theme.frame[0]);
+            frameGrad.addColorStop(1, theme.frame[1]);
+            ctx.fillStyle = frameGrad;
+            drawRoundRect(ctx, cardX, cardY, cardW, cardH, 75);
+            ctx.fill();
+
+            // Inner Highlight on Frame
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.stroke();
+            ctx.restore();
+
+            // Inner Window Card
+            const pad = 30 * scale;
+            const innerX = cardX + pad;
+            const innerY = cardY + pad;
+            const innerW = cardW - (pad * 2);
+            const innerH = cardH - (pad * 2);
+
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+            ctx.shadowBlur = 25;
+            ctx.shadowOffsetY = 10;
+            ctx.fillStyle = theme.cardBg;
+            drawRoundRect(ctx, innerX, innerY, innerW, innerH, 60);
+            ctx.fill();
+
+            // Top-Right Browser Tab Cutout
+            const tabW = innerW * 0.38;
+            const tabH = 65 * scale;
+            const tabX = innerX + innerW - tabW;
+            const tabY = innerY;
+
+            ctx.fillStyle = theme.frame[0];
+            drawRoundRect(ctx, tabX, tabY, tabW, tabH, 30);
+            ctx.fill();
+
+            // Window Controls: Minimize, Maximize, Close (_ ▢ ✕)
+            ctx.font = `900 ${Math.round(28 * scale)}px "Montserrat", sans-serif`;
+            ctx.fillStyle = '#000000';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('—', tabX + tabW * 0.28, tabY + tabH * 0.45);
+            ctx.fillText('▢', tabX + tabW * 0.58, tabY + tabH * 0.5);
+            ctx.fillText('✕', tabX + tabW * 0.85, tabY + tabH * 0.5);
+            ctx.restore();
+
+            // 5. Speech Question Bubbles
+            draw3DQuestionBubble(ctx, cardX + cardW + 8, cardY + cardH * 0.38, 90 * scale, theme.decor[1], glowFactor, 0.1);
+            draw3DQuestionBubble(ctx, cardX - 10, cardY + cardH * 0.74, 100 * scale, theme.decor[1], glowFactor, -0.15);
+
+            // 6. Header Inset Box
+            const titleBoxW = innerW * 0.82;
+            const titleBoxH = 135 * scale;
+            const titleBoxX = (W - titleBoxW) / 2;
+            const titleBoxY = innerY + (80 * scale);
+
+            ctx.save();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+            drawRoundRect(ctx, titleBoxX, titleBoxY, titleBoxW, titleBoxH, 28);
+            ctx.fill();
+
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = theme.headerBorder;
+            ctx.shadowColor = theme.headerBorder;
+            ctx.shadowBlur = 20 * glowFactor;
+            ctx.stroke();
+
+            const titleText = $('title').value || "QUIZ TIME";
+            ctx.font = `900 ${Math.round(72 * scale)}px "Fredoka One", sans-serif`;
+            ctx.fillStyle = theme.titleColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowBlur = 18 * glowFactor;
+            ctx.shadowColor = theme.titleColor;
+            ctx.fillText(titleText, W / 2, titleBoxY + titleBoxH / 2 + (4 * scale));
+            ctx.restore();
+
+            // 7. Question Text (Draggable Region)
+            const { q, opts } = parsed();
+            const qStartY = titleBoxY + titleBoxH + (55 * scale) + questionShift;
+            ctx.save();
+            ctx.font = `800 ${Math.round(38 * scale)}px "Quicksand", Outfit, sans-serif`;
+            ctx.fillStyle = theme.cardBg === '#fbf7ee' ? '#1e293b' : '#ffffff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const lastQY = wrapText(ctx, q, W / 2, qStartY, innerW - (60 * scale), 48 * scale);
+            ctx.restore();
+
+            hitRegions.question = {
+                x: innerX,
+                y: qStartY - 30 * scale,
+                w: innerW,
+                h: (lastQY - qStartY) + 60 * scale
+            };
+
+            // 8. 2x2 Option Buttons with INDIVIDUAL GLOW FOR EACH OPTION
+            const gridW = innerW * 0.88;
+            const btnW = (gridW - (20 * scale)) / 2;
+            const btnH = 92 * scale;
+            const gridStartX = (W - gridW) / 2;
+            const defaultGridStartY = innerY + innerH - (320 * scale);
+            const gridStartY = defaultGridStartY + optionsShift;
+
+            const optBadges = ['A', 'B', 'C', 'D'];
+
+            for (let i = 0; i < 4; i++) {
+                const col = i % 2;
+                const row = Math.floor(i / 2);
+                const bx = gridStartX + col * (btnW + (20 * scale));
+                const by = gridStartY + row * (btnH + (22 * scale));
+
+                ctx.save();
+
+                // Option Individual Glow Effect
+                ctx.shadowColor = theme.glows[i];
+                ctx.shadowBlur = 26 * glowFactor;
+                ctx.shadowOffsetY = 6;
+
+                // Base Navy/Dark Capsule
+                ctx.fillStyle = '#1e293b';
+                drawRoundRect(ctx, bx, by, btnW, btnH, 24 * scale);
+                ctx.fill();
+
+                // Left Colored Badge Pill
+                const badgeW = btnW * 0.34;
+                ctx.fillStyle = theme.opts[i];
+                drawRoundRect(ctx, bx, by, badgeW, btnH, 24 * scale);
+                ctx.fill();
+                ctx.fillRect(bx + badgeW - (15 * scale), by, 15 * scale, btnH);
+
+                // Option Letter
+                ctx.font = `900 ${Math.round(36 * scale)}px "Montserrat", sans-serif`;
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(optBadges[i], bx + (badgeW * 0.46), by + btnH / 2);
+
+                // Option Text
+                ctx.font = `800 ${Math.round(32 * scale)}px "Quicksand", sans-serif`;
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+
+                let txt = opts[i];
+                const textStartX = bx + badgeW + (16 * scale);
+                const maxTxtW = btnW - badgeW - (25 * scale);
+                if (ctx.measureText(txt).width > maxTxtW) {
+                    while (ctx.measureText(txt + '...').width > maxTxtW && txt.length > 0) {
+                        txt = txt.slice(0, -1);
+                    }
+                    txt += '...';
+                }
+                ctx.fillText(txt, textStartX, by + btnH / 2);
+
+                ctx.restore();
+            }
+
+            hitRegions.options = {
+                x: gridStartX,
+                y: gridStartY,
+                w: gridW,
+                h: 2 * btnH + (22 * scale)
+            };
+
+            // 9. Watermark Badge
+            const wm = $('watermark').value || '@4xlearner';
+            ctx.save();
+            ctx.font = `800 ${Math.round(38 * scale)}px "Outfit", sans-serif`;
+            const wmWidth = ctx.measureText(wm).width + 60;
+            const wmHeight = 60 * scale;
+            const wmX = (W - wmWidth) / 2;
+            const wmY = H - (120 * (H / 1920));
+
+            ctx.shadowColor = theme.frame[0];
+            ctx.shadowBlur = 20 * glowFactor;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            drawRoundRect(ctx, wmX, wmY, wmWidth, wmHeight, 30);
+            ctx.fill();
+
+            ctx.fillStyle = '#0f172a';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(wm, W / 2, wmY + wmHeight / 2);
+            ctx.restore();
+        }
+
+        // TOUCH & MOUSE DRAGGING ENGINE
+        function getCanvasCoordinates(e) {
+            const rect = C.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const scaleX = C.width / rect.width;
+            const scaleY = C.height / rect.height;
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY,
+                rawY: clientY
+            };
+        }
+
+        function onPointerDown(e) {
+            const pos = getCanvasCoordinates(e);
+
+            if (pos.x >= hitRegions.options.x && pos.x <= hitRegions.options.x + hitRegions.options.w &&
+                pos.y >= hitRegions.options.y && pos.y <= hitRegions.options.y + hitRegions.options.h) {
+                draggingTarget = 'options';
+                dragStartY = pos.rawY;
+                initialValY = +$('optionsY').value;
+                return;
+            }
+
+            if (pos.x >= hitRegions.question.x && pos.x <= hitRegions.question.x + hitRegions.question.w &&
+                pos.y >= hitRegions.question.y && pos.y <= hitRegions.question.y + hitRegions.question.h) {
+                draggingTarget = 'question';
+                dragStartY = pos.rawY;
+                initialValY = +$('questionY').value;
+                return;
+            }
+        }
+
+        function onPointerMove(e) {
+            if (!draggingTarget) return;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const deltaY = clientY - dragStartY;
+
+            const rect = C.getBoundingClientRect();
+            const scaleFactor = (C.height / rect.height) * (1920 / C.height);
+            const computedY = Math.round(initialValY + deltaY * scaleFactor);
+
+            if (draggingTarget === 'options') {
+                $('optionsY').value = Math.max(-400, Math.min(300, computedY));
+            } else if (draggingTarget === 'question') {
+                $('questionY').value = Math.max(-300, Math.min(300, computedY));
+            }
+
+            sync();
+            render();
+        }
+
+        function onPointerUp() {
+            draggingTarget = null;
+        }
+
+        C.addEventListener('mousedown', onPointerDown);
+        window.addEventListener('mousemove', onPointerMove);
+        window.addEventListener('mouseup', onPointerUp);
+
+        C.addEventListener('touchstart', onPointerDown, { passive: true });
+        window.addEventListener('touchmove', onPointerMove, { passive: true });
+        window.addEventListener('touchend', onPointerUp);
+
+        // TRUE 4K DOWNLOAD (DIRECT VECTOR GPU RENDER)
+        function downloadPNG() {
+            const ow = C.width, oh = C.height;
+            const sc = 2; // True 4K (2160x3840)
+            const r = $('ratio').value;
+            let w = 1080, h = 1920;
+            if (r === '1:1') { w = 1080; h = 1080; }
+            if (r === '4:5') { w = 1080; h = 1350; }
+            if (r === '16:9') { w = 1920; h = 1080; }
+
+            C.width = w * sc; C.height = h * sc;
+            render();
+
+            const url = C.toDataURL('image/png', 1.0);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `4X-GlowQuiz-4K-${Date.now()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            C.width = ow; C.height = oh;
+            render();
+        }
+
+        function resetAll() {
+            $('title').value = "QUIZ TIME";
+            $('raw').value = "Which color do you like the most?\nA. Red\nB. Blue\nC. Green\nD. Yellow";
+            $('watermark').value = '@4xlearner';
+            $('ratio').value = '9:16';
+            $('contentY').value = 0;
+            $('questionY').value = 0;
+            $('optionsY').value = -90;
+            $('scale').value = 100;
+            $('glowIntensity').value = 80;
+            $('bgDim').value = 0;
+            $('bgBlur').value = 0;
+            currentThemeIndex = 0;
+            removeBgImage();
+            sync();
+            render();
+        }
+
+        document.fonts.ready.then(() => {
+            sync();
+            render();
+        });
+
+        window.addEventListener('resize', () => requestAnimationFrame(render));
+    </script>
+</body>
+
+</html>

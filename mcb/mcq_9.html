@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>4X Learner • 3D Pink Sparkle Quiz Studio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap');
+
+        :root {
+            --bg: #070b14;
+            --panel: #111827;
+            --line: #263247;
+            --text: #f8fafc;
+            --accent: #f43f5e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', Outfit, sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .topbar {
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background: rgba(9, 14, 25, .95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(18px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+            letter-spacing: .5px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #f43f5e, #fb7185);
+            box-shadow: 0 8px 24px rgba(244, 63, 94, 0.4);
+            color: #fff;
+            font-weight: 900;
+            font-size: 15px;
+        }
+
+        .brand span {
+            font-size: 18px;
+        }
+
+        .menuBtn,
+        .smallBtn,
+        .primaryBtn {
+            border: 0;
+            color: #fff;
+            border-radius: 12px;
+            font-weight: 800;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            box-shadow: 0 8px 25px rgba(244, 63, 94, 0.3);
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 390px;
+            height: calc(100vh - 64px);
+        }
+
+        .stage {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0, #050811 100%);
+            overflow: auto;
+            position: relative;
+        }
+
+        .previewWrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #canvas {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: calc(100vw - 430px);
+            max-height: calc(100vh - 100px);
+            border-radius: 28px;
+            box-shadow: 0 25px 80px #000b;
+            cursor: grab;
+            touch-action: none;
+        }
+
+        #canvas:active {
+            cursor: grabbing;
+        }
+
+        .drawer {
+            background: linear-gradient(180deg, #111827, #0b1220);
+            border-left: 1px solid var(--line);
+            overflow-y: auto;
+            padding: 18px;
+        }
+
+        .section {
+            background: #0c1422;
+            border: 1px solid #243149;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .section h3 {
+            font-size: 13px;
+            color: #fb7185;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 11px;
+        }
+
+        label {
+            display: block;
+            color: #9fb0c8;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            margin: 11px 0 5px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #30405a;
+            background: #070d18;
+            color: #fff;
+            border-radius: 10px;
+            outline: 0;
+            padding: 10px 11px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #f43f5e;
+            box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 116px;
+            line-height: 1.45;
+        }
+
+        .rangeRow {
+            display: grid;
+            grid-template-columns: 1fr 58px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        input[type=range] {
+            padding: 0;
+            accent-color: #f43f5e;
+        }
+
+        .value {
+            background: #07101c;
+            border: 1px solid #27354b;
+            border-radius: 9px;
+            padding: 7px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .swatches {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 7px;
+        }
+
+        .swatch {
+            height: 36px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 0;
+            position: relative;
+            transition: transform 0.15s;
+        }
+
+        .swatch:hover {
+            transform: scale(1.06);
+        }
+
+        .swatch.active {
+            border-color: #fff;
+            box-shadow: 0 0 12px #f43f5e;
+        }
+
+        .fileUploadBtn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e293b;
+            border: 2px dashed #475569;
+            color: #cbd5e1;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 13px;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .primaryBtn {
+            grid-column: 1/-1;
+            padding: 13px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+            font-size: 14px;
+        }
+
+        .drag-tip {
+            background: rgba(244, 63, 94, 0.12);
+            border: 1px dashed #f43f5e;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 11px;
+            color: #fda4af;
+            line-height: 1.4;
+            margin-top: 8px;
+        }
+
+        @media(max-width:860px) {
+            .topbar {
+                height: 58px;
+                padding: 0 10px;
+            }
+
+            .logo {
+                width: 34px;
+                height: 34px;
+            }
+
+            .brand span {
+                font-size: 15px;
+            }
+
+            .app {
+                display: block;
+                height: auto;
+            }
+
+            .stage {
+                height: calc(100vh - 58px);
+                min-height: 540px;
+                padding: 10px;
+            }
+
+            #canvas {
+                max-width: calc(100vw - 20px);
+                max-height: calc(100vh - 82px);
+                border-radius: 18px;
+            }
+
+            .drawer {
+                position: fixed;
+                z-index: 900;
+                right: 0;
+                top: 58px;
+                bottom: 0;
+                width: min(390px, 94vw);
+                transform: translateX(105%);
+                transition: transform .25s ease;
+                box-shadow: -25px 0 70px #000b;
+            }
+
+            .drawer.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">4X</div><span>4X LEARNER • 3D SPARKLE QUIZ</span>
+        </div>
+        <button class="menuBtn" onclick="toggleDrawer()">⚙️ Controls</button>
+    </header>
+
+    <div class="app">
+        <main class="stage">
+            <div class="previewWrap"><canvas id="canvas" width="1080" height="1920"></canvas></div>
+        </main>
+
+        <aside class="drawer" id="drawer">
+            <div class="drag-tip">
+                ✨ <b>Live Dragging:</b> स्क्रीन पर <b>Question Text</b> या <b>Option Buttons</b> को अपनी उंगली या माउस
+                से पकड़कर सीधे ऊपर-नीचे जहाँ चाहें खिसका सकते हैं!
+            </div>
+
+            <!-- 20 PRO THEMES -->
+            <div class="section" style="margin-top:12px;">
+                <h3>Top 20 Pro Themes (Auto-Contrast)</h3>
+                <div id="themes" class="swatches"></div>
+            </div>
+
+            <!-- POSITION SLIDERS -->
+            <div class="section">
+                <h3>Position & Layout Sliders</h3>
+                <label>Options Group Y-Position</label>
+                <div class="rangeRow">
+                    <input id="optionsY" type="range" min="-350" max="350" value="0">
+                    <div class="value" id="optionsYv">0</div>
+                </div>
+
+                <label>Question Y-Position</label>
+                <div class="rangeRow">
+                    <input id="questionY" type="range" min="-300" max="300" value="0">
+                    <div class="value" id="questionYv">0</div>
+                </div>
+
+                <label>Center Disc Y-Position</label>
+                <div class="rangeRow">
+                    <input id="contentY" type="range" min="-250" max="250" value="0">
+                    <div class="value" id="contentYv">0</div>
+                </div>
+
+                <label>Overall Scale</label>
+                <div class="rangeRow">
+                    <input id="scale" type="range" min="80" max="115" value="100">
+                    <div class="value" id="scalev">100%</div>
+                </div>
+            </div>
+
+            <!-- CONTENT INPUT -->
+            <div class="section">
+                <h3>Content</h3>
+                <label>Top Sub-Heading</label>
+                <input id="topSubTitle" value="ITS TIME TO">
+                <label>Main Title</label>
+                <input id="title" value="DAILY QUIZ">
+                <label>Question + 4 Options (One Box)</label>
+                <textarea id="raw">Which color do you like the most?
+A. Red
+B. Blue
+C. Green
+D. Yellow</textarea>
+                <label>Bottom Watermark</label>
+                <input id="watermark" value="@4xlearner">
+            </div>
+
+            <!-- BACKGROUND IMAGE UPLOAD -->
+            <div class="section">
+                <h3>Custom Background Image</h3>
+                <label>Upload Own Image (Optional)</label>
+                <label class="fileUploadBtn" for="bgUpload">
+                    📁 <span>Choose Custom Image</span>
+                </label>
+                <input type="file" id="bgUpload" accept="image/*" style="display:none">
+
+                <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <button class="smallBtn" style="padding:6px 10px; font-size:11px;" onclick="removeBgImage()">✕
+                        Remove Image</button>
+                </div>
+
+                <label>Background Dim</label>
+                <div class="rangeRow">
+                    <input id="bgDim" type="range" min="0" max="90" value="0">
+                    <div class="value" id="bgDimv">0%</div>
+                </div>
+
+                <label>Background Blur</label>
+                <div class="rangeRow">
+                    <input id="bgBlur" type="range" min="0" max="25" value="0">
+                    <div class="value" id="bgBlurv">0px</div>
+                </div>
+            </div>
+
+            <!-- FORMAT -->
+            <div class="section">
+                <h3>Aspect Ratio</h3>
+                <select id="ratio">
+                    <option value="9:16">9:16 • Shorts / Reels • 1080×1920</option>
+                    <option value="1:1">1:1 • Square • 1080×1080</option>
+                    <option value="4:5">4:5 • Feed • 1080×1350</option>
+                    <option value="16:9">16:9 • Landscape • 1920×1080</option>
+                </select>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="section">
+                <h3>Actions</h3>
+                <div class="actions">
+                    <button class="smallBtn" onclick="resetAll()">↺ Reset</button>
+                    <button class="primaryBtn" onclick="downloadPNG()">⬇ Download Perfect 4K PNG</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const C = document.getElementById('canvas'), ctx = C.getContext('2d', { alpha: false });
+        const $ = id => document.getElementById(id);
+
+        let customBgImg = null;
+
+        // TOP 20 PRO THEMES WITH PRECISE AUTO-CONTRAST & SPARKLE PALETTES
+        const themes = [
+            // 0. Screenshot Exact (Pink Dream Sparkle)
+            {
+                bgGrad: ['#ffb7cf', '#f9a8d4'],
+                sphereGrad: ['#ffd1e3', '#f43f5e'],
+                discBg: '#f8fafc',
+                topCapsule: '#be185d',
+                mainCapsule: '#f43f5e',
+                btnBg: '#c2185b',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#db2777',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#be185d',
+                sparkleColor: '#ffffff'
+            },
+            // 1. Pure White Neumorphic (Auto Black Text Contrast)
+            {
+                bgGrad: ['#f8fafc', '#e2e8f0'],
+                sphereGrad: ['#ffffff', '#cbd5e1'],
+                discBg: '#ffffff',
+                topCapsule: '#334155',
+                mainCapsule: '#0f172a',
+                btnBg: '#1e293b',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#0f172a',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#64748b',
+                sparkleColor: '#38bdf8'
+            },
+            // 2. Cyber Neon Blue
+            {
+                bgGrad: ['#0f172a', '#020617'],
+                sphereGrad: ['#38bdf8', '#0369a1'],
+                discBg: '#1e293b',
+                topCapsule: '#0369a1',
+                mainCapsule: '#0284c7',
+                btnBg: '#0ea5e9',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#38bdf8',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#38bdf8',
+                sparkleColor: '#38bdf8'
+            },
+            // 3. Cyberpunk Violet Magenta
+            {
+                bgGrad: ['#2e0854', '#0d001a'],
+                sphereGrad: ['#d946ef', '#701a75'],
+                discBg: '#18022e',
+                topCapsule: '#86198f',
+                mainCapsule: '#c026d3',
+                btnBg: '#a21caf',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#f0abfc',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#d946ef',
+                sparkleColor: '#f0abfc'
+            },
+            // 4. Emerald Forest Mint
+            {
+                bgGrad: ['#dcfce7', '#bbf7d0'],
+                sphereGrad: ['#86efac', '#059669'],
+                discBg: '#ffffff',
+                topCapsule: '#047857',
+                mainCapsule: '#059669',
+                btnBg: '#065f46',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#047857',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#064e3b',
+                sparkleColor: '#ffffff'
+            },
+            // 5. Sunset Orange Flame
+            {
+                bgGrad: ['#ffedd5', '#fed7aa'],
+                sphereGrad: ['#fdba74', '#ea580c'],
+                discBg: '#ffffff',
+                topCapsule: '#c2410c',
+                mainCapsule: '#ea580c',
+                btnBg: '#9a3412',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#c2410c',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#9a3412',
+                sparkleColor: '#ffffff'
+            },
+            // 6. Deep Crimson Night
+            {
+                bgGrad: ['#2b0707', '#0f0202'],
+                sphereGrad: ['#f87171', '#991b1b'],
+                discBg: '#1a0404',
+                topCapsule: '#7f1d1d',
+                mainCapsule: '#dc2626',
+                btnBg: '#991b1b',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#fca5a5',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#ef4444',
+                sparkleColor: '#fca5a5'
+            },
+            // 7. Golden Luxury Amber
+            {
+                bgGrad: ['#fef3c7', '#fde68a'],
+                sphereGrad: ['#fde047', '#d97706'],
+                discBg: '#ffffff',
+                topCapsule: '#b45309',
+                mainCapsule: '#d97706',
+                btnBg: '#92400e',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#b45309',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#78350f',
+                sparkleColor: '#ffffff'
+            },
+            // 8. Midnight Black AMOLED
+            {
+                bgGrad: ['#000000', '#0a0a0c'],
+                sphereGrad: ['#27272a', '#09090b'],
+                discBg: '#121214',
+                topCapsule: '#27272a',
+                mainCapsule: '#3f3f46',
+                btnBg: '#27272a',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#e4e4e7',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#a1a1aa',
+                sparkleColor: '#ffffff'
+            },
+            // 9. Arctic Sky Blue
+            {
+                bgGrad: ['#e0f2fe', '#bae6fd'],
+                sphereGrad: ['#7dd3fc', '#0284c7'],
+                discBg: '#ffffff',
+                topCapsule: '#0369a1',
+                mainCapsule: '#0284c7',
+                btnBg: '#075985',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#0369a1',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#0c4a6e',
+                sparkleColor: '#ffffff'
+            },
+            // 10. Pastel Lavender
+            {
+                bgGrad: ['#f3e8ff', '#e9d5ff'],
+                sphereGrad: ['#d8b4fe', '#7c3aed'],
+                discBg: '#ffffff',
+                topCapsule: '#6b21a8',
+                mainCapsule: '#7c3aed',
+                btnBg: '#581c87',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#6b21a8',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#4c1d95',
+                sparkleColor: '#ffffff'
+            },
+            // 11. Toxic Acid Lime Dark
+            {
+                bgGrad: ['#0c1404', '#020501'],
+                sphereGrad: ['#bef264', '#4d7c0f'],
+                discBg: '#131e07',
+                topCapsule: '#3f6212',
+                mainCapsule: '#65a30d',
+                btnBg: '#4d7c0f',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#d9f99d',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#a3e635',
+                sparkleColor: '#bef264'
+            },
+            // 12. Soft Peachy Warmth
+            {
+                bgGrad: ['#ffedd5', '#fed7aa'],
+                sphereGrad: ['#fdba74', '#ea580c'],
+                discBg: '#ffffff',
+                topCapsule: '#9a3412',
+                mainCapsule: '#ea580c',
+                btnBg: '#c2410c',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#9a3412',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#7c2d12',
+                sparkleColor: '#ffffff'
+            },
+            // 13. Deep Oceanic Cyan
+            {
+                bgGrad: ['#082f49', '#02131e'],
+                sphereGrad: ['#38bdf8', '#0369a1'],
+                discBg: '#0c2238',
+                topCapsule: '#075985',
+                mainCapsule: '#0284c7',
+                btnBg: '#0369a1',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#7dd3fc',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#38bdf8',
+                sparkleColor: '#38bdf8'
+            },
+            // 14. Soft Rose Quartz
+            {
+                bgGrad: ['#ffe4e6', '#fecdd3'],
+                sphereGrad: ['#fda4af', '#e11d48'],
+                discBg: '#ffffff',
+                topCapsule: '#9f1239',
+                mainCapsule: '#e11d48',
+                btnBg: '#be123c',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#9f1239',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#881337',
+                sparkleColor: '#ffffff'
+            },
+            // 15. Electric Blue Violet
+            {
+                bgGrad: ['#1e1b4b', '#090724'],
+                sphereGrad: ['#818cf8', '#3730a3'],
+                discBg: '#131138',
+                topCapsule: '#3730a3',
+                mainCapsule: '#4f46e5',
+                btnBg: '#4338ca',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#a5b4fc',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#6366f1',
+                sparkleColor: '#818cf8'
+            },
+            // 16. Pure AMOLED Blood Red
+            {
+                bgGrad: ['#000000', '#0a0002'],
+                sphereGrad: ['#f87171', '#7f1d1d'],
+                discBg: '#120204',
+                topCapsule: '#7f1d1d',
+                mainCapsule: '#dc2626',
+                btnBg: '#991b1b',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#fca5a5',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#ef4444',
+                sparkleColor: '#ef4444'
+            },
+            // 17. Clean Mint Aqua
+            {
+                bgGrad: ['#ccfbf1', '#99f6e4'],
+                sphereGrad: ['#5eead4', '#0d9488'],
+                discBg: '#ffffff',
+                topCapsule: '#115e59',
+                mainCapsule: '#0d9488',
+                btnBg: '#0f766e',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#115e59',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#134e4a',
+                sparkleColor: '#ffffff'
+            },
+            // 18. Peachy Pink Glow
+            {
+                bgGrad: ['#ffe4e6', '#fed7aa'],
+                sphereGrad: ['#f472b6', '#f97316'],
+                discBg: '#ffffff',
+                topCapsule: '#be185d',
+                mainCapsule: '#ec4899',
+                btnBg: '#db2777',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#be185d',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#9d174d',
+                sparkleColor: '#ffffff'
+            },
+            // 19. Cyber Green Laser
+            {
+                bgGrad: ['#022c22', '#00140e'],
+                sphereGrad: ['#34d399', '#059669'],
+                discBg: '#04221a',
+                topCapsule: '#065f46',
+                mainCapsule: '#059669',
+                btnBg: '#047857',
+                titleColor: '#ffffff',
+                subTitleColor: '#ffffff',
+                questionColor: '#6ee7b7',
+                btnTextColor: '#ffffff',
+                watermarkColor: '#10b981',
+                sparkleColor: '#34d399'
+            }
+        ];
+
+        let currentThemeIndex = 0;
+
+        function createThemeSwatches() {
+            const container = $('themes');
+            themes.forEach((t, i) => {
+                const b = document.createElement('button');
+                b.className = 'swatch' + (i === 0 ? ' active' : '');
+                b.title = 'Theme ' + (i + 1);
+                b.style.background = `linear-gradient(135deg, ${t.bgGrad[0]}, ${t.mainCapsule})`;
+                b.onclick = () => {
+                    currentThemeIndex = i;
+                    document.querySelectorAll('.swatch').forEach((el, idx) => el.classList.toggle('active', idx === i));
+                    render();
+                };
+                container.appendChild(b);
+            });
+        }
+        createThemeSwatches();
+
+        // Hitboxes for Interactive Drag
+        let hitRegions = {
+            question: { x: 0, y: 0, w: 0, h: 0 },
+            options: { x: 0, y: 0, w: 0, h: 0 }
+        };
+
+        let draggingTarget = null;
+        let dragStartY = 0;
+        let initialValY = 0;
+
+        function toggleDrawer() { $('drawer').classList.toggle('open'); }
+
+        function sync() {
+            ['contentY', 'questionY', 'optionsY', 'scale', 'bgDim', 'bgBlur'].forEach(id => {
+                const v = $(id).value;
+                if (id === 'scale' || id === 'bgDim') $(id + 'v').textContent = v + '%';
+                else if (id === 'bgBlur') $(id + 'v').textContent = v + 'px';
+                else $(id + 'v').textContent = v;
+            });
+        }
+
+        ['topSubTitle', 'title', 'raw', 'watermark', 'ratio', 'contentY', 'questionY', 'optionsY', 'scale', 'bgDim', 'bgBlur'].forEach(id => {
+            $(id).addEventListener(id === 'ratio' ? 'change' : 'input', render);
+        });
+        ['contentY', 'questionY', 'optionsY', 'scale', 'bgDim', 'bgBlur'].forEach(id => $(id).addEventListener('input', sync));
+
+        // Background Upload
+        $('bgUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                const img = new Image();
+                img.onload = () => {
+                    customBgImg = img;
+                    render();
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function removeBgImage() {
+            customBgImg = null;
+            $('bgUpload').value = '';
+            render();
+        }
+
+        function setSize() {
+            const r = $('ratio').value;
+            if (r === '9:16') { C.width = 1080; C.height = 1920; }
+            if (r === '1:1') { C.width = 1080; C.height = 1080; }
+            if (r === '4:5') { C.width = 1080; C.height = 1350; }
+            if (r === '16:9') { C.width = 1920; C.height = 1080; }
+        }
+
+        function drawRoundRect(c, x, y, w, h, r) {
+            r = Math.min(r, w / 2, h / 2);
+            c.beginPath();
+            c.moveTo(x + r, y);
+            c.lineTo(x + w - r, y);
+            c.quadraticCurveTo(x + w, y, x + w, y + r);
+            c.lineTo(x + w, y + h - r);
+            c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            c.lineTo(x + r, y + h);
+            c.quadraticCurveTo(x, y + h, x, y + h - r);
+            c.lineTo(x, y + r);
+            c.quadraticCurveTo(x, y, x + r, y);
+            c.closePath();
+        }
+
+        function wrapText(c, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(/\s+/);
+            let line = '';
+            let currentY = y;
+            for (let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                if (c.measureText(testLine).width > maxWidth && n > 0) {
+                    c.fillText(line, x, currentY);
+                    line = words[n] + ' ';
+                    currentY += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            c.fillText(line, x, currentY);
+            return currentY;
+        }
+
+        // Draw 4-Pointed Sparkle Star (Matches Screenshot Glitter)
+        function drawSparkleStar(c, cx, cy, size, color) {
+            c.save();
+            c.translate(cx, cy);
+            c.shadowColor = color;
+            c.shadowBlur = size * 0.8;
+
+            c.fillStyle = color;
+            c.beginPath();
+            c.moveTo(0, -size);
+            c.quadraticCurveTo(0, 0, size, 0);
+            c.quadraticCurveTo(0, 0, 0, size);
+            c.quadraticCurveTo(0, 0, -size, 0);
+            c.quadraticCurveTo(0, 0, 0, -size);
+            c.closePath();
+            c.fill();
+
+            // Diagonal mini sparkles
+            c.beginPath();
+            c.moveTo(0, -size * 0.45);
+            c.quadraticCurveTo(0, 0, size * 0.45, 0);
+            c.quadraticCurveTo(0, 0, 0, size * 0.45);
+            c.quadraticCurveTo(0, 0, -size * 0.45, 0);
+            c.quadraticCurveTo(0, 0, 0, -size * 0.45);
+            c.closePath();
+            c.fill();
+
+            c.restore();
+        }
+
+        // Draw Frosted 3D Glow Sphere
+        function draw3DSphere(c, cx, cy, radius, gradColors) {
+            c.save();
+            const grad = c.createRadialGradient(cx - radius * 0.35, cy - radius * 0.35, radius * 0.08, cx, cy, radius);
+            grad.addColorStop(0, gradColors[0]);
+            grad.addColorStop(0.7, gradColors[1]);
+            grad.addColorStop(1, 'rgba(0,0,0,0.15)');
+            c.fillStyle = grad;
+            c.beginPath();
+            c.arc(cx, cy, radius, 0, Math.PI * 2);
+            c.fill();
+            c.restore();
+        }
+
+        // Draw 3D Megaphone / Loudspeaker (Matches Screenshot Top-Right on Header)
+        function draw3DMegaphone(c, cx, cy, scale) {
+            c.save();
+            c.translate(cx, cy);
+            c.scale(scale, scale);
+            c.rotate(-0.25);
+
+            // Ambient Shadow
+            c.shadowColor = 'rgba(0, 0, 0, 0.25)';
+            c.shadowBlur = 18;
+            c.shadowOffsetY = 8;
+
+            // Handle (Pink Tube)
+            c.fillStyle = '#f43f5e';
+            drawRoundRect(c, -12, 18, 14, 38, 7);
+            c.fill();
+
+            // Body Horn (Golden Yellow Cone)
+            const hornGrad = c.createLinearGradient(-35, -20, 35, 20);
+            hornGrad.addColorStop(0, '#fde047');
+            hornGrad.addColorStop(0.5, '#eab308');
+            hornGrad.addColorStop(1, '#ca8a04');
+            c.fillStyle = hornGrad;
+            c.beginPath();
+            c.moveTo(-35, -8);
+            c.lineTo(15, -28);
+            c.lineTo(15, 28);
+            c.lineTo(-35, 8);
+            c.closePath();
+            c.fill();
+
+            // Back Cap (Pink Ring)
+            c.fillStyle = '#f43f5e';
+            c.beginPath();
+            c.ellipse(-35, 0, 8, 12, 0, 0, Math.PI * 2);
+            c.fill();
+
+            // Front Bell Mouth (Golden Outer Rim)
+            c.fillStyle = '#fef08a';
+            c.beginPath();
+            c.ellipse(15, 0, 10, 32, 0, 0, Math.PI * 2);
+            c.fill();
+
+            // Inner Shadow inside Bell
+            c.fillStyle = '#854d0e';
+            c.beginPath();
+            c.ellipse(15, 0, 6, 26, 0, 0, Math.PI * 2);
+            c.fill();
+
+            c.restore();
+        }
+
+        function parsed() {
+            const ls = $('raw').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+            let q = ls[0] || 'Which color do you like the most?';
+            let opts = [];
+            for (let i = 1; i < 5; i++) {
+                opts.push((ls[i] || ['A. Red', 'B. Blue', 'C. Green', 'D. Yellow'][i - 1]).replace(/^[A-Da-d][\.\)\:\-\s]+/, ''));
+            }
+            return { q, opts };
+        }
+
+        // MASTER GRAPHICS RENDER
+        function render() {
+            setSize();
+            const W = C.width, H = C.height;
+            const theme = themes[currentThemeIndex];
+            const scale = +$('scale').value / 100;
+
+            const contentShift = +$('contentY').value * (H / 1920);
+            const questionShift = +$('questionY').value * (H / 1920);
+            const optionsShift = +$('optionsY').value * (H / 1920);
+
+            // 1. BASE BACKGROUND
+            if (customBgImg) {
+                ctx.save();
+                if (+$('bgBlur').value > 0) {
+                    ctx.filter = `blur(${+$('bgBlur').value}px)`;
+                }
+                ctx.drawImage(customBgImg, 0, 0, W, H);
+                ctx.filter = 'none';
+
+                const dim = +$('bgDim').value / 100;
+                if (dim > 0) {
+                    ctx.fillStyle = `rgba(0, 0, 0, ${dim})`;
+                    ctx.fillRect(0, 0, W, H);
+                }
+                ctx.restore();
+            } else {
+                const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+                bgGrad.addColorStop(0, theme.bgGrad[0]);
+                bgGrad.addColorStop(1, theme.bgGrad[1]);
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, W, H);
+            }
+
+            // 2. 3D FROSTED SPHERES IN CORNERS
+            draw3DSphere(ctx, W * 0.95, H * 0.12, 190 * scale, theme.sphereGrad);
+            draw3DSphere(ctx, W * 0.08, H * 0.88, 210 * scale, theme.sphereGrad);
+
+            // 3. SPARKLE STARS (GLITTER IN CORNERS)
+            drawSparkleStar(ctx, W * 0.16, H * 0.08, 48 * scale, theme.sparkleColor);
+            drawSparkleStar(ctx, W * 0.28, H * 0.16, 85 * scale, theme.sparkleColor);
+            drawSparkleStar(ctx, W * 0.44, H * 0.10, 30 * scale, theme.sparkleColor);
+            drawSparkleStar(ctx, W * 0.85, H * 0.74, 38 * scale, theme.sparkleColor);
+            drawSparkleStar(ctx, W * 0.92, H * 0.82, 75 * scale, theme.sparkleColor);
+            drawSparkleStar(ctx, W * 0.88, H * 0.94, 95 * scale, theme.sparkleColor);
+
+            // 4. MAIN 3D EMBOSSED WHITE CIRCULAR DISC
+            const discRadius = W * 0.46 * scale;
+            const discCenterX = W / 2;
+            const discCenterY = H * 0.52 + contentShift;
+
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.12)';
+            ctx.shadowBlur = 45;
+            ctx.shadowOffsetY = 24;
+            ctx.fillStyle = theme.discBg;
+            ctx.beginPath();
+            ctx.arc(discCenterX, discCenterY, discRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // 5. DOUBLE-LAYER STEPPED HEADER CAPSULES
+            const headerCenterY = discCenterY - discRadius * 0.55;
+
+            // 5A. Top Dark Capsule ("ITS TIME TO")
+            const topCapsuleW = W * 0.42 * scale;
+            const topCapsuleH = 95 * scale;
+            const topCapsuleX = (W - topCapsuleW) / 2 + 50 * scale; // Slightly shifted right like screenshot
+            const topCapsuleY = headerCenterY - 60 * scale;
+
+            ctx.save();
+            ctx.fillStyle = theme.topCapsule;
+            drawRoundRect(ctx, topCapsuleX, topCapsuleY, topCapsuleW, topCapsuleH, topCapsuleH / 2);
+            ctx.fill();
+
+            const subTitle = $('topSubTitle').value || "ITS TIME TO";
+            ctx.font = `900 ${Math.round(44 * scale)}px "Montserrat", sans-serif`;
+            ctx.fillStyle = theme.subTitleColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(subTitle, topCapsuleX + topCapsuleW / 2, topCapsuleY + topCapsuleH / 2 - 12 * scale);
+            ctx.restore();
+
+            // 5B. Main Wide Pink Capsule ("DAILY QUIZ")
+            const mainCapsuleW = W * 0.76 * scale;
+            const mainCapsuleH = 145 * scale;
+            const mainCapsuleX = (W - mainCapsuleW) / 2;
+            const mainCapsuleY = headerCenterY - 10 * scale;
+
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.18)';
+            ctx.shadowBlur = 24;
+            ctx.shadowOffsetY = 10;
+            ctx.fillStyle = theme.mainCapsule;
+            drawRoundRect(ctx, mainCapsuleX, mainCapsuleY, mainCapsuleW, mainCapsuleH, mainCapsuleH / 2);
+            ctx.fill();
+
+            const title = $('title').value || "DAILY QUIZ";
+            ctx.font = `900 ${Math.round(85 * scale)}px "Montserrat", sans-serif`;
+            ctx.fillStyle = theme.titleColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(title, W / 2, mainCapsuleY + mainCapsuleH / 2 + 4 * scale);
+            ctx.restore();
+
+            // 5C. 3D Megaphone Sitting Top-Right on Header
+            draw3DMegaphone(ctx, mainCapsuleX + mainCapsuleW - 40 * scale, topCapsuleY + 15 * scale, 1.2 * scale);
+
+            // 6. QUESTION TEXT (DRAGGABLE REGION)
+            const { q, opts } = parsed();
+            const qStartY = mainCapsuleY + mainCapsuleH + (80 * scale) + questionShift;
+
+            ctx.save();
+            ctx.font = `800 ${Math.round(42 * scale)}px "Plus Jakarta Sans", Outfit, sans-serif`;
+            ctx.fillStyle = theme.questionColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const lastQY = wrapText(ctx, q, W / 2, qStartY, W * 0.65 * scale, 52 * scale);
+            ctx.restore();
+
+            hitRegions.question = {
+                x: W * 0.15,
+                y: qStartY - 30 * scale,
+                w: W * 0.7,
+                h: (lastQY - qStartY) + 60 * scale
+            };
+
+            // 7. 2x2 ROUNDED MAGENTA OPTION BUTTONS (MATCHES SCREENSHOT)
+            const gridW = W * 0.68 * scale;
+            const btnW = (gridW - 24 * scale) / 2;
+            const btnH = 92 * scale;
+            const gridStartX = (W - gridW) / 2;
+            const defaultGridStartY = lastQY + 60 * scale;
+            const gridStartY = defaultGridStartY + optionsShift;
+
+            const optBadges = ['A.', 'B.', 'C.', 'D.'];
+            // Layout mapping like screenshot: (0: A top-left, 1: B bot-left, 2: C top-right, 3: D bot-right)
+            const layoutMapping = [
+                { col: 0, row: 0, idx: 0 }, // A
+                { col: 0, row: 1, idx: 1 }, // B
+                { col: 1, row: 0, idx: 2 }, // C
+                { col: 1, row: 1, idx: 3 }  // D
+            ];
+
+            layoutMapping.forEach(item => {
+                const bx = gridStartX + item.col * (btnW + 24 * scale);
+                const by = gridStartY + item.row * (btnH + 24 * scale);
+                const optIndex = item.idx;
+
+                ctx.save();
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.12)';
+                ctx.shadowBlur = 15;
+                ctx.shadowOffsetY = 6;
+                ctx.fillStyle = theme.btnBg;
+                drawRoundRect(ctx, bx, by, btnW, btnH, btnH / 2);
+                ctx.fill();
+
+                // Option Text Inside
+                ctx.font = `800 ${Math.round(36 * scale)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillStyle = theme.btnTextColor;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                let fullText = `${optBadges[optIndex]} ${opts[optIndex]}`;
+                const maxTxtW = btnW - 30 * scale;
+                if (ctx.measureText(fullText).width > maxTxtW) {
+                    while (ctx.measureText(fullText + '...').width > maxTxtW && fullText.length > 0) {
+                        fullText = fullText.slice(0, -1);
+                    }
+                    fullText += '...';
+                }
+                ctx.fillText(fullText, bx + btnW / 2, by + btnH / 2);
+                ctx.restore();
+            });
+
+            hitRegions.options = {
+                x: gridStartX,
+                y: gridStartY,
+                w: gridW,
+                h: 2 * btnH + 24 * scale
+            };
+
+            // 8. WATERMARK AT BOTTOM OF THE DISC
+            const wm = $('watermark').value || '@4xlearner';
+            ctx.save();
+            ctx.font = `700 ${Math.round(36 * scale)}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = theme.watermarkColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(wm, W / 2, discCenterY + discRadius * 0.72);
+            ctx.restore();
+        }
+
+        // TOUCH & MOUSE DRAGGING ENGINE
+        function getCanvasCoordinates(e) {
+            const rect = C.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const scaleX = C.width / rect.width;
+            const scaleY = C.height / rect.height;
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY,
+                rawY: clientY
+            };
+        }
+
+        function onPointerDown(e) {
+            const pos = getCanvasCoordinates(e);
+
+            if (pos.x >= hitRegions.options.x && pos.x <= hitRegions.options.x + hitRegions.options.w &&
+                pos.y >= hitRegions.options.y && pos.y <= hitRegions.options.y + hitRegions.options.h) {
+                draggingTarget = 'options';
+                dragStartY = pos.rawY;
+                initialValY = +$('optionsY').value;
+                return;
+            }
+
+            if (pos.x >= hitRegions.question.x && pos.x <= hitRegions.question.x + hitRegions.question.w &&
+                pos.y >= hitRegions.question.y && pos.y <= hitRegions.question.y + hitRegions.question.h) {
+                draggingTarget = 'question';
+                dragStartY = pos.rawY;
+                initialValY = +$('questionY').value;
+                return;
+            }
+        }
+
+        function onPointerMove(e) {
+            if (!draggingTarget) return;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const deltaY = clientY - dragStartY;
+
+            const rect = C.getBoundingClientRect();
+            const scaleFactor = (C.height / rect.height) * (1920 / C.height);
+            const computedY = Math.round(initialValY + deltaY * scaleFactor);
+
+            if (draggingTarget === 'options') {
+                $('optionsY').value = Math.max(-350, Math.min(350, computedY));
+            } else if (draggingTarget === 'question') {
+                $('questionY').value = Math.max(-300, Math.min(300, computedY));
+            }
+
+            sync();
+            render();
+        }
+
+        function onPointerUp() {
+            draggingTarget = null;
+        }
+
+        C.addEventListener('mousedown', onPointerDown);
+        window.addEventListener('mousemove', onPointerMove);
+        window.addEventListener('mouseup', onPointerUp);
+
+        C.addEventListener('touchstart', onPointerDown, { passive: true });
+        window.addEventListener('touchmove', onPointerMove, { passive: true });
+        window.addEventListener('touchend', onPointerUp);
+
+        // TRUE 4K DIRECT DOWNLOAD (DIRECT VECTOR GPU RENDER)
+        function downloadPNG() {
+            const ow = C.width, oh = C.height;
+            const sc = 2; // True 4K scale
+            const r = $('ratio').value;
+            let w = 1080, h = 1920;
+            if (r === '1:1') { w = 1080; h = 1080; }
+            if (r === '4:5') { w = 1080; h = 1350; }
+            if (r === '16:9') { w = 1920; h = 1080; }
+
+            C.width = w * sc; C.height = h * sc;
+            render();
+
+            const url = C.toDataURL('image/png', 1.0);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `4X-SparkleQuiz-4K-${Date.now()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            C.width = ow; C.height = oh;
+            render();
+        }
+
+        function resetAll() {
+            $('topSubTitle').value = "ITS TIME TO";
+            $('title').value = "DAILY QUIZ";
+            $('raw').value = "Which color do you like the most?\nA. Red\nB. Blue\nC. Green\nD. Yellow";
+            $('watermark').value = '@4xlearner';
+            $('ratio').value = '9:16';
+            $('contentY').value = 0;
+            $('questionY').value = 0;
+            $('optionsY').value = 0;
+            $('scale').value = 100;
+            $('bgDim').value = 0;
+            $('bgBlur').value = 0;
+            currentThemeIndex = 0;
+            removeBgImage();
+            sync();
+            render();
+        }
+
+        document.fonts.ready.then(() => {
+            sync();
+            render();
+        });
+
+        window.addEventListener('resize', () => requestAnimationFrame(render));
+    </script>
+</body>
+
+</html>

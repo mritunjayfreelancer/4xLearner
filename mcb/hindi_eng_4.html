@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>4X LEARNER - Megaphone Top 5 Slang & Talk PRO</title>
+
+    <!-- Google Fonts including Hindi Devanagari Support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka:wght@600;700;800&family=Inter:wght@600;700;800;900&family=Lexend:wght@600;700;800;900&family=Montserrat:wght@600;700;800;900&family=Noto+Sans+Devanagari:wght@700;800;900&family=Outfit:wght@600;700;800;900&family=Paytone+One&family=Plus+Jakarta+Sans:wght@600;700;800;900&family=Poppins:wght@600;700;800;900&family=Righteous&family=Rubik:wght@600;700;800;900&family=Syne:wght@700;800;900&family=Titan+One&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --bg: #090e1a;
+            --panel: rgba(20, 28, 46, 0.95);
+            --border: rgba(255, 255, 255, 0.12);
+            --accent: #38bdf8;
+            --btn-pink: #b8235a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 0%, #172554 0%, var(--bg) 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+            max-width: 440px;
+            align-items: center;
+        }
+
+        @media (min-width: 992px) {
+            .main-wrapper {
+                max-width: 1120px;
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: center;
+                gap: 24px;
+            }
+        }
+
+        /* 9:16 Shorts Viewport */
+        .preview-viewport {
+            width: 100%;
+            max-width: 380px;
+            background: #141c2e;
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 28px;
+            padding: 12px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        canvas {
+            width: 100%;
+            aspect-ratio: 9/16;
+            border-radius: 20px;
+            background: #000;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9);
+            display: block;
+        }
+
+        /* Mobile-First Control Deck */
+        .control-panel {
+            width: 100%;
+            max-width: 380px;
+            background: #141c2e;
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 26px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+        }
+
+        @media (min-width: 992px) {
+            .control-panel {
+                max-width: 520px;
+                height: calc(100vh - 40px);
+                overflow-y: auto;
+            }
+        }
+
+        .control-panel::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .control-panel::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #23314f;
+            padding-bottom: 10px;
+        }
+
+        .panel-header h2 {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #38bdf8;
+            letter-spacing: -0.5px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        label {
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        textarea,
+        input,
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            background: #0a1020;
+            color: #fff;
+            font-size: 0.85rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        textarea:focus,
+        input:focus,
+        select:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
+            line-height: 1.45;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+            font-size: 0.82rem;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-row>div {
+            flex: 1;
+        }
+
+        .btn-deck {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .btn-ui {
+            padding: 13px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.8rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-ui:active {
+            transform: scale(0.97);
+        }
+
+        .btn-preview {
+            background: #1e293b;
+            color: #38bdf8;
+            border-color: #38bdf8;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #b8235a, #e11d48);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 15px rgba(184, 35, 90, 0.4);
+        }
+
+        .btn-video {
+            background: linear-gradient(135deg, #e11d48, #be123c);
+            color: #ffffff;
+            grid-column: span 2;
+            padding: 14px;
+            font-size: 0.92rem;
+            border: none;
+            box-shadow: 0 6px 20px rgba(225, 29, 72, 0.45);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-wrapper">
+        <!-- 9:16 Shorts/Reels Canvas Viewport -->
+        <div class="preview-viewport">
+            <canvas id="posterCanvas" width="1080" height="1920"></canvas>
+        </div>
+
+        <!-- Mobile-First Control Deck -->
+        <div class="control-panel">
+            <div class="panel-header">
+                <h2>⚡ 4X LEARNER MEGAPHONE PRO</h2>
+                <span
+                    style="font-size:0.68rem; background:rgba(56,189,248,0.2); color:#38bdf8; padding:3px 7px; border-radius:6px; font-weight:900;">1080x1920
+                    REELS</span>
+            </div>
+
+            <div class="field-group">
+                <label>🎨 50 Pro Glowing Themes</label>
+                <select id="themeSelect"></select>
+            </div>
+
+            <div class="field-group">
+                <label>⚡ 60 Fast Landing Styles</label>
+                <select id="landingSelect"></select>
+            </div>
+
+            <div class="input-row">
+                <div>
+                    <label>Header Title</label>
+                    <input type="text" id="titleInput" value="TOP 5 SLANG WORDS">
+                </div>
+                <div>
+                    <label>Category Label</label>
+                    <input type="text" id="topicInput" value="DAILY TALK & INSULTS">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>Top 5 Words (English = Hindi)</label>
+                <textarea id="rawInput">1. Moron = महामूर्ख / दिमाग से पैदल
+2. Scumbag = घटिया / नीच इंसान
+3. Jerk = बदतमीज़ / जाहिल
+4. Weirdo = अतरंगी / सनकी आदमी
+5. Rascal = धूर्त / कमीना इंसान</textarea>
+            </div>
+
+            <div class="input-row">
+                <div>
+                    <label>CTA Badge</label>
+                    <input type="text" id="ctaInput" value="COMMENT & SHARE">
+                </div>
+                <div>
+                    <label>Social / Handle</label>
+                    <input type="text" id="footerInput" value="@4xlearner">
+                </div>
+            </div>
+
+            <div class="btn-deck">
+                <button class="btn-ui btn-preview" onclick="runFastLandingAnimation()"><i class="fa-solid fa-play"></i>
+                    Play Animation</button>
+                <button class="btn-ui btn-download" onclick="downloadImage()"><i class="fa-solid fa-image"></i> HD
+                    PNG</button>
+                <button class="btn-ui btn-video" id="recordBtn" onclick="exportReelsVideo()"><i
+                        class="fa-solid fa-video"></i> Export 1080x1920 60FPS Video</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fontPairs = [
+            { main: "'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif", title: "'Paytone One', sans-serif", name: "Paytone Punch" },
+            { main: "'Inter', 'Noto Sans Devanagari', sans-serif", title: "'Titan One', cursive", name: "Titan 3D Pop" },
+            { main: "'Outfit', 'Noto Sans Devanagari', sans-serif", title: "'Fredoka', cursive", name: "Fredoka Cute" },
+            { main: "'Rubik', 'Noto Sans Devanagari', sans-serif", title: "'Righteous', cursive", name: "Righteous Arcade" },
+            { main: "'Montserrat', 'Noto Sans Devanagari', sans-serif", title: "'Bungee', cursive", name: "Bungee Street" },
+            { main: "'Lexend', 'Noto Sans Devanagari', sans-serif", title: "'Syne', sans-serif", name: "Syne Modern" }
+        ];
+
+        const baseThemeList = [
+            {
+                bgMain: "#93e4ec", blob1: "#c4b5fd", blob2: "#ddd6fe", cardBg: "#ffffff",
+                titleCol: "#b8235a",
+                rows: [
+                    { bg: ["#6c5ce7", "#5b4cdb"], bBg: "#81ecec", bTxt: "#0984e3" },
+                    { bg: ["#e11d48", "#be123c"], bBg: "#ffe4e6", bTxt: "#9f1239" },
+                    { bg: ["#059669", "#047857"], bBg: "#ccfbf1", bTxt: "#0f766e" },
+                    { bg: ["#ea580c", "#c2410c"], bBg: "#ffedd5", bTxt: "#c2410c" },
+                    { bg: ["#0284c7", "#0369a1"], bBg: "#e0f2fe", bTxt: "#075985" }
+                ],
+                footerCol: "#0f172a"
+            },
+            {
+                bgMain: "#fef08a", blob1: "#fed7aa", blob2: "#fbcfe8", cardBg: "#ffffff",
+                titleCol: "#dc2626",
+                rows: [
+                    { bg: ["#ef4444", "#dc2626"], bBg: "#fee2e2", bTxt: "#b91c1c" },
+                    { bg: ["#f59e0b", "#d97706"], bBg: "#fef3c7", bTxt: "#b45309" },
+                    { bg: ["#10b981", "#059669"], bBg: "#d1fae5", bTxt: "#047857" },
+                    { bg: ["#3b82f6", "#2563eb"], bBg: "#dbeafe", bTxt: "#1d4ed8" },
+                    { bg: ["#8b5cf6", "#6d28d9"], bBg: "#ede9fe", bTxt: "#5b21b6" }
+                ],
+                footerCol: "#1e293b"
+            },
+            {
+                bgMain: "#a7f3d0", blob1: "#6ee7b7", blob2: "#93c5fd", cardBg: "#ffffff",
+                titleCol: "#047857",
+                rows: [
+                    { bg: ["#059669", "#047857"], bBg: "#ccfbf1", bTxt: "#0f766e" },
+                    { bg: ["#0d9488", "#0f766e"], bBg: "#ccfbf1", bTxt: "#0f766e" },
+                    { bg: ["#0891b2", "#0e7490"], bBg: "#cffafe", bTxt: "#155e75" },
+                    { bg: ["#0284c7", "#0369a1"], bBg: "#e0f2fe", bTxt: "#075985" },
+                    { bg: ["#4f46e5", "#3730a3"], bBg: "#e0e7ff", bTxt: "#312e81" }
+                ],
+                footerCol: "#064e3b"
+            },
+            {
+                bgMain: "#fed7aa", blob1: "#fecdd3", blob2: "#fef08a", cardBg: "#ffffff",
+                titleCol: "#c2410c",
+                rows: [
+                    { bg: ["#f97316", "#ea580c"], bBg: "#ffedd5", bTxt: "#c2410c" },
+                    { bg: ["#fb923c", "#f97316"], bBg: "#ffedd5", bTxt: "#c2410c" },
+                    { bg: ["#f43f5e", "#e11d48"], bBg: "#ffe4e6", bTxt: "#be123c" },
+                    { bg: ["#e11d48", "#be123c"], bBg: "#ffe4e6", bTxt: "#9f1239" },
+                    { bg: ["#7c3aed", "#6d28d9"], bBg: "#ede9fe", bTxt: "#5b21b6" }
+                ],
+                footerCol: "#431407"
+            }
+        ];
+
+        const themes = [];
+        for (let i = 1; i <= 50; i++) {
+            const fontObj = fontPairs[(i - 1) % fontPairs.length];
+            const baseT = baseThemeList[(i - 1) % baseThemeList.length];
+            themes.push({
+                name: `${i < 10 ? '0' + i : i}. ${fontObj.name} [Style ${i}]`,
+                font: fontObj,
+                ...baseT
+            });
+        }
+
+        const themeSelect = document.getElementById("themeSelect");
+        themes.forEach((th, idx) => {
+            const opt = document.createElement("option");
+            opt.value = idx;
+            opt.innerText = th.name;
+            themeSelect.appendChild(opt);
+        });
+
+        const landingSelect = document.getElementById("landingSelect");
+        const landingBase = [
+            "Hyper Elastic Drop", "Radial Pop Burst", "Kinetic Left Horizon",
+            "Kinetic Right Horizon", "3D Flip Land", "Vortex Twirl In"
+        ];
+        for (let i = 1; i <= 60; i++) {
+            const opt = document.createElement("option");
+            opt.value = i - 1;
+            opt.innerText = `Preset #${i < 10 ? '0' + i : i} - ${landingBase[(i - 1) % landingBase.length]} [FX ${i}]`;
+            landingSelect.appendChild(opt);
+        }
+
+        const canvas = document.getElementById("posterCanvas");
+        const ctx = canvas.getContext("2d");
+
+        function parseRawInput() {
+            const text = document.getElementById("rawInput").value.trim();
+            const defaultList = [
+                { num: "1", en: "Moron", hi: "महामूर्ख / दिमाग से पैदल" },
+                { num: "2", en: "Scumbag", hi: "घटिया / नीच इंसान" },
+                { num: "3", en: "Jerk", hi: "बदतमीज़ / जाहिल" },
+                { num: "4", en: "Weirdo", hi: "अतरंगी / सनकी आदमी" },
+                { num: "5", en: "Rascal", hi: "धूर्त / कमीना इंसान" }
+            ];
+            if (!text) return defaultList;
+
+            const lines = text.split("\n").map(l => l.trim()).filter(l => l.length > 0);
+            const parsed = [];
+
+            for (let i = 0; i < 5; i++) {
+                if (lines[i]) {
+                    let clean = lines[i].replace(/^\d+[\.\)\:\-\s]+/, "");
+                    let parts = clean.split(/[=\-\:]+/);
+                    let en = (parts[0] || "").trim();
+                    let hi = (parts[1] || "").trim();
+                    parsed.push({ num: String(i + 1), en: en || `Word ${i + 1}`, hi: hi || `अर्थ ${i + 1}` });
+                } else {
+                    parsed.push(defaultList[i]);
+                }
+            }
+            return parsed;
+        }
+
+        function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.lineTo(x + w - r, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y);
+            ctx.closePath();
+            if (fill) ctx.fill();
+            if (stroke) ctx.stroke();
+        }
+
+        function drawVectorMegaphone(ctx, x, y, scale = 1.0) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+
+            ctx.fillStyle = "#845ec2";
+            ctx.beginPath();
+            ctx.moveTo(42, 45);
+            ctx.lineTo(105, 20);
+            ctx.lineTo(105, 95);
+            ctx.lineTo(42, 75);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = "#6c5ce7";
+            ctx.beginPath();
+            ctx.ellipse(105, 57, 10, 38, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#2d3436";
+            ctx.beginPath();
+            ctx.ellipse(105, 57, 5, 20, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#dfe6e9";
+            ctx.save();
+            ctx.rotate(-5 * Math.PI / 180);
+            roundRect(ctx, 36, 46, 10, 34, 3, true, false);
+            ctx.restore();
+
+            ctx.fillStyle = "#b39ddb";
+            ctx.beginPath();
+            ctx.arc(32, 58, 16, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#dcdde1";
+            ctx.beginPath();
+            ctx.moveTo(48, 76);
+            ctx.lineTo(44, 106);
+            ctx.lineTo(58, 106);
+            ctx.lineTo(58, 78);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawSpeechBubbles(ctx, x, y, scale = 1.0) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+
+            ctx.fillStyle = "#e84393";
+            roundRect(ctx, 36, 22, 54, 50, 14, true, false);
+            ctx.beginPath();
+            ctx.moveTo(56, 72);
+            ctx.lineTo(50, 84);
+            ctx.lineTo(68, 72);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "900 28px 'Fredoka', cursive";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("💬", 63, 47);
+
+            ctx.fillStyle = "#6c5ce7";
+            roundRect(ctx, 8, 4, 60, 56, 16, true, false);
+            ctx.beginPath();
+            ctx.moveTo(30, 60);
+            ctx.lineTo(22, 74);
+            ctx.lineTo(42, 60);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "900 32px 'Fredoka', cursive";
+            ctx.fillText("🔥", 38, 32);
+
+            ctx.restore();
+        }
+
+        function drawSparks(ctx, x, y, size) {
+            ctx.save();
+            ctx.fillStyle = "#f97316";
+            ctx.shadowColor = "rgba(249, 115, 22, 0.4)";
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.moveTo(x, y - size);
+            ctx.quadraticCurveTo(x, y, x + size, y);
+            ctx.quadraticCurveTo(x, y, x, y + size);
+            ctx.quadraticCurveTo(x, y, x - size, y);
+            ctx.quadraticCurveTo(x, y, x, y - size);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function renderScene(landingProg = 1.0) {
+            const th = themes[themeSelect.value];
+            const items = parseRawInput();
+            const titleText = document.getElementById("titleInput").value;
+            const topicText = document.getElementById("topicInput").value;
+            const ctaText = document.getElementById("ctaInput").value;
+            const footerText = document.getElementById("footerInput").value;
+            const landingMode = parseInt(landingSelect.value, 10) % 6;
+
+            ctx.clearRect(0, 0, 1080, 1920);
+
+            // 1. Pastel Background
+            ctx.fillStyle = th.bgMain;
+            ctx.fillRect(0, 0, 1080, 1920);
+
+            ctx.fillStyle = th.blob1;
+            ctx.beginPath();
+            ctx.ellipse(80, 100, 360, 360, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = th.blob2;
+            ctx.beginPath();
+            ctx.ellipse(1000, 1820, 360, 360, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Decorative Props
+            drawVectorMegaphone(ctx, 40, 120, 1.4);
+            drawSparks(ctx, 230, 130, 24);
+            drawSparks(ctx, 260, 190, 18);
+            drawSpeechBubbles(ctx, 920, 120, 1.3);
+
+            // 2. Header Box
+            const hEase = 1 - Math.pow(1 - Math.min(1, landingProg / 0.35), 3);
+            ctx.save();
+            ctx.globalAlpha = Math.min(1, landingProg / 0.35);
+            ctx.translate(0, (1 - hEase) * -160);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
+            ctx.shadowBlur = 20;
+            roundRect(ctx, 260, 110, 420, 92, 24, true, false);
+
+            const bGrad = ctx.createLinearGradient(274, 124, 374, 188);
+            bGrad.addColorStop(0, "#b8235a");
+            bGrad.addColorStop(1, "#e11d48");
+            ctx.fillStyle = bGrad;
+            roundRect(ctx, 274, 124, 100, 64, 18, true, false);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = `900 40px 'Montserrat', sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("4X", 324, 156);
+
+            ctx.fillStyle = "#0f172a";
+            ctx.font = `900 36px 'Montserrat', sans-serif`;
+            ctx.textAlign = "left";
+            ctx.fillText("LEARNER", 394, 156);
+
+            // Pill Badge
+            roundRect(ctx, 1080 - 380, 110, 290, 92, 46, "#ffffff", false);
+            ctx.fillStyle = "#b8235a";
+            ctx.font = "900 28px 'Inter', sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(`⚡ DAILY TALK`, 1080 - 235, 156);
+            ctx.restore();
+
+            // 3. Central Card
+            const cProg = Math.min(1, Math.max(0, (landingProg - 0.12) / 0.45));
+            const cEase = 1 - Math.pow(1 - cProg, 3);
+            const cardX = 80;
+            const cardY = 270;
+            const cardW = 920;
+            const cardH = 1380;
+
+            ctx.save();
+            ctx.globalAlpha = cProg;
+
+            if (landingMode === 1) {
+                const s = 0.2 + 0.8 * cEase;
+                ctx.translate(540 * (1 - s), 960 * (1 - s));
+                ctx.scale(s, s);
+            } else if (landingMode === 2) {
+                ctx.translate((1 - cEase) * -700, 0);
+            } else if (landingMode === 3) {
+                ctx.translate((1 - cEase) * 700, 0);
+            } else {
+                ctx.translate(0, (1 - cEase) * 220);
+            }
+
+            // White Card
+            ctx.fillStyle = th.cardBg;
+            ctx.shadowColor = "rgba(0, 0, 0, 0.18)";
+            ctx.shadowBlur = 40;
+            roundRect(ctx, cardX, cardY, cardW, cardH, 50, true, false);
+
+            // Speech Bubble Tail
+            ctx.fillStyle = th.cardBg;
+            ctx.beginPath();
+            ctx.moveTo(cardX + cardW - 120, cardY + cardH);
+            ctx.lineTo(cardX + cardW - 60, cardY + cardH + 45);
+            ctx.lineTo(cardX + cardW - 170, cardY + cardH);
+            ctx.closePath();
+            ctx.fill();
+
+            // Category Subtitle
+            ctx.fillStyle = "#6366f1";
+            ctx.font = `800 30px 'Inter', sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.shadowBlur = 0;
+            ctx.fillText(topicText.toUpperCase(), 540, cardY + 70);
+
+            // Big Title
+            ctx.fillStyle = th.titleCol;
+            ctx.font = `900 70px ${th.font.title}, sans-serif`;
+            ctx.fillText(titleText, 540, cardY + 145);
+
+            // Top 5 Rows Stack
+            const rowYStart = cardY + 225;
+            const rowH = 195;
+            const rowGap = 26;
+            const rowW = cardW - 80;
+            const rowX = cardX + 40;
+
+            items.forEach((item, idx) => {
+                const y = rowYStart + idx * (rowH + rowGap);
+                const rowStyle = th.rows[idx % th.rows.length];
+
+                const oProg = Math.min(1, Math.max(0, (landingProg - (0.2 + idx * 0.12)) / 0.4));
+                const oEase = 1 - Math.pow(1 - oProg, 3);
+                const currX = rowX + (1 - oEase) * (idx % 2 === 0 ? -600 : 600);
+
+                ctx.save();
+                ctx.globalAlpha = oProg;
+                ctx.translate(currX - rowX, 0);
+
+                // Row Background
+                const g = ctx.createLinearGradient(rowX, y, rowX + rowW, y);
+                g.addColorStop(0, rowStyle.bg[0]);
+                g.addColorStop(1, rowStyle.bg[1]);
+                ctx.fillStyle = g;
+                ctx.shadowColor = "rgba(0, 0, 0, 0.25)";
+                ctx.shadowBlur = 18;
+                roundRect(ctx, rowX, y, rowW, rowH, 26, true, false);
+
+                // Number Box (1 to 5)
+                const cSize = 120;
+                const cX = rowX + 24;
+                const cY = y + (rowH - cSize) / 2;
+                ctx.fillStyle = rowStyle.bBg;
+                roundRect(ctx, cX, cY, cSize, cSize, 22, true, false);
+
+                ctx.fillStyle = rowStyle.bTxt;
+                ctx.font = `900 64px ${th.font.title}, sans-serif`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(item.num, cX + cSize / 2, cY + cSize / 2);
+
+                // English Slang / Insult Word
+                const textStartX = cX + cSize + 30;
+                ctx.fillStyle = "#ffffff";
+                ctx.font = `900 50px ${th.font.title}, sans-serif`;
+                ctx.textAlign = "left";
+                ctx.textBaseline = "middle";
+                ctx.fillText(item.en, textStartX, y + 62);
+
+                // Hindi Meaning
+                ctx.fillStyle = "#fef08a";
+                ctx.font = `800 40px 'Noto Sans Devanagari', sans-serif`;
+                ctx.fillText(item.hi, textStartX, y + 134);
+
+                ctx.restore();
+            });
+
+            ctx.restore();
+
+            // 4. CTA Button Badge
+            ctx.save();
+            ctx.globalAlpha = Math.min(1, landingProg);
+            const ctaW = 380;
+            const ctaH = 80;
+            roundRect(ctx, 1080 - 80 - ctaW, cardY + cardH + 18, ctaW, ctaH, 40, "#ffffff", false);
+            ctx.fillStyle = "#ea580c";
+            ctx.font = `900 24px 'Inter', sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(`📢 ${ctaText}`, 1080 - 80 - ctaW / 2, cardY + cardH + 18 + ctaH / 2);
+            ctx.restore();
+
+            // 5. Footer Social Link
+            ctx.save();
+            ctx.globalAlpha = Math.min(1, landingProg);
+            ctx.fillStyle = th.footerCol;
+            ctx.font = `900 36px 'Inter', sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(`🌐 4X LEARNER • ${footerText}`, 540, 1750);
+            ctx.restore();
+        }
+
+        // Live Animation Loop
+        function runFastLandingAnimation() {
+            let start = null;
+            const duration = 1400;
+
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                const elapsed = timestamp - start;
+                const progress = Math.min(1.0, elapsed / duration);
+
+                renderScene(progress);
+
+                if (progress < 1.0) {
+                    requestAnimationFrame(step);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // 4K PNG Download
+        function downloadImage() {
+            renderScene(1.0);
+            const a = document.createElement("a");
+            a.download = `4X_LEARNER_Top5_Slang_${Date.now()}.png`;
+            a.href = canvas.toDataURL("image/png", 1.0);
+            a.click();
+        }
+
+        // 60FPS Video Export
+        function exportReelsVideo() {
+            const btn = document.getElementById("recordBtn");
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Rendering 60FPS Video...`;
+            btn.disabled = true;
+
+            const stream = canvas.captureStream(60);
+            const recorder = new MediaRecorder(stream, {
+                mimeType: MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm'
+            });
+            const chunks = [];
+
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `4X_LEARNER_Top5_Reel_1080x1920_${Date.now()}.webm`;
+                a.click();
+                btn.innerHTML = `<i class="fa-solid fa-video"></i> Export 1080x1920 60FPS Video`;
+                btn.disabled = false;
+            };
+
+            recorder.start();
+
+            const TOTAL_DURATION = 4200;
+            const startTime = performance.now();
+
+            function step(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(1.0, elapsed / 1400);
+
+                renderScene(progress);
+
+                if (elapsed < TOTAL_DURATION) {
+                    requestAnimationFrame(step);
+                } else {
+                    recorder.stop();
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // Live Event Listeners
+        [
+            "themeSelect", "titleInput", "topicInput",
+            "ctaInput", "footerInput", "rawInput"
+        ].forEach(id => {
+            document.getElementById(id).addEventListener("input", () => renderScene(1.0));
+        });
+
+        document.getElementById("landingSelect").addEventListener("change", runFastLandingAnimation);
+
+        // Initial Load
+        renderScene(1.0);
+        runFastLandingAnimation();
+    </script>
+</body>
+
+</html>

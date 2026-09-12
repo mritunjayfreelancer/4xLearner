@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>4X Learner • 100% Pixel Match Neumorphic Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap');
+
+        :root {
+            --bg: #070b14;
+            --panel: #111827;
+            --line: #263247;
+            --text: #f8fafc;
+            --accent: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .topbar {
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background: rgba(9, 14, 25, .95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(18px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+            letter-spacing: .5px;
+        }
+
+        .logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #ef4444, #f43f5e);
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+            color: #fff;
+            font-weight: 900;
+            font-size: 15px;
+        }
+
+        .brand span {
+            font-size: 18px;
+        }
+
+        .menuBtn,
+        .smallBtn,
+        .primaryBtn {
+            border: 0;
+            color: #fff;
+            border-radius: 12px;
+            font-weight: 800;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #ef4444, #be123c);
+            box-shadow: 0 8px 25px #0005;
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 390px;
+            height: calc(100vh - 64px);
+        }
+
+        .stage {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0, #050811 100%);
+            overflow: auto;
+            position: relative;
+        }
+
+        .previewWrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #canvas {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: calc(100vw - 430px);
+            max-height: calc(100vh - 100px);
+            border-radius: 28px;
+            box-shadow: 0 25px 80px #000b;
+            cursor: grab;
+            touch-action: none;
+        }
+
+        #canvas:active {
+            cursor: grabbing;
+        }
+
+        .drawer {
+            background: linear-gradient(180deg, #111827, #0b1220);
+            border-left: 1px solid var(--line);
+            overflow-y: auto;
+            padding: 18px;
+        }
+
+        .section {
+            background: #0c1422;
+            border: 1px solid #243149;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .section h3 {
+            font-size: 13px;
+            color: #f87171;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 11px;
+        }
+
+        label {
+            display: block;
+            color: #9fb0c8;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            margin: 11px 0 5px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #30405a;
+            background: #070d18;
+            color: #fff;
+            border-radius: 10px;
+            outline: 0;
+            padding: 10px 11px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 116px;
+            line-height: 1.45;
+        }
+
+        .rangeRow {
+            display: grid;
+            grid-template-columns: 1fr 58px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        input[type=range] {
+            padding: 0;
+            accent-color: #ef4444;
+        }
+
+        .value {
+            background: #07101c;
+            border: 1px solid #27354b;
+            border-radius: 9px;
+            padding: 7px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .swatches {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 7px;
+        }
+
+        .swatch {
+            height: 36px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 0;
+            position: relative;
+            transition: transform 0.15s;
+        }
+
+        .swatch:hover {
+            transform: scale(1.06);
+        }
+
+        .swatch.active {
+            border-color: #fff;
+            box-shadow: 0 0 12px #ef4444;
+        }
+
+        .fileUploadBtn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e293b;
+            border: 2px dashed #475569;
+            color: #cbd5e1;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 13px;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .primaryBtn {
+            grid-column: 1/-1;
+            padding: 13px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+            font-size: 14px;
+        }
+
+        .drag-tip {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px dashed #ef4444;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 11px;
+            color: #fca5a5;
+            line-height: 1.4;
+            margin-top: 8px;
+        }
+
+        @media(max-width:860px) {
+            .topbar {
+                height: 58px;
+                padding: 0 10px;
+            }
+
+            .logo {
+                width: 34px;
+                height: 34px;
+            }
+
+            .brand span {
+                font-size: 15px;
+            }
+
+            .app {
+                display: block;
+                height: auto;
+            }
+
+            .stage {
+                height: calc(100vh - 58px);
+                min-height: 540px;
+                padding: 10px;
+            }
+
+            #canvas {
+                max-width: calc(100vw - 20px);
+                max-height: calc(100vh - 82px);
+                border-radius: 18px;
+            }
+
+            .drawer {
+                position: fixed;
+                z-index: 900;
+                right: 0;
+                top: 58px;
+                bottom: 0;
+                width: min(390px, 94vw);
+                transform: translateX(105%);
+                transition: transform .25s ease;
+                box-shadow: -25px 0 70px #000b;
+            }
+
+            .drawer.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">4X</div><span>4X LEARNER • 100% NEUMORPHIC</span>
+        </div>
+        <button class="menuBtn" onclick="toggleDrawer()">⚙️ Controls</button>
+    </header>
+
+    <div class="app">
+        <main class="stage">
+            <div class="previewWrap"><canvas id="canvas" width="1080" height="1920"></canvas></div>
+        </main>
+
+        <aside class="drawer" id="drawer">
+            <div class="drag-tip">
+                🎯 <b>Live Dragging:</b> स्क्रीन पर <b>Question</b> या <b>Option Buttons</b> को अपनी उंगली या माउस से
+                पकड़कर ऊपर-नीचे जहाँ चाहें सेट करें।
+            </div>
+
+            <!-- 20 PRO THEMES -->
+            <div class="section" style="margin-top:12px;">
+                <h3>Top 20 Pro Themes (Auto-Contrast)</h3>
+                <div id="themes" class="swatches"></div>
+            </div>
+
+            <!-- POSITION SLIDERS -->
+            <div class="section">
+                <h3>Position & Layout Sliders</h3>
+                <label>Options Group Position (Y)</label>
+                <div class="rangeRow">
+                    <input id="optionsY" type="range" min="-350" max="350" value="0">
+                    <div class="value" id="optionsYv">0</div>
+                </div>
+
+                <label>Question Position (Y)</label>
+                <div class="rangeRow">
+                    <input id="questionY" type="range" min="-300" max="300" value="0">
+                    <div class="value" id="questionYv">0</div>
+                </div>
+
+                <label>Card Stack Position (Y)</label>
+                <div class="rangeRow">
+                    <input id="contentY" type="range" min="-250" max="250" value="0">
+                    <div class="value" id="contentYv">0</div>
+                </div>
+
+                <label>Overall Scale</label>
+                <div class="rangeRow">
+                    <input id="scale" type="range" min="80" max="115" value="100">
+                    <div class="value" id="scalev">100%</div>
+                </div>
+            </div>
+
+            <!-- CONTENT INPUT -->
+            <div class="section">
+                <h3>Content</h3>
+                <label>Title Header</label>
+                <input id="title" value="Daily Quiz!">
+                <label>Question + 4 Options (One Box)</label>
+                <textarea id="raw">Which season do you prefer?
+A. Summer
+B. Winter
+C. Rainy
+D. Spring</textarea>
+                <label>Bottom Watermark</label>
+                <input id="watermark" value="@4xlearner">
+            </div>
+
+            <!-- BACKGROUND IMAGE UPLOAD -->
+            <div class="section">
+                <h3>Custom Background Image</h3>
+                <label>Upload Own Image (Optional)</label>
+                <label class="fileUploadBtn" for="bgUpload">
+                    📁 <span>Choose Custom Image</span>
+                </label>
+                <input type="file" id="bgUpload" accept="image/*" style="display:none">
+
+                <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                    <button class="smallBtn" style="padding:6px 10px; font-size:11px;" onclick="removeBgImage()">✕
+                        Remove Image</button>
+                </div>
+
+                <label>Background Dim</label>
+                <div class="rangeRow">
+                    <input id="bgDim" type="range" min="0" max="90" value="0">
+                    <div class="value" id="bgDimv">0%</div>
+                </div>
+
+                <label>Background Blur</label>
+                <div class="rangeRow">
+                    <input id="bgBlur" type="range" min="0" max="25" value="0">
+                    <div class="value" id="bgBlurv">0px</div>
+                </div>
+            </div>
+
+            <!-- FORMAT -->
+            <div class="section">
+                <h3>Aspect Ratio</h3>
+                <select id="ratio">
+                    <option value="9:16">9:16 • Shorts / Reels • 1080×1920</option>
+                    <option value="1:1">1:1 • Square • 1080×1080</option>
+                    <option value="4:5">4:5 • Feed • 1080×1350</option>
+                    <option value="16:9">16:9 • Landscape • 1920×1080</option>
+                </select>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="section">
+                <h3>Actions</h3>
+                <div class="actions">
+                    <button class="smallBtn" onclick="resetAll()">↺ Reset</button>
+                    <button class="primaryBtn" onclick="downloadPNG()">⬇ Download Perfect 4K PNG</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const C = document.getElementById('canvas'), ctx = C.getContext('2d', { alpha: false });
+        const $ = id => document.getElementById(id);
+
+        let customBgImg = null;
+
+        // 20 PRO THEMES WITH PRECISE AUTO-CONTRAST AND INSET NEUMORPHIC SHADOWS
+        const themes = [
+            // 0. Screenshot Exact (Matte Charcoal Black)
+            {
+                bg: ['#1d1f24', '#0f1013'],
+                cardBg: '#21242a',
+                cardShadowDark: 'rgba(0, 0, 0, 0.75)',
+                cardShadowLight: 'rgba(255, 255, 255, 0.05)',
+                btnBg: '#1a1c21',
+                btnDark: 'rgba(0, 0, 0, 0.85)',
+                btnLight: 'rgba(255, 255, 255, 0.07)',
+                badgeBg: '#131418',
+                badgeBorder: 'rgba(255, 255, 255, 0.05)',
+                titleColor: '#ffffff',
+                questionColor: '#cbd5e1',
+                badgeTextColor: '#94a3b8',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#94a3b8'
+            },
+            // 1. Pure White Neumorphic (Black Text Auto-Contrast)
+            {
+                bg: ['#f1f5f9', '#e2e8f0'],
+                cardBg: '#ffffff',
+                cardShadowDark: 'rgba(148, 163, 184, 0.45)',
+                cardShadowLight: 'rgba(255, 255, 255, 0.95)',
+                btnBg: '#f8fafc',
+                btnDark: 'rgba(148, 163, 184, 0.5)',
+                btnLight: 'rgba(255, 255, 255, 1)',
+                badgeBg: '#e2e8f0',
+                badgeBorder: 'rgba(0, 0, 0, 0.05)',
+                titleColor: '#0f172a',
+                questionColor: '#475569',
+                badgeTextColor: '#0f172a',
+                optionTextColor: '#0f172a',
+                watermarkColor: '#64748b'
+            },
+            // 2. Midnight Cyber Cyan
+            {
+                bg: ['#061322', '#02070d'],
+                cardBg: '#091c30',
+                cardShadowDark: 'rgba(0, 0, 0, 0.85)',
+                cardShadowLight: 'rgba(56, 189, 248, 0.12)',
+                btnBg: '#061628',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(56, 189, 248, 0.15)',
+                badgeBg: '#030d17',
+                badgeBorder: 'rgba(56, 189, 248, 0.2)',
+                titleColor: '#38bdf8',
+                questionColor: '#bae6fd',
+                badgeTextColor: '#38bdf8',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#38bdf8'
+            },
+            // 3. Royal Sapphire Blue
+            {
+                bg: ['#0f172a', '#030712'],
+                cardBg: '#1e293b',
+                cardShadowDark: 'rgba(0, 0, 0, 0.8)',
+                cardShadowLight: 'rgba(96, 165, 250, 0.1)',
+                btnBg: '#131d2e',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(96, 165, 250, 0.15)',
+                badgeBg: '#0b111c',
+                badgeBorder: 'rgba(96, 165, 250, 0.2)',
+                titleColor: '#ffffff',
+                questionColor: '#93c5fd',
+                badgeTextColor: '#60a5fa',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#60a5fa'
+            },
+            // 4. Emerald Velvet
+            {
+                bg: ['#022c22', '#01140f'],
+                cardBg: '#064e3b',
+                cardShadowDark: 'rgba(0, 0, 0, 0.85)',
+                cardShadowLight: 'rgba(52, 211, 153, 0.12)',
+                btnBg: '#033a2c',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(52, 211, 153, 0.15)',
+                badgeBg: '#01241b',
+                badgeBorder: 'rgba(52, 211, 153, 0.25)',
+                titleColor: '#34d399',
+                questionColor: '#a7f3d0',
+                badgeTextColor: '#34d399',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#10b981'
+            },
+            // 5. Crimson Passion
+            {
+                bg: ['#2b0707', '#0f0202'],
+                cardBg: '#3d0a0a',
+                cardShadowDark: 'rgba(0, 0, 0, 0.9)',
+                cardShadowLight: 'rgba(248, 113, 113, 0.12)',
+                btnBg: '#2d0606',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(248, 113, 113, 0.18)',
+                badgeBg: '#1a0303',
+                badgeBorder: 'rgba(248, 113, 113, 0.25)',
+                titleColor: '#ffffff',
+                questionColor: '#fca5a5',
+                badgeTextColor: '#f87171',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#ef4444'
+            },
+            // 6. Golden Amber Luxury
+            {
+                bg: ['#261a04', '#0f0a01'],
+                cardBg: '#3b2706',
+                cardShadowDark: 'rgba(0, 0, 0, 0.9)',
+                cardShadowLight: 'rgba(251, 191, 36, 0.12)',
+                btnBg: '#2a1c04',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(251, 191, 36, 0.16)',
+                badgeBg: '#1a1102',
+                badgeBorder: 'rgba(251, 191, 36, 0.25)',
+                titleColor: '#fbbf24',
+                questionColor: '#fde68a',
+                badgeTextColor: '#fbbf24',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#f59e0b'
+            },
+            // 7. Violet Nebula
+            {
+                bg: ['#1e0b36', '#090212'],
+                cardBg: '#2c104f',
+                cardShadowDark: 'rgba(0, 0, 0, 0.9)',
+                cardShadowLight: 'rgba(192, 132, 252, 0.12)',
+                btnBg: '#200a3b',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(192, 132, 252, 0.18)',
+                badgeBg: '#130424',
+                badgeBorder: 'rgba(192, 132, 252, 0.25)',
+                titleColor: '#c084fc',
+                questionColor: '#e9d5ff',
+                badgeTextColor: '#c084fc',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#a855f7'
+            },
+            // 8. Soft Warm Cream (Black Text Contrast)
+            {
+                bg: ['#fff7ed', '#ffedd5'],
+                cardBg: '#ffffff',
+                cardShadowDark: 'rgba(254, 215, 170, 0.65)',
+                cardShadowLight: 'rgba(255, 255, 255, 0.95)',
+                btnBg: '#fff7ed',
+                btnDark: 'rgba(254, 215, 170, 0.7)',
+                btnLight: 'rgba(255, 255, 255, 1)',
+                badgeBg: '#ffedd5',
+                badgeBorder: 'rgba(234, 88, 12, 0.1)',
+                titleColor: '#7c2d12',
+                questionColor: '#9a3412',
+                badgeTextColor: '#c2410c',
+                optionTextColor: '#431407',
+                watermarkColor: '#ea580c'
+            },
+            // 9. Toxic Lime
+            {
+                bg: ['#121d03', '#050a01'],
+                cardBg: '#1d2f05',
+                cardShadowDark: 'rgba(0, 0, 0, 0.9)',
+                cardShadowLight: 'rgba(163, 230, 53, 0.15)',
+                btnBg: '#142103',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(163, 230, 53, 0.18)',
+                badgeBg: '#0b1301',
+                badgeBorder: 'rgba(163, 230, 53, 0.25)',
+                titleColor: '#a3e635',
+                questionColor: '#d9f99d',
+                badgeTextColor: '#a3e635',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#84cc16'
+            },
+            // 10. Pastel Minty (Black Text Contrast)
+            {
+                bg: ['#f0fdf4', '#dcfce7'],
+                cardBg: '#ffffff',
+                cardShadowDark: 'rgba(187, 247, 208, 0.65)',
+                cardShadowLight: 'rgba(255, 255, 255, 0.95)',
+                btnBg: '#f0fdf4',
+                btnDark: 'rgba(187, 247, 208, 0.7)',
+                btnLight: 'rgba(255, 255, 255, 1)',
+                badgeBg: '#dcfce7',
+                badgeBorder: 'rgba(5, 150, 105, 0.1)',
+                titleColor: '#064e3b',
+                questionColor: '#065f46',
+                badgeTextColor: '#047857',
+                optionTextColor: '#022c22',
+                watermarkColor: '#059669'
+            },
+            // 11. Magenta Cyberpunk
+            {
+                bg: ['#280423', '#0c010a'],
+                cardBg: '#3d0836',
+                cardShadowDark: 'rgba(0, 0, 0, 0.9)',
+                cardShadowLight: 'rgba(244, 114, 182, 0.15)',
+                btnBg: '#290524',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(244, 114, 182, 0.18)',
+                badgeBg: '#190216',
+                badgeBorder: 'rgba(244, 114, 182, 0.25)',
+                titleColor: '#f472b6',
+                questionColor: '#fbcfe8',
+                badgeTextColor: '#f472b6',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#ec4899'
+            },
+            // 12. Steel Slate Dark
+            {
+                bg: ['#1e293b', '#0f172a'],
+                cardBg: '#334155',
+                cardShadowDark: 'rgba(0, 0, 0, 0.75)',
+                cardShadowLight: 'rgba(255, 255, 255, 0.08)',
+                btnBg: '#243042',
+                btnDark: 'rgba(0, 0, 0, 0.8)',
+                btnLight: 'rgba(255, 255, 255, 0.1)',
+                badgeBg: '#18202c',
+                badgeBorder: 'rgba(255, 255, 255, 0.1)',
+                titleColor: '#f8fafc',
+                questionColor: '#cbd5e1',
+                badgeTextColor: '#cbd5e1',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#94a3b8'
+            },
+            // 13. Deep Forest Teal
+            {
+                bg: ['#042121', '#010c0c'],
+                cardBg: '#073333',
+                cardShadowDark: 'rgba(0, 0, 0, 0.85)',
+                cardShadowLight: 'rgba(45, 212, 191, 0.12)',
+                btnBg: '#052525',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(45, 212, 191, 0.15)',
+                badgeBg: '#021717',
+                badgeBorder: 'rgba(45, 212, 191, 0.25)',
+                titleColor: '#2dd4bf',
+                questionColor: '#99f6e4',
+                badgeTextColor: '#2dd4bf',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#14b8a6'
+            },
+            // 14. Soft Rose Quartz (Black Text Contrast)
+            {
+                bg: ['#fff1f2', '#ffe4e6'],
+                cardBg: '#ffffff',
+                cardShadowDark: 'rgba(254, 205, 211, 0.65)',
+                cardShadowLight: 'rgba(255, 255, 255, 0.95)',
+                btnBg: '#fff1f2',
+                btnDark: 'rgba(254, 205, 211, 0.7)',
+                btnLight: 'rgba(255, 255, 255, 1)',
+                badgeBg: '#ffe4e6',
+                badgeBorder: 'rgba(225, 29, 72, 0.1)',
+                titleColor: '#881337',
+                questionColor: '#9f1239',
+                badgeTextColor: '#be123c',
+                optionTextColor: '#4c0519',
+                watermarkColor: '#e11d48'
+            },
+            // 15. Electric Blue Night
+            {
+                bg: ['#05122b', '#010612'],
+                cardBg: '#0a1d45',
+                cardShadowDark: 'rgba(0, 0, 0, 0.85)',
+                cardShadowLight: 'rgba(96, 165, 250, 0.15)',
+                btnBg: '#071636',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(96, 165, 250, 0.18)',
+                badgeBg: '#030c1e',
+                badgeBorder: 'rgba(96, 165, 250, 0.25)',
+                titleColor: '#60a5fa',
+                questionColor: '#bfdbfe',
+                badgeTextColor: '#60a5fa',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#3b82f6'
+            },
+            // 16. Pure AMOLED Black
+            {
+                bg: ['#000000', '#050505'],
+                cardBg: '#0f0f11',
+                cardShadowDark: 'rgba(0, 0, 0, 1)',
+                cardShadowLight: 'rgba(255, 255, 255, 0.08)',
+                btnBg: '#08080a',
+                btnDark: 'rgba(0, 0, 0, 1)',
+                btnLight: 'rgba(255, 255, 255, 0.08)',
+                badgeBg: '#030304',
+                badgeBorder: 'rgba(255, 255, 255, 0.1)',
+                titleColor: '#ffffff',
+                questionColor: '#a1a1aa',
+                badgeTextColor: '#e4e4e7',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#71717a'
+            },
+            // 17. Electric Rose
+            {
+                bg: ['#240510', '#0a0104'],
+                cardBg: '#360919',
+                cardShadowDark: 'rgba(0, 0, 0, 0.9)',
+                cardShadowLight: 'rgba(251, 113, 133, 0.15)',
+                btnBg: '#270612',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(251, 113, 133, 0.18)',
+                badgeBg: '#17030a',
+                badgeBorder: 'rgba(251, 113, 133, 0.25)',
+                titleColor: '#fb7185',
+                questionColor: '#fecdd3',
+                badgeTextColor: '#fb7185',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#f43f5e'
+            },
+            // 18. Clean Pastel Blue (Black Text Contrast)
+            {
+                bg: ['#f0f9ff', '#e0f2fe'],
+                cardBg: '#ffffff',
+                cardShadowDark: 'rgba(186, 230, 253, 0.65)',
+                cardShadowLight: 'rgba(255, 255, 255, 0.95)',
+                btnBg: '#f0f9ff',
+                btnDark: 'rgba(186, 230, 253, 0.7)',
+                btnLight: 'rgba(255, 255, 255, 1)',
+                badgeBg: '#e0f2fe',
+                badgeBorder: 'rgba(2, 132, 199, 0.1)',
+                titleColor: '#0c4a6e',
+                questionColor: '#0369a1',
+                badgeTextColor: '#0284c7',
+                optionTextColor: '#082f49',
+                watermarkColor: '#0284c7'
+            },
+            // 19. Radioactive Neon Green Dark
+            {
+                bg: ['#021a0a', '#010a04'],
+                cardBg: '#052910',
+                cardShadowDark: 'rgba(0, 0, 0, 0.9)',
+                cardShadowLight: 'rgba(34, 197, 94, 0.15)',
+                btnBg: '#031f0c',
+                btnDark: 'rgba(0, 0, 0, 0.9)',
+                btnLight: 'rgba(34, 197, 94, 0.18)',
+                badgeBg: '#011407',
+                badgeBorder: 'rgba(34, 197, 94, 0.25)',
+                titleColor: '#4ade80',
+                questionColor: '#bbf7d0',
+                badgeTextColor: '#4ade80',
+                optionTextColor: '#ffffff',
+                watermarkColor: '#22c55e'
+            }
+        ];
+
+        let currentThemeIndex = 0;
+
+        function createThemeSwatches() {
+            const container = $('themes');
+            themes.forEach((t, i) => {
+                const b = document.createElement('button');
+                b.className = 'swatch' + (i === 0 ? ' active' : '');
+                b.title = 'Theme ' + (i + 1);
+                b.style.background = `linear-gradient(135deg, ${t.bg[0]}, ${t.cardBg}, ${t.titleColor})`;
+                b.onclick = () => {
+                    currentThemeIndex = i;
+                    document.querySelectorAll('.swatch').forEach((el, idx) => el.classList.toggle('active', idx === i));
+                    render();
+                };
+                container.appendChild(b);
+            });
+        }
+        createThemeSwatches();
+
+        // Hitboxes for Interactive Drag
+        let hitRegions = {
+            question: { x: 0, y: 0, w: 0, h: 0 },
+            options: { x: 0, y: 0, w: 0, h: 0 }
+        };
+
+        let draggingTarget = null;
+        let dragStartY = 0;
+        let initialValY = 0;
+
+        function toggleDrawer() { $('drawer').classList.toggle('open'); }
+
+        function sync() {
+            ['contentY', 'questionY', 'optionsY', 'scale', 'bgDim', 'bgBlur'].forEach(id => {
+                const v = $(id).value;
+                if (id === 'scale' || id === 'bgDim') $(id + 'v').textContent = v + '%';
+                else if (id === 'bgBlur') $(id + 'v').textContent = v + 'px';
+                else $(id + 'v').textContent = v;
+            });
+        }
+
+        ['title', 'raw', 'watermark', 'ratio', 'contentY', 'questionY', 'optionsY', 'scale', 'bgDim', 'bgBlur'].forEach(id => {
+            $(id).addEventListener(id === 'ratio' ? 'change' : 'input', render);
+        });
+        ['contentY', 'questionY', 'optionsY', 'scale', 'bgDim', 'bgBlur'].forEach(id => $(id).addEventListener('input', sync));
+
+        // Background Upload
+        $('bgUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                const img = new Image();
+                img.onload = () => {
+                    customBgImg = img;
+                    render();
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function removeBgImage() {
+            customBgImg = null;
+            $('bgUpload').value = '';
+            render();
+        }
+
+        function setSize() {
+            const r = $('ratio').value;
+            if (r === '9:16') { C.width = 1080; C.height = 1920; }
+            if (r === '1:1') { C.width = 1080; C.height = 1080; }
+            if (r === '4:5') { C.width = 1080; C.height = 1350; }
+            if (r === '16:9') { C.width = 1920; C.height = 1080; }
+        }
+
+        function drawRoundRect(c, x, y, w, h, r) {
+            r = Math.min(r, w / 2, h / 2);
+            c.beginPath();
+            c.moveTo(x + r, y);
+            c.lineTo(x + w - r, y);
+            c.quadraticCurveTo(x + w, y, x + w, y + r);
+            c.lineTo(x + w, y + h - r);
+            c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            c.lineTo(x + r, y + h);
+            c.quadraticCurveTo(x, y + h, x, y + h - r);
+            c.lineTo(x, y + r);
+            c.quadraticCurveTo(x, y, x + r, y);
+            c.closePath();
+        }
+
+        function wrapText(c, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(/\s+/);
+            let line = '';
+            let currentY = y;
+            for (let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                if (c.measureText(testLine).width > maxWidth && n > 0) {
+                    c.fillText(line, x, currentY);
+                    line = words[n] + ' ';
+                    currentY += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            c.fillText(line, x, currentY);
+            return currentY;
+        }
+
+        // 100% REALISTIC INSET GROOVE PILL BUTTON (DEEP SUNKEN NEUMORPHIC EFFECT)
+        function drawRealisticSunkenButton(c, x, y, w, h, r, btnBg, darkShadow, lightShadow) {
+            c.save();
+            // Outer Rim Groove
+            c.fillStyle = btnBg;
+            drawRoundRect(c, x, y, w, h, r);
+            c.fill();
+
+            // Inner Shadow Simulation
+            c.save();
+            drawRoundRect(c, x, y, w, h, r);
+            c.clip();
+
+            // Dark Top-Left Inset Shadow
+            c.shadowColor = darkShadow;
+            c.shadowBlur = 18;
+            c.shadowOffsetX = 8;
+            c.shadowOffsetY = 8;
+            c.lineWidth = 10;
+            c.strokeStyle = darkShadow;
+            drawRoundRect(c, x - 5, y - 5, w + 10, h + 10, r);
+            c.stroke();
+
+            // Light Bottom-Right Inset Highlight
+            c.shadowColor = lightShadow;
+            c.shadowBlur = 14;
+            c.shadowOffsetX = -6;
+            c.shadowOffsetY = -6;
+            c.lineWidth = 6;
+            c.strokeStyle = lightShadow;
+            drawRoundRect(c, x - 3, y - 3, w + 6, h + 6, r);
+            c.stroke();
+
+            c.restore();
+            c.restore();
+        }
+
+        // 100% SCREENSHOT MATCH: 3D GLOSSY RED HEART SPEECH BUBBLE
+        function drawExact3DHeartBubble(c, cx, cy, size) {
+            c.save();
+            c.translate(cx, cy);
+
+            // Ambient Shadow
+            c.shadowColor = 'rgba(0, 0, 0, 0.45)';
+            c.shadowBlur = 35;
+            c.shadowOffsetY = 16;
+
+            // Glossy White Speech Bubble Outer Body
+            const bgGrad = c.createLinearGradient(-size / 2, -size / 2, size / 2, size / 2);
+            bgGrad.addColorStop(0, '#ffffff');
+            bgGrad.addColorStop(0.6, '#f8fafc');
+            bgGrad.addColorStop(1, '#e2e8f0');
+            c.fillStyle = bgGrad;
+            c.beginPath();
+            c.arc(0, 0, size * 0.52, 0, Math.PI * 2);
+            c.fill();
+
+            // Pointed Bottom Pin
+            c.beginPath();
+            c.moveTo(-size * 0.16, size * 0.42);
+            c.lineTo(0, size * 0.72);
+            c.lineTo(size * 0.16, size * 0.42);
+            c.closePath();
+            c.fill();
+
+            // Soft Rim Highlight
+            c.shadowBlur = 0;
+            c.lineWidth = 3;
+            c.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+            c.stroke();
+
+            // 3D RED HEART (VOLUMETRIC WITH SOFT GLOW)
+            c.shadowColor = 'rgba(220, 38, 38, 0.65)';
+            c.shadowBlur = 18;
+
+            const scaleFactor = size * 0.026;
+            c.scale(scaleFactor, scaleFactor);
+
+            const heartGrad = c.createRadialGradient(-3, -6, 2, 0, 0, 16);
+            heartGrad.addColorStop(0, '#fca5a5');
+            heartGrad.addColorStop(0.25, '#ef4444');
+            heartGrad.addColorStop(0.75, '#dc2626');
+            heartGrad.addColorStop(1, '#991b1b');
+            c.fillStyle = heartGrad;
+
+            c.beginPath();
+            c.moveTo(0, 4);
+            c.bezierCurveTo(-9, -6, -18, 5, 0, 17);
+            c.bezierCurveTo(18, 5, 9, -6, 0, 4);
+            c.fill();
+
+            c.restore();
+        }
+
+        // BACKGROUND 3D RINGS & ORBS
+        function drawBackgroundElements(c, W, H, theme) {
+            c.save();
+            // Top Left Cut Rings (Toruses)
+            c.lineWidth = 45;
+            c.strokeStyle = theme.cardShadowLight;
+            c.globalAlpha = 0.5;
+            c.beginPath();
+            c.arc(W * 0.05, H * 0.06, 170, 0, Math.PI * 2);
+            c.stroke();
+
+            // Bottom Right Cut Ring
+            c.lineWidth = 60;
+            c.beginPath();
+            c.arc(W + 20, H - 20, 240, 0, Math.PI * 2);
+            c.stroke();
+
+            // Ambient Glow Sphere Top-Right
+            let g1 = c.createRadialGradient(W * 0.92, H * 0.12, 10, W * 0.92, H * 0.12, 260);
+            g1.addColorStop(0, theme.cardShadowLight);
+            g1.addColorStop(1, 'transparent');
+            c.fillStyle = g1;
+            c.beginPath();
+            c.arc(W * 0.92, H * 0.12, 260, 0, Math.PI * 2);
+            c.fill();
+
+            // Ambient Glow Bottom-Left
+            let g2 = c.createRadialGradient(W * 0.08, H * 0.92, 10, W * 0.08, H * 0.92, 280);
+            g2.addColorStop(0, theme.cardShadowLight);
+            g2.addColorStop(1, 'transparent');
+            c.fillStyle = g2;
+            c.beginPath();
+            c.arc(W * 0.08, H * 0.92, 280, 0, Math.PI * 2);
+            c.fill();
+
+            c.restore();
+        }
+
+        function parsed() {
+            const ls = $('raw').value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+            let q = ls[0] || 'Which season do you prefer?';
+            let opts = [];
+            for (let i = 1; i < 5; i++) {
+                opts.push((ls[i] || ['A. Summer', 'B. Winter', 'C. Rainy', 'D. Spring'][i - 1]).replace(/^[A-Da-d][\.\)\:\-\s]+/, ''));
+            }
+            return { q, opts };
+        }
+
+        // MASTER RENDER
+        function render() {
+            setSize();
+            const W = C.width, H = C.height;
+            const theme = themes[currentThemeIndex];
+            const scale = +$('scale').value / 100;
+
+            const contentShift = +$('contentY').value * (H / 1920);
+            const questionShift = +$('questionY').value * (H / 1920);
+            const optionsShift = +$('optionsY').value * (H / 1920);
+
+            // 1. BACKGROUND (Custom or Gradients)
+            if (customBgImg) {
+                ctx.save();
+                if (+$('bgBlur').value > 0) {
+                    ctx.filter = `blur(${+$('bgBlur').value}px)`;
+                }
+                ctx.drawImage(customBgImg, 0, 0, W, H);
+                ctx.filter = 'none';
+
+                const dim = +$('bgDim').value / 100;
+                if (dim > 0) {
+                    ctx.fillStyle = `rgba(0, 0, 0, ${dim})`;
+                    ctx.fillRect(0, 0, W, H);
+                }
+                ctx.restore();
+            } else {
+                const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+                bgGrad.addColorStop(0, theme.bg[0]);
+                bgGrad.addColorStop(1, theme.bg[1]);
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, W, H);
+            }
+
+            // 2. Background Orbs and Rings
+            drawBackgroundElements(ctx, W, H, theme);
+
+            // 3. MAIN SOFT MATTE NEUMORPHIC CARD
+            const cardW = W * 0.82 * scale;
+            const cardH = H * 0.62 * scale;
+            const cardX = (W - cardW) / 2;
+            const cardY = (H - cardH) / 2 + contentShift;
+            const cardR = 75 * scale;
+
+            ctx.save();
+            // Multi-Pass Neumorphic Shadows for Depth
+            ctx.shadowColor = theme.cardShadowDark;
+            ctx.shadowBlur = 65;
+            ctx.shadowOffsetX = 22;
+            ctx.shadowOffsetY = 28;
+            ctx.fillStyle = theme.cardBg;
+            drawRoundRect(ctx, cardX, cardY, cardW, cardH, cardR);
+            ctx.fill();
+
+            // Ambient Light Specular
+            ctx.shadowColor = theme.cardShadowLight;
+            ctx.shadowBlur = 30;
+            ctx.shadowOffsetX = -12;
+            ctx.shadowOffsetY = -12;
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = theme.cardShadowLight;
+            ctx.stroke();
+            ctx.restore();
+
+            // 4. TOP 3D HEART BUBBLE PIN
+            drawExact3DHeartBubble(ctx, W / 2, cardY, 120 * scale);
+
+            // 5. Title Header ("Daily Quiz!")
+            const titleText = $('title').value || "Daily Quiz!";
+            ctx.save();
+            ctx.font = `900 ${Math.round(92 * scale)}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = theme.titleColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(titleText, W / 2, cardY + (160 * scale));
+            ctx.restore();
+
+            // 6. Question Text (Draggable Region)
+            const { q, opts } = parsed();
+            const qStartY = cardY + (265 * scale) + questionShift;
+            ctx.save();
+            ctx.font = `600 ${Math.round(40 * scale)}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = theme.questionColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const lastQY = wrapText(ctx, q, W / 2, qStartY, cardW * 0.84, 52 * scale);
+            ctx.restore();
+
+            hitRegions.question = {
+                x: cardX,
+                y: qStartY - 30 * scale,
+                w: cardW,
+                h: (lastQY - qStartY) + 60 * scale
+            };
+
+            // 7. 2x2 INSET SUNKEN BUTTONS (A, C Top | B, D Bottom - Exact Screenshot)
+            const gridW = cardW * 0.88;
+            const btnW = (gridW - (26 * scale)) / 2;
+            const btnH = 92 * scale;
+            const gridStartX = (W - gridW) / 2;
+            const defaultGridStartY = cardY + (395 * scale);
+            const gridStartY = defaultGridStartY + optionsShift;
+
+            const optBadges = ['A.', 'B.', 'C.', 'D.'];
+            const layoutMapping = [
+                { col: 0, row: 0, idx: 0 }, // A: Top-Left
+                { col: 0, row: 1, idx: 1 }, // B: Bottom-Left
+                { col: 1, row: 0, idx: 2 }, // C: Top-Right
+                { col: 1, row: 1, idx: 3 }  // D: Bottom-Right
+            ];
+
+            layoutMapping.forEach(item => {
+                const bx = gridStartX + item.col * (btnW + (26 * scale));
+                const by = gridStartY + item.row * (btnH + (28 * scale));
+                const optIndex = item.idx;
+
+                // Draw Real Sunken Inset Button Frame
+                drawRealisticSunkenButton(
+                    ctx,
+                    bx, by, btnW, btnH, btnH / 2,
+                    theme.btnBg, theme.btnDark, theme.btnLight
+                );
+
+                // Circular Badge Container (Sunken Circle)
+                ctx.save();
+                const badgeR = 34 * scale;
+                const badgeX = bx + 50 * scale;
+                const badgeY = by + btnH / 2;
+
+                ctx.fillStyle = theme.badgeBg;
+                ctx.beginPath();
+                ctx.arc(badgeX, badgeY, badgeR, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Subtle Border on badge circle
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = theme.badgeBorder;
+                ctx.stroke();
+
+                // Letter Text (A., B., C., D.)
+                ctx.font = `800 ${Math.round(26 * scale)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillStyle = theme.badgeTextColor;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(optBadges[optIndex], badgeX, badgeY + 1);
+
+                // Option Text (Aligned like screenshot)
+                ctx.font = `600 ${Math.round(33 * scale)}px "Plus Jakarta Sans", sans-serif`;
+                ctx.fillStyle = theme.optionTextColor;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                let txt = opts[optIndex];
+                const maxTxtW = btnW - (90 * scale);
+                if (ctx.measureText(txt).width > maxTxtW) {
+                    while (ctx.measureText(txt + '...').width > maxTxtW && txt.length > 0) {
+                        txt = txt.slice(0, -1);
+                    }
+                    txt += '...';
+                }
+                ctx.fillText(txt, bx + btnW * 0.62, by + btnH / 2);
+                ctx.restore();
+            });
+
+            hitRegions.options = {
+                x: gridStartX,
+                y: gridStartY,
+                w: gridW,
+                h: 2 * btnH + (28 * scale)
+            };
+
+            // 8. Watermark Badge
+            const wm = $('watermark').value || '@4xlearner';
+            ctx.save();
+            ctx.font = `600 ${Math.round(36 * scale)}px "Plus Jakarta Sans", sans-serif`;
+            ctx.fillStyle = theme.watermarkColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(wm, W / 2, H - (90 * (H / 1920)));
+            ctx.restore();
+        }
+
+        // TOUCH & MOUSE DRAGGING ENGINE
+        function getCanvasCoordinates(e) {
+            const rect = C.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const scaleX = C.width / rect.width;
+            const scaleY = C.height / rect.height;
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY,
+                rawY: clientY
+            };
+        }
+
+        function onPointerDown(e) {
+            const pos = getCanvasCoordinates(e);
+
+            if (pos.x >= hitRegions.options.x && pos.x <= hitRegions.options.x + hitRegions.options.w &&
+                pos.y >= hitRegions.options.y && pos.y <= hitRegions.options.y + hitRegions.options.h) {
+                draggingTarget = 'options';
+                dragStartY = pos.rawY;
+                initialValY = +$('optionsY').value;
+                return;
+            }
+
+            if (pos.x >= hitRegions.question.x && pos.x <= hitRegions.question.x + hitRegions.question.w &&
+                pos.y >= hitRegions.question.y && pos.y <= hitRegions.question.y + hitRegions.question.h) {
+                draggingTarget = 'question';
+                dragStartY = pos.rawY;
+                initialValY = +$('questionY').value;
+                return;
+            }
+        }
+
+        function onPointerMove(e) {
+            if (!draggingTarget) return;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const deltaY = clientY - dragStartY;
+
+            const rect = C.getBoundingClientRect();
+            const scaleFactor = (C.height / rect.height) * (1920 / C.height);
+            const computedY = Math.round(initialValY + deltaY * scaleFactor);
+
+            if (draggingTarget === 'options') {
+                $('optionsY').value = Math.max(-350, Math.min(350, computedY));
+            } else if (draggingTarget === 'question') {
+                $('questionY').value = Math.max(-300, Math.min(300, computedY));
+            }
+
+            sync();
+            render();
+        }
+
+        function onPointerUp() {
+            draggingTarget = null;
+        }
+
+        C.addEventListener('mousedown', onPointerDown);
+        window.addEventListener('mousemove', onPointerMove);
+        window.addEventListener('mouseup', onPointerUp);
+
+        C.addEventListener('touchstart', onPointerDown, { passive: true });
+        window.addEventListener('touchmove', onPointerMove, { passive: true });
+        window.addEventListener('touchend', onPointerUp);
+
+        // TRUE 4K DIRECT DOWNLOAD
+        function downloadPNG() {
+            const ow = C.width, oh = C.height;
+            const sc = 2; // True 4K scale
+            const r = $('ratio').value;
+            let w = 1080, h = 1920;
+            if (r === '1:1') { w = 1080; h = 1080; }
+            if (r === '4:5') { w = 1080; h = 1350; }
+            if (r === '16:9') { w = 1920; h = 1080; }
+
+            C.width = w * sc; C.height = h * sc;
+            render();
+
+            const url = C.toDataURL('image/png', 1.0);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `4X-Neumorphic-Quiz-4K-${Date.now()}.png`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            C.width = ow; C.height = oh;
+            render();
+        }
+
+        function resetAll() {
+            $('title').value = "Daily Quiz!";
+            $('raw').value = "Which season do you prefer?\nA. Summer\nB. Winter\nC. Rainy\nD. Spring";
+            $('watermark').value = '@4xlearner';
+            $('ratio').value = '9:16';
+            $('contentY').value = 0;
+            $('questionY').value = 0;
+            $('optionsY').value = 0;
+            $('scale').value = 100;
+            $('bgDim').value = 0;
+            $('bgBlur').value = 0;
+            currentThemeIndex = 0;
+            removeBgImage();
+            sync();
+            render();
+        }
+
+        document.fonts.ready.then(() => {
+            sync();
+            render();
+        });
+
+        window.addEventListener('resize', () => requestAnimationFrame(render));
+    </script>
+</body>
+
+</html>

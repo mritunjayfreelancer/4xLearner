@@ -1,0 +1,2206 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>4X LEARNER — Studio PRO v2</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Bungee&family=Cinzel:wght@700;900&family=Comfortaa:wght@700&family=Fira+Code:wght@700&family=Montserrat:wght@700;800;900&family=Orbitron:wght@700;800;900&family=Outfit:wght@600;700;800;900&family=Playfair+Display:wght@700;900&family=Righteous&family=Russo+One&family=Space+Grotesk:wght@600;700;800;900&family=Syne:wght@700;800;900&family=Teko:wght@600;700&family=Unbounded:wght@700;800;900&family=Yantramanav:wght@700;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --app-bg: #05070d;
+            --panel: rgba(14, 18, 31, .92);
+            --panel2: rgba(20, 25, 42, .88);
+            --border: rgba(255, 255, 255, .11);
+            --text: #fff;
+            --muted: #8d99ad;
+            --accent: #00eaff;
+            --danger: #ff3864;
+            --success: #16d99a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Space Grotesk", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 50% -10%, #172344 0%, transparent 42%),
+                linear-gradient(145deg, #03050a, #080c16 55%, #020308);
+            color: var(--text);
+            padding: 14px;
+            overflow-x: hidden;
+        }
+
+        button,
+        select,
+        input,
+        textarea {
+            font: inherit;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 1250px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: minmax(300px, 430px) minmax(400px, 560px);
+            gap: 18px;
+            justify-content: center;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, .65);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+
+        .preview-panel {
+            padding: 14px;
+            position: sticky;
+            top: 14px;
+        }
+
+        .preview-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 11px;
+            gap: 10px;
+        }
+
+        .brand {
+            font-weight: 900;
+            letter-spacing: 1px;
+            font-size: 15px;
+        }
+
+        .status {
+            font-size: 10px;
+            font-weight: 900;
+            color: var(--accent);
+            border: 1px solid rgba(0, 234, 255, .22);
+            background: rgba(0, 234, 255, .06);
+            padding: 7px 10px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .canvas-wrap {
+            width: 100%;
+            aspect-ratio: 9/16;
+            background: #000;
+            border-radius: 21px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, .85);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .control-panel {
+            padding: 17px;
+        }
+
+        .section {
+            padding-bottom: 13px;
+            margin-bottom: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, .07);
+        }
+
+        .section:last-child {
+            border-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.3px;
+            color: #7f8ba1;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .field {
+            margin-bottom: 9px;
+        }
+
+        label {
+            display: block;
+            font-size: 10px;
+            color: #9aa5b8;
+            font-weight: 900;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        select,
+        input,
+        textarea {
+            width: 100%;
+            color: #fff;
+            background: #080b14;
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 13px;
+            outline: none;
+            padding: 11px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 234, 255, .07);
+        }
+
+        textarea {
+            min-height: 180px;
+            resize: vertical;
+            font-family: "Fira Code", monospace;
+            line-height: 1.45;
+            font-size: 10px;
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 14px;
+            min-height: 45px;
+            padding: 10px 12px;
+            cursor: pointer;
+            color: #fff;
+            font-weight: 900;
+            font-size: 11px;
+            letter-spacing: .2px;
+            transition: transform .15s, filter .15s, box-shadow .15s;
+        }
+
+        .btn:active {
+            transform: scale(.96);
+        }
+
+        .btn:hover {
+            filter: brightness(1.08);
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, #00eaff, #3278ff);
+            color: #03121a;
+            box-shadow: 0 8px 25px rgba(0, 210, 255, .22);
+        }
+
+        .btn-purple {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+        }
+
+        .btn-red {
+            background: linear-gradient(135deg, #ef4444, #be123c);
+        }
+
+        .btn-dark {
+            background: linear-gradient(135deg, #303b52, #111827);
+        }
+
+        .btn-wide {
+            grid-column: 1/-1;
+        }
+
+        .progress {
+            height: 5px;
+            width: 100%;
+            background: #111827;
+            border-radius: 99px;
+            overflow: hidden;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .progress i {
+            display: block;
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00eaff, #7c3aed, #ff3cac);
+            transition: width .08s linear;
+        }
+
+        .small-note {
+            color: #69758a;
+            font-size: 9px;
+            line-height: 1.4;
+            margin-top: 6px;
+        }
+
+        @media(max-width:900px) {
+            body {
+                padding: 8px;
+            }
+
+            .app {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+
+            .preview-panel {
+                position: relative;
+                top: auto;
+            }
+
+            .canvas-wrap {
+                max-width: 430px;
+                margin: auto;
+            }
+        }
+
+        @media(max-width:480px) {
+            .control-panel {
+                padding: 12px;
+            }
+
+            .preview-panel {
+                padding: 10px;
+            }
+
+            .btn {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <div class="panel preview-panel">
+            <div class="preview-top">
+                <div class="brand">⚡ 4X LEARNER STUDIO</div>
+                <div id="status" class="status">READY</div>
+            </div>
+
+            <div class="canvas-wrap">
+                <canvas id="canvas" width="1080" height="1920"></canvas>
+            </div>
+        </div>
+
+        <div class="panel control-panel">
+
+            <div class="section">
+
+                <div class="section-title">Content Engine</div>
+
+                <div class="grid2">
+
+                    <div class="field">
+                        <label>Format</label>
+                        <select id="mode">
+                            <option value="vocab">Hindi → English Vocab</option>
+                            <option value="mcq">English MCQ Quiz</option>
+                            <option value="fill">Fill The Blank</option>
+                            <option value="bigHindi">Hindi → English Sentence</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Animation</label>
+                        <select id="animation">
+                            <option value="elastic">Elastic Drop</option>
+                            <option value="zoom">Hyper Zoom</option>
+                            <option value="left">Left Kinetic</option>
+                            <option value="right">Right Kinetic</option>
+                            <option value="flip">3D Flip</option>
+                            <option value="snap">Fast Snap</option>
+                            <option value="rise">Bottom Rise</option>
+                            <option value="pulse">Pulse Landing</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="field">
+                    <label>Theme — Top 30 Premium</label>
+                    <select id="theme"></select>
+                </div>
+
+                <div class="grid2">
+
+                    <div class="field">
+                        <label>Hook Heading</label>
+                        <input id="title" value="स्कूल में नहीं सिखाया गया था">
+                    </div>
+
+                    <div class="field">
+                        <label>Sub Heading</label>
+                        <input id="sub" value="★ ENGLISH SPEAKING MASTERCLASS ★">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="section">
+
+                <div class="section-title">Dataset</div>
+
+                <div class="field">
+                    <label>Single Paste JSON</label>
+                    <textarea id="json"></textarea>
+                </div>
+
+                <div class="small-note">
+                    JSON बदलते ही preview live update होगा। गलत JSON होने पर default content इस्तेमाल होगा।
+                </div>
+
+            </div>
+
+            <div class="section">
+
+                <div class="section-title">Studio Actions</div>
+
+                <div class="btn-grid">
+
+                    <button class="btn btn-dark" id="prev">← PREV THEME</button>
+                    <button class="btn btn-purple" id="next">NEXT THEME →</button>
+
+                    <button class="btn btn-green" id="play">▶ PLAY ANIMATION</button>
+                    <button class="btn btn-main" id="answer">✓ REVEAL ANSWER</button>
+
+                    <button class="btn btn-main btn-wide" id="png">
+                        ⬇ DOWNLOAD 4K PNG
+                    </button>
+
+                    <button class="btn btn-red btn-wide" id="video">
+                        🎬 EXPORT 1080×1920 VIDEO
+                    </button>
+
+                </div>
+
+                <div class="progress" id="progress">
+                    <i id="progressBar"></i>
+                </div>
+
+                <div class="small-note" id="progressText">
+                    Ready for rendering.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        /* ============================================================
+           4X LEARNER STUDIO PRO v2
+           30 THEMES — 15 DARK + 15 LIGHT
+           ============================================================ */
+
+        const THEMES = [
+
+            /* ---------------- DARK 01 ---------------- */
+
+            {
+                name: "01 [DARK] Cyber Neon",
+                type: "dark",
+                bg: ["#020617", "#071b2e", "#01030a"],
+                accent: "#00eaff",
+                accent2: "#7c3aed",
+                card: ["rgba(8,25,43,.96)", "rgba(2,10,22,.98)"],
+                stroke: "#00eaff",
+                text: "#ffffff",
+                muted: "#94a3b8",
+                english: "#00eaff",
+                shape: "round",
+                radius: 30,
+                font: "Orbitron"
+            },
+
+            {
+                name: "02 [DARK] Royal Gold",
+                type: "dark",
+                bg: ["#100903", "#321d05", "#050201"],
+                accent: "#fbbf24",
+                accent2: "#f59e0b",
+                card: ["rgba(58,34,6,.96)", "rgba(18,9,2,.98)"],
+                stroke: "#fbbf24",
+                text: "#fff",
+                muted: "#d6c18a",
+                english: "#fde047",
+                shape: "round",
+                radius: 34,
+                font: "Cinzel"
+            },
+
+            {
+                name: "03 [DARK] Purple Galaxy",
+                type: "dark",
+                bg: ["#10051d", "#32105c", "#05010b"],
+                accent: "#c084fc",
+                accent2: "#ec4899",
+                card: ["rgba(50,16,88,.94)", "rgba(18,5,35,.98)"],
+                stroke: "#c084fc",
+                text: "#fff",
+                muted: "#c4b5fd",
+                english: "#e9d5ff",
+                shape: "round",
+                radius: 34,
+                font: "Syne"
+            },
+
+            {
+                name: "04 [DARK] Emerald Matrix",
+                type: "dark",
+                bg: ["#01130a", "#06351c", "#010604"],
+                accent: "#22c55e",
+                accent2: "#a3e635",
+                card: ["rgba(5,52,27,.95)", "rgba(1,18,9,.98)"],
+                stroke: "#22c55e",
+                text: "#fff",
+                muted: "#86efac",
+                english: "#4ade80",
+                shape: "hex",
+                radius: 18,
+                font: "Russo One"
+            },
+
+            {
+                name: "05 [DARK] Crimson Fire",
+                type: "dark",
+                bg: ["#170207", "#4b0718", "#080103"],
+                accent: "#fb7185",
+                accent2: "#ef4444",
+                card: ["rgba(75,7,24,.96)", "rgba(22,2,8,.98)"],
+                stroke: "#fb7185",
+                text: "#fff",
+                muted: "#fda4af",
+                english: "#fda4af",
+                shape: "chamfer",
+                radius: 24,
+                font: "Montserrat"
+            },
+
+            {
+                name: "06 [DARK] Ocean Electric",
+                type: "dark",
+                bg: ["#021421", "#063e61", "#01070d"],
+                accent: "#38bdf8",
+                accent2: "#06b6d4",
+                card: ["rgba(5,55,86,.96)", "rgba(2,20,34,.98)"],
+                stroke: "#38bdf8",
+                text: "#fff",
+                muted: "#bae6fd",
+                english: "#7dd3fc",
+                shape: "round",
+                radius: 28,
+                font: "Space Grotesk"
+            },
+
+            {
+                name: "07 [DARK] Acid Lime",
+                type: "dark",
+                bg: ["#061004", "#183b08", "#020701"],
+                accent: "#a3e635",
+                accent2: "#22c55e",
+                card: ["rgba(22,55,8,.95)", "rgba(5,18,2,.98)"],
+                stroke: "#a3e635",
+                text: "#fff",
+                muted: "#bef264",
+                english: "#bef264",
+                shape: "hex",
+                radius: 18,
+                font: "Russo One"
+            },
+
+            {
+                name: "08 [DARK] Synthwave",
+                type: "dark",
+                bg: ["#16021f", "#4b075f", "#09000e"],
+                accent: "#ff2d95",
+                accent2: "#7c3aed",
+                card: ["rgba(73,8,91,.95)", "rgba(25,2,35,.98)"],
+                stroke: "#ff2d95",
+                text: "#fff",
+                muted: "#f0abfc",
+                english: "#fb7185",
+                shape: "chamfer",
+                radius: 22,
+                font: "Righteous"
+            },
+
+            {
+                name: "09 [DARK] Carbon Pro",
+                type: "dark",
+                bg: ["#050505", "#191919", "#020202"],
+                accent: "#e5e7eb",
+                accent2: "#64748b",
+                card: ["rgba(31,31,31,.98)", "rgba(8,8,8,.99)"],
+                stroke: "#525252",
+                text: "#fff",
+                muted: "#a3a3a3",
+                english: "#f43f5e",
+                shape: "chamfer",
+                radius: 16,
+                font: "Anton"
+            },
+
+            {
+                name: "10 [DARK] Violet Cyber",
+                type: "dark",
+                bg: ["#08051c", "#19115c", "#03020b"],
+                accent: "#818cf8",
+                accent2: "#22d3ee",
+                card: ["rgba(25,20,82,.96)", "rgba(8,6,31,.99)"],
+                stroke: "#818cf8",
+                text: "#fff",
+                muted: "#a5b4fc",
+                english: "#a5b4fc",
+                shape: "round",
+                radius: 32,
+                font: "Unbounded"
+            },
+
+            {
+                name: "11 [DARK] Magma",
+                type: "dark",
+                bg: ["#180500", "#4c1603", "#090201"],
+                accent: "#fb923c",
+                accent2: "#ef4444",
+                card: ["rgba(75,22,3,.96)", "rgba(23,5,1,.99)"],
+                stroke: "#fb923c",
+                text: "#fff",
+                muted: "#fed7aa",
+                english: "#fdba74",
+                shape: "round",
+                radius: 28,
+                font: "Bungee"
+            },
+
+            {
+                name: "12 [DARK] Midnight Blue",
+                type: "dark",
+                bg: ["#020617", "#172554", "#01030b"],
+                accent: "#60a5fa",
+                accent2: "#2563eb",
+                card: ["rgba(22,38,85,.96)", "rgba(3,9,27,.99)"],
+                stroke: "#3b82f6",
+                text: "#fff",
+                muted: "#93c5fd",
+                english: "#60a5fa",
+                shape: "round",
+                radius: 26,
+                font: "Orbitron"
+            },
+
+            {
+                name: "13 [DARK] Neon Rose",
+                type: "dark",
+                bg: ["#17030e", "#4a0828", "#070106"],
+                accent: "#f472b6",
+                accent2: "#ec4899",
+                card: ["rgba(74,8,40,.96)", "rgba(21,2,12,.99)"],
+                stroke: "#f472b6",
+                text: "#fff",
+                muted: "#f9a8d4",
+                english: "#f9a8d4",
+                shape: "round",
+                radius: 34,
+                font: "Outfit"
+            },
+
+            {
+                name: "14 [DARK] Arctic",
+                type: "dark",
+                bg: ["#03131b", "#0b4054", "#01070a"],
+                accent: "#67e8f9",
+                accent2: "#38bdf8",
+                card: ["rgba(7,56,73,.96)", "rgba(2,18,25,.99)"],
+                stroke: "#67e8f9",
+                text: "#fff",
+                muted: "#a5f3fc",
+                english: "#a5f3fc",
+                shape: "round",
+                radius: 30,
+                font: "Playfair Display"
+            },
+
+            {
+                name: "15 [DARK] Phantom",
+                type: "dark",
+                bg: ["#020207", "#111126", "#010103"],
+                accent: "#a5b4fc",
+                accent2: "#6366f1",
+                card: ["rgba(19,19,43,.97)", "rgba(5,5,14,.99)"],
+                stroke: "#6366f1",
+                text: "#fff",
+                muted: "#a5b4fc",
+                english: "#c4b5fd",
+                shape: "round",
+                radius: 36,
+                font: "Unbounded"
+            },
+
+            /* ---------------- LIGHT 16 ---------------- */
+
+            {
+                name: "16 [LIGHT] Clean Paper",
+                type: "light",
+                bg: ["#ffffff", "#eef2f7", "#dbe4ef"],
+                accent: "#0284c7",
+                accent2: "#2563eb",
+                card: ["#ffffff", "#f8fafc"],
+                stroke: "#cbd5e1",
+                text: "#0f172a",
+                muted: "#475569",
+                english: "#0284c7",
+                shape: "round",
+                radius: 30,
+                font: "Outfit"
+            },
+
+            {
+                name: "17 [LIGHT] Neo Yellow",
+                type: "light",
+                bg: ["#fffde7", "#fef08a", "#facc15"],
+                accent: "#000000",
+                accent2: "#ef4444",
+                card: ["#ffffff", "#ffffff"],
+                stroke: "#000",
+                text: "#000",
+                muted: "#334155",
+                english: "#4338ca",
+                shape: "square",
+                radius: 8,
+                font: "Space Grotesk"
+            },
+
+            {
+                name: "18 [LIGHT] Mint Fresh",
+                type: "light",
+                bg: ["#f0fdf4", "#d1fae5", "#a7f3d0"],
+                accent: "#059669",
+                accent2: "#10b981",
+                card: ["#ffffff", "#f0fdf4"],
+                stroke: "#10b981",
+                text: "#064e3b",
+                muted: "#166534",
+                english: "#059669",
+                shape: "round",
+                radius: 32,
+                font: "Syne"
+            },
+
+            {
+                name: "19 [LIGHT] Sky Blue",
+                type: "light",
+                bg: ["#f0f9ff", "#e0f2fe", "#bae6fd"],
+                accent: "#0284c7",
+                accent2: "#0ea5e9",
+                card: ["#ffffff", "#f8fafc"],
+                stroke: "#38bdf8",
+                text: "#0c4a6e",
+                muted: "#0369a1",
+                english: "#0284c7",
+                shape: "round",
+                radius: 30,
+                font: "Montserrat"
+            },
+
+            {
+                name: "20 [LIGHT] Sakura Pink",
+                type: "light",
+                bg: ["#fff1f2", "#ffe4e6", "#fecdd3"],
+                accent: "#e11d48",
+                accent2: "#fb7185",
+                card: ["#ffffff", "#fff7f8"],
+                stroke: "#fb7185",
+                text: "#881337",
+                muted: "#9f1239",
+                english: "#e11d48",
+                shape: "round",
+                radius: 34,
+                font: "Comfortaa"
+            },
+
+            {
+                name: "21 [LIGHT] Lavender",
+                type: "light",
+                bg: ["#faf5ff", "#f3e8ff", "#e9d5ff"],
+                accent: "#9333ea",
+                accent2: "#c026d3",
+                card: ["#ffffff", "#fdf4ff"],
+                stroke: "#c084fc",
+                text: "#581c87",
+                muted: "#7e22ce",
+                english: "#7e22ce",
+                shape: "round",
+                radius: 32,
+                font: "Syne"
+            },
+
+            {
+                name: "22 [LIGHT] Orange Pop",
+                type: "light",
+                bg: ["#fff7ed", "#ffedd5", "#fed7aa"],
+                accent: "#ea580c",
+                accent2: "#f97316",
+                card: ["#ffffff", "#fffaf5"],
+                stroke: "#fb923c",
+                text: "#7c2d12",
+                muted: "#9a3412",
+                english: "#ea580c",
+                shape: "round",
+                radius: 28,
+                font: "Righteous"
+            },
+
+            {
+                name: "23 [LIGHT] Royal Cobalt",
+                type: "light",
+                bg: ["#eff6ff", "#dbeafe", "#bfdbfe"],
+                accent: "#1d4ed8",
+                accent2: "#2563eb",
+                card: ["#ffffff", "#f8faff"],
+                stroke: "#3b82f6",
+                text: "#172554",
+                muted: "#1e40af",
+                english: "#1d4ed8",
+                shape: "chamfer",
+                radius: 18,
+                font: "Space Grotesk"
+            },
+
+            {
+                name: "24 [LIGHT] Vanilla Gold",
+                type: "light",
+                bg: ["#fffcf2", "#f8efd7", "#ead9b4"],
+                accent: "#92400e",
+                accent2: "#d97706",
+                card: ["#ffffff", "#fffaf0"],
+                stroke: "#d6a44b",
+                text: "#451a03",
+                muted: "#78350f",
+                english: "#92400e",
+                shape: "round",
+                radius: 30,
+                font: "Cinzel"
+            },
+
+            {
+                name: "25 [LIGHT] Aqua Breeze",
+                type: "light",
+                bg: ["#f0fdfa", "#ccfbf1", "#99f6e4"],
+                accent: "#0f766e",
+                accent2: "#14b8a6",
+                card: ["#ffffff", "#f0fdfa"],
+                stroke: "#2dd4bf",
+                text: "#134e4a",
+                muted: "#115e59",
+                english: "#0f766e",
+                shape: "round",
+                radius: 30,
+                font: "Outfit"
+            },
+
+            {
+                name: "26 [LIGHT] Editorial",
+                type: "light",
+                bg: ["#fafaf9", "#f1eee7", "#e7dfd0"],
+                accent: "#292524",
+                accent2: "#92400e",
+                card: ["#ffffff", "#faf8f3"],
+                stroke: "#57534e",
+                text: "#1c1917",
+                muted: "#57534e",
+                english: "#854d0e",
+                shape: "chamfer",
+                radius: 14,
+                font: "Playfair Display"
+            },
+
+            {
+                name: "27 [LIGHT] Lemonade",
+                type: "light",
+                bg: ["#fefce8", "#fef08a", "#fde047"],
+                accent: "#0891b2",
+                accent2: "#06b6d4",
+                card: ["#ffffff", "#ffffff"],
+                stroke: "#111827",
+                text: "#111827",
+                muted: "#374151",
+                english: "#0891b2",
+                shape: "square",
+                radius: 8,
+                font: "Bungee"
+            },
+
+            {
+                name: "28 [LIGHT] Coral",
+                type: "light",
+                bg: ["#fff1f2", "#ffe4e6", "#fecaca"],
+                accent: "#dc2626",
+                accent2: "#f43f5e",
+                card: ["#ffffff", "#fff7f7"],
+                stroke: "#fb7185",
+                text: "#7f1d1d",
+                muted: "#991b1b",
+                english: "#dc2626",
+                shape: "round",
+                radius: 30,
+                font: "Montserrat"
+            },
+
+            {
+                name: "29 [LIGHT] Lime Garden",
+                type: "light",
+                bg: ["#f7fee7", "#ecfccb", "#d9f99d"],
+                accent: "#4d7c0f",
+                accent2: "#65a30d",
+                card: ["#ffffff", "#fbfff2"],
+                stroke: "#84cc16",
+                text: "#1a2e05",
+                muted: "#3f6212",
+                english: "#4d7c0f",
+                shape: "round",
+                radius: 30,
+                font: "Righteous"
+            },
+
+            {
+                name: "30 [LIGHT] Platinum Pro",
+                type: "light",
+                bg: ["#f8fafc", "#e2e8f0", "#cbd5e1"],
+                accent: "#0369a1",
+                accent2: "#0284c7",
+                card: ["#ffffff", "#f8fafc"],
+                stroke: "#94a3b8",
+                text: "#0f172a",
+                muted: "#475569",
+                english: "#0369a1",
+                shape: "chamfer",
+                radius: 18,
+                font: "Orbitron"
+            }
+
+        ];
+
+
+        /* ============================================================
+           DATA
+           ============================================================ */
+
+        const DEFAULTS = {
+
+            vocab: [
+                { num: 1, hi: "मेरा यकीन करो", en: "Believe me", icon: "🤝", hint: "भरोसा रखो", col: "#10b981" },
+                { num: 2, hi: "कोई बात नहीं", en: "Never mind", icon: "😌", hint: "चिंता छोड़ो", col: "#3b82f6" },
+                { num: 3, hi: "जल्दी मिलेंगे", en: "See you soon", icon: "👋", hint: "फिर मिलेंगे", col: "#8b5cf6" },
+                { num: 4, hi: "जाने भी दो", en: "Let it be", icon: "🧘", hint: "बात खत्म करो", col: "#f97316" },
+                { num: 5, hi: "इसे अभी करो", en: "Do it now", icon: "⚡", hint: "तुरंत एक्शन", col: "#ef4444" }
+            ],
+
+            mcq: {
+                questionHi: "वह कल मुझसे मिलने आएगा।",
+                questionEn: "Choose the correct English translation:",
+                options: [
+                    { tag: "A", text: "He come to meet me tomorrow." },
+                    { tag: "B", text: "He will come to meet me tomorrow.", correct: true },
+                    { tag: "C", text: "He is meet me tomorrow." },
+                    { tag: "D", text: "He came to meet me tomorrow." }
+                ],
+                hint: "💡 Hint: Future Indefinite = will + V1"
+            },
+
+            fill: {
+                questionHi: "मुझे तुम्हारी सलाह की जरूरत है।",
+                sentence: "I need your ________ right now.",
+                options: [
+                    { tag: "A", text: "Advise" },
+                    { tag: "B", text: "Advice", correct: true },
+                    { tag: "C", text: "Advised" },
+                    { tag: "D", text: "Advising" }
+                ],
+                rule: "📌 Rule: Advice = Noun | Advise = Verb"
+            },
+
+            bigHindi: {
+                hindiText: "अगर तुम कठिन परिश्रम नहीं करोगे, तो तुम परीक्षा में सफल नहीं हो सकोगे।",
+                englishText: "If you do not work hard, you will not be able to succeed in the examination.",
+                breakdown: [
+                    { part: "अगर तुम कठिन परिश्रम नहीं करोगे", trans: "If you do not work hard" },
+                    { part: "तो तुम सफल नहीं हो सकोगे", trans: "You will not be able to succeed" },
+                    { part: "परीक्षा में", trans: "in the examination" }
+                ],
+                tip: "🌟 Pro Tip: Be able to = सामर्थ्य दर्शाना"
+            }
+
+        };
+
+
+        /* ============================================================
+           ELEMENTS
+           ============================================================ */
+
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const modeEl = document.getElementById("mode");
+        const themeEl = document.getElementById("theme");
+        const animationEl = document.getElementById("animation");
+        const titleEl = document.getElementById("title");
+        const subEl = document.getElementById("sub");
+        const jsonEl = document.getElementById("json");
+        const statusEl = document.getElementById("status");
+        const progressEl = document.getElementById("progress");
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+
+
+        /* ============================================================
+           THEME SELECT
+           ============================================================ */
+
+        THEMES.forEach((theme, i) => {
+            const op = document.createElement("option");
+            op.value = i;
+            op.textContent = theme.name;
+            themeEl.appendChild(op);
+        });
+
+
+        /* ============================================================
+           HELPERS
+           ============================================================ */
+
+        function theme() {
+            return THEMES[Number(themeEl.value)] || THEMES[0];
+        }
+
+        function safeData() {
+            try {
+                return JSON.parse(jsonEl.value);
+            } catch {
+                return DEFAULTS[modeEl.value];
+            }
+        }
+
+        function clamp(v, a = 0, b = 1) {
+            return Math.max(a, Math.min(b, v));
+        }
+
+        function easeOut(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        function easeElastic(t) {
+            if (t === 0 || t === 1) return t;
+            const c4 = (2 * Math.PI) / 3;
+            return Math.pow(2, -10 * t) * Math.sin((t * 10 - .75) * c4) + 1;
+        }
+
+        function roundRect(x, y, w, h, r) {
+            r = Math.min(r, w / 2, h / 2);
+            ctx.beginPath();
+            ctx.roundRect(x, y, w, h, r);
+        }
+
+        function pathShape(x, y, w, h, type, r = 25) {
+
+            ctx.beginPath();
+
+            if (type === "square") {
+                ctx.rect(x, y, w, h);
+                return;
+            }
+
+            if (type === "chamfer") {
+                const c = 30;
+                ctx.moveTo(x + c, y);
+                ctx.lineTo(x + w - c, y);
+                ctx.lineTo(x + w, y + c);
+                ctx.lineTo(x + w - c, y + h);
+                ctx.lineTo(x + c, y + h);
+                ctx.lineTo(x, y + h - c);
+                ctx.lineTo(x, y + c);
+                ctx.closePath();
+                return;
+            }
+
+            if (type === "hex") {
+                const c = 22;
+                ctx.moveTo(x + c, y);
+                ctx.lineTo(x + w - c, y);
+                ctx.lineTo(x + w, y + c);
+                ctx.lineTo(x + w, y + h - c);
+                ctx.lineTo(x + w - c, y + h);
+                ctx.lineTo(x + c, y + h);
+                ctx.lineTo(x, y + h - c);
+                ctx.lineTo(x, y + c);
+                ctx.closePath();
+                return;
+            }
+
+            ctx.roundRect(x, y, w, h, r);
+        }
+
+        function gradient(a, b, x1, y1, x2, y2) {
+            const g = ctx.createLinearGradient(x1, y1, x2, y2);
+            g.addColorStop(0, a);
+            g.addColorStop(1, b);
+            return g;
+        }
+
+        function fitText(text, maxWidth, font, maxSize, minSize = 22) {
+
+            let size = maxSize;
+
+            while (size > minSize) {
+                ctx.font = `900 ${size}px ${font}`;
+                if (ctx.measureText(text).width <= maxWidth) return size;
+                size -= 2;
+            }
+
+            return size;
+        }
+
+        function wrapText(text, maxWidth, font, size) {
+
+            ctx.font = `900 ${size}px ${font}`;
+
+            const words = String(text).split(/\s+/);
+            const lines = [];
+            let line = "";
+
+            for (const word of words) {
+
+                const test = line ? line + " " + word : word;
+
+                if (ctx.measureText(test).width <= maxWidth) {
+                    line = test;
+                } else {
+                    if (line) lines.push(line);
+                    line = word;
+                }
+            }
+
+            if (line) lines.push(line);
+
+            return lines;
+        }
+
+        function drawWrapped(text, x, y, maxWidth, lineHeight, font, color, maxLines = 4) {
+
+            let size = 42;
+
+            while (size > 24) {
+
+                const lines = wrapText(text, maxWidth, font, size);
+
+                if (lines.length <= maxLines) break;
+
+                size -= 2;
+            }
+
+            const lines = wrapText(text, maxWidth, font, size);
+
+            ctx.font = `900 ${size}px ${font}`;
+            ctx.fillStyle = color;
+            ctx.textAlign = "left";
+            ctx.textBaseline = "top";
+
+            lines.slice(0, maxLines).forEach((line, i) => {
+                ctx.fillText(line, x, y + i * lineHeight);
+            });
+
+            return lines.length;
+        }
+
+        function shadow(st, blur = 30) {
+
+            ctx.shadowColor = st.accent;
+            ctx.shadowBlur = blur;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 8;
+        }
+
+        function noShadow() {
+            ctx.shadowColor = "transparent";
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+        }
+
+
+        /* ============================================================
+           BACKGROUND
+           ============================================================ */
+
+        function drawBackground(st, t = 0) {
+
+            const g = ctx.createLinearGradient(0, 0, 1080, 1920);
+
+            g.addColorStop(0, st.bg[0]);
+            g.addColorStop(.5, st.bg[1]);
+            g.addColorStop(1, st.bg[2]);
+
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, 1080, 1920);
+
+            /* ambient circles */
+
+            for (let i = 0; i < 5; i++) {
+
+                const x = 120 + (i * 260);
+                const y = 250 + Math.sin(t * 2 + i) * 120 + i * 310;
+                const radius = 180 + (i % 2) * 90;
+
+                const rg = ctx.createRadialGradient(
+                    x, y, 0,
+                    x, y, radius
+                );
+
+                rg.addColorStop(0, st.accent + "22");
+                rg.addColorStop(1, "transparent");
+
+                ctx.fillStyle = rg;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            /* grid */
+
+            ctx.save();
+            ctx.globalAlpha = st.type === "dark" ? .07 : .035;
+            ctx.strokeStyle = st.accent;
+
+            for (let x = 0; x < 1080; x += 90) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, 1920);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y < 1920; y += 90) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(1080, y);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
+
+        function drawHeader(st, p) {
+
+            const e = easeOut(clamp(p / .3));
+
+            ctx.save();
+
+            ctx.globalAlpha = e;
+
+            const y = 90 - (1 - e) * 100;
+
+            shadow(st, st.type === "dark" ? 35 : 20);
+
+            ctx.fillStyle = gradient(
+                st.accent,
+                st.accent2,
+                0, y,
+                1080, y + 140
+            );
+
+            pathShape(40, y, 1000, 138, st.shape, st.radius);
+            ctx.fill();
+
+            noShadow();
+
+            if (st.type === "light") {
+                ctx.strokeStyle = st.stroke;
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+
+            ctx.fillStyle = st.type === "dark" ? "#061019" : "#ffffff";
+
+            ctx.font = `900 ${fitText(titleEl.value, 900, "Yantramanav", 50, 28)}px Yantramanav`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(titleEl.value, 540, y + 68);
+
+            ctx.restore();
+
+            /* sub */
+
+            const subY = 252;
+
+            ctx.save();
+
+            ctx.fillStyle = st.type === "dark"
+                ? "rgba(0,0,0,.55)"
+                : "rgba(255,255,255,.88)";
+
+            pathShape(155, subY, 770, 58, "round", 29);
+            ctx.fill();
+
+            ctx.strokeStyle = st.accent;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = st.type === "dark" ? "#fff" : "#111827";
+            ctx.font = `800 ${fitText(subEl.value, 700, "Yantramanav", 30, 18)}px Yantramanav`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(subEl.value, 540, subY + 29);
+
+            ctx.restore();
+        }
+
+
+        /* ============================================================
+           CARD
+           ============================================================ */
+
+        function card(x, y, w, h, st, fill = null, stroke = null) {
+
+            ctx.save();
+
+            shadow(st, st.type === "dark" ? st.type === "dark" ? 30 : 20 : 18);
+
+            ctx.fillStyle = fill || gradient(
+                st.card[0],
+                st.card[1],
+                x, y,
+                x, y + h
+            );
+
+            pathShape(x, y, w, h, st.shape, st.radius);
+            ctx.fill();
+
+            noShadow();
+
+            ctx.strokeStyle = stroke || st.stroke;
+            ctx.lineWidth = st.type === "light" ? 2.5 : 2.8;
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+
+        /* ============================================================
+           VOCAB
+           ============================================================ */
+
+        function drawVocab(st, data, p, answer) {
+
+            const items = Array.isArray(data) ? data : DEFAULTS.vocab;
+
+            const startY = 350;
+            const h = 245;
+            const gap = 24;
+
+            items.slice(0, 5).forEach((item, i) => {
+
+                let raw = clamp((p - (i * .075)) / .38);
+
+                let e = easeOut(raw);
+
+                if (animationEl.value === "elastic") {
+                    e = easeElastic(raw);
+                }
+
+                let offsetX = 0;
+
+                if (animationEl.value === "left") {
+                    offsetX = (1 - e) * -700;
+                } else if (animationEl.value === "right") {
+                    offsetX = (1 - e) * 700;
+                } else if (animationEl.value === "zoom") {
+                    ctx.save();
+                    ctx.translate(540, (startY + i * (h + gap)) + h / 2);
+                    const sc = .75 + .25 * e;
+                    ctx.scale(sc, sc);
+                    ctx.translate(-540, -(startY + i * (h + gap)) - h / 2);
+                }
+
+                const y = startY + i * (h + gap);
+
+                ctx.save();
+
+                ctx.globalAlpha = raw;
+
+                if (animationEl.value !== "zoom") {
+                    ctx.translate(offsetX, 0);
+                }
+
+                card(40, y, 1000, h, st);
+
+                const color = item.col || st.accent;
+
+                /* number */
+
+                const bx = 70;
+                const by = y + 30;
+                const bs = 180;
+
+                ctx.fillStyle = gradient(
+                    color,
+                    st.accent2,
+                    bx, by,
+                    bx, by + bs
+                );
+
+                pathShape(bx, by, bs, bs, "round", 24);
+                ctx.fill();
+
+                ctx.fillStyle = "#fff";
+                ctx.font = `900 75px ${st.font}`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(item.num, bx + bs / 2, by + bs / 2);
+
+                ctx.fillStyle = "#ffffffaa";
+                ctx.font = "800 20px Yantramanav";
+                ctx.fillText(item.hint || "STEP", bx + bs / 2, by + bs - 28);
+
+                /* Hindi */
+
+                ctx.textAlign = "left";
+                ctx.textBaseline = "top";
+
+                const hiSize = fitText(
+                    item.hi,
+                    650,
+                    "Yantramanav",
+                    54,
+                    30
+                );
+
+                ctx.font = `900 ${hiSize}px Yantramanav`;
+                ctx.fillStyle = st.text;
+                ctx.fillText(item.hi, 285, y + 45);
+
+                /* arrow */
+
+                ctx.fillStyle = st.accent;
+                ctx.font = "900 42px Arial";
+                ctx.fillText("→", 285, y + 126);
+
+                /* English */
+
+                const enSize = fitText(
+                    item.en,
+                    620,
+                    st.font,
+                    55,
+                    28
+                );
+
+                ctx.font = `900 ${enSize}px ${st.font}`;
+                ctx.fillStyle = color;
+                ctx.fillText(item.en, 350, y + 119);
+
+                /* icon */
+
+                ctx.font = "70px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText(item.icon || "✨", 970, y + 123);
+
+                ctx.restore();
+            });
+        }
+
+
+        /* ============================================================
+           MCQ
+           ============================================================ */
+
+        function drawMCQ(st, data, p, answer) {
+
+            const q = data || DEFAULTS.mcq;
+
+            card(40, 350, 1000, 300, st);
+
+            ctx.fillStyle = st.accent;
+            pathShape(70, 375, 220, 55, "round", 15);
+            ctx.fill();
+
+            ctx.fillStyle = st.type === "dark" ? "#001018" : "#fff";
+            ctx.font = "900 25px Orbitron";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("QUESTION", 180, 402);
+
+            drawWrapped(
+                q.questionHi,
+                70,
+                460,
+                930,
+                58,
+                "Yantramanav",
+                st.text,
+                2
+            );
+
+            ctx.font = "800 34px " + st.font;
+            ctx.fillStyle = st.english;
+            ctx.textAlign = "left";
+            ctx.fillText(q.questionEn, 70, 585);
+
+            const startY = 690;
+            const h = 205;
+            const gap = 20;
+
+            q.options.slice(0, 4).forEach((o, i) => {
+
+                const raw = clamp((p - (i * .08)) / .32);
+                const e = easeOut(raw);
+
+                let x = 40;
+
+                if (i % 2 === 0 && animationEl.value === "left")
+                    x = -700 + 740 * e;
+
+                if (i % 2 === 1 && animationEl.value === "right")
+                    x = 740 * e;
+
+                ctx.save();
+                ctx.globalAlpha = raw;
+                ctx.translate(x, 0);
+
+                const correct = answer && o.correct;
+
+                card(
+                    40,
+                    startY + i * (h + gap),
+                    1000,
+                    h,
+                    st,
+                    correct
+                        ? st.type === "dark" ? "rgba(6,78,59,.97)" : "#d1fae5"
+                        : null,
+                    correct ? "#10b981" : null
+                );
+
+                ctx.fillStyle = correct ? "#10b981" : st.accent;
+
+                pathShape(70, startY + i * (h + gap) + 38, 125, 125, "round", 20);
+                ctx.fill();
+
+                ctx.fillStyle = "#fff";
+                ctx.font = `900 62px ${st.font}`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(
+                    o.tag,
+                    132,
+                    startY + i * (h + gap) + 100
+                );
+
+                ctx.textAlign = "left";
+
+                const fs = fitText(
+                    o.text,
+                    720,
+                    st.font,
+                    40,
+                    24
+                );
+
+                ctx.font = `900 ${fs}px ${st.font}`;
+                ctx.fillStyle = correct
+                    ? st.type === "dark" ? "#6ee7b7" : "#065f46"
+                    : st.text;
+
+                ctx.fillText(
+                    o.text,
+                    235,
+                    startY + i * (h + gap) + 103
+                );
+
+                if (correct) {
+                    ctx.font = "55px Arial";
+                    ctx.textAlign = "right";
+                    ctx.fillText("✓", 990, startY + i * (h + gap) + 105);
+                }
+
+                ctx.restore();
+            });
+
+            /* hint */
+
+            card(
+                40,
+                1580,
+                1000,
+                105,
+                st,
+                st.type === "dark"
+                    ? "rgba(0,0,0,.55)"
+                    : "rgba(255,255,255,.92)",
+                "#f59e0b"
+            );
+
+            ctx.fillStyle = st.type === "dark" ? "#fde047" : "#92400e";
+            ctx.font = "800 30px Yantramanav";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(q.hint, 540, 1632);
+        }
+
+
+        /* ============================================================
+           FILL
+           ============================================================ */
+
+        function drawFill(st, data, p, answer) {
+
+            const q = data || DEFAULTS.fill;
+
+            card(40, 350, 1000, 315, st);
+
+            ctx.fillStyle = "#f59e0b";
+            pathShape(70, 378, 300, 55, "round", 15);
+            ctx.fill();
+
+            ctx.fillStyle = "#111";
+            ctx.font = "900 24px Orbitron";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("FILL THE BLANK", 220, 405);
+
+            drawWrapped(
+                q.questionHi,
+                70,
+                470,
+                930,
+                55,
+                "Yantramanav",
+                st.text,
+                2
+            );
+
+            const sentenceSize = fitText(
+                q.sentence,
+                900,
+                st.font,
+                45,
+                25
+            );
+
+            ctx.font = `900 ${sentenceSize}px ${st.font}`;
+            ctx.fillStyle = st.english;
+            ctx.textAlign = "left";
+            ctx.fillText(q.sentence, 70, 590);
+
+            const coords = [
+                [40, 710],
+                [550, 710],
+                [40, 930],
+                [550, 930]
+            ];
+
+            q.options.slice(0, 4).forEach((o, i) => {
+
+                const [x, y] = coords[i];
+                const correct = answer && o.correct;
+
+                card(
+                    x, y, 490, 185, st,
+                    correct
+                        ? st.type === "dark" ? "rgba(6,78,59,.97)" : "#d1fae5"
+                        : null,
+                    correct ? "#10b981" : null
+                );
+
+                ctx.fillStyle = correct ? "#10b981" : st.accent;
+
+                pathShape(x + 22, y + 28, 82, 82, "round", 15);
+                ctx.fill();
+
+                ctx.fillStyle = "#fff";
+                ctx.font = `900 42px ${st.font}`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(o.tag, x + 63, y + 69);
+
+                const fs = fitText(
+                    o.text,
+                    330,
+                    st.font,
+                    39,
+                    23
+                );
+
+                ctx.font = `900 ${fs}px ${st.font}`;
+                ctx.fillStyle = correct
+                    ? st.type === "dark" ? "#6ee7b7" : "#065f46"
+                    : st.text;
+                ctx.textAlign = "left";
+                ctx.fillText(o.text, x + 130, y + 96);
+
+                if (correct) {
+                    ctx.font = "38px Arial";
+                    ctx.fillText("✓", x + 435, y + 96);
+                }
+            });
+
+            card(
+                40,
+                1180,
+                1000,
+                120,
+                st,
+                st.type === "dark"
+                    ? "rgba(0,0,0,.55)"
+                    : "rgba(255,255,255,.9)",
+                st.accent
+            );
+
+            ctx.fillStyle = st.english;
+            ctx.font = "800 31px Yantramanav";
+            ctx.textAlign = "center";
+            ctx.fillText(q.rule, 540, 1240);
+        }
+
+
+        /* ============================================================
+           BIG HINDI
+           ============================================================ */
+
+        function drawBigHindi(st, data, p) {
+
+            const q = data || DEFAULTS.bigHindi;
+
+            card(40, 350, 1000, 300, st);
+
+            ctx.fillStyle = "#ef4444";
+            pathShape(70, 378, 245, 52, "round", 14);
+            ctx.fill();
+
+            ctx.fillStyle = "#fff";
+            ctx.font = "900 24px Orbitron";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("HINDI", 192, 404);
+
+            drawWrapped(
+                q.hindiText,
+                70,
+                465,
+                930,
+                58,
+                "Yantramanav",
+                st.text,
+                3
+            );
+
+            card(40, 690, 1000, 310, st);
+
+            ctx.fillStyle = st.accent;
+            pathShape(70, 718, 355, 52, "round", 14);
+            ctx.fill();
+
+            ctx.fillStyle = st.type === "dark" ? "#001018" : "#fff";
+            ctx.font = "900 22px Orbitron";
+            ctx.textAlign = "center";
+            ctx.fillText("ENGLISH TRANSLATION", 248, 744);
+
+            drawWrapped(
+                q.englishText,
+                70,
+                810,
+                930,
+                55,
+                st.font,
+                st.english,
+                3
+            );
+
+            q.breakdown.slice(0, 3).forEach((b, i) => {
+
+                const y = 1040 + i * 175;
+
+                card(40, y, 1000, 150, st);
+
+                ctx.font = `800 ${fitText(b.part, 900, "Yantramanav", 35, 22)}px Yantramanav`;
+                ctx.fillStyle = st.text;
+                ctx.textAlign = "left";
+                ctx.fillText(b.part, 70, y + 48);
+
+                ctx.fillStyle = "#10b981";
+                ctx.font = `800 ${fitText(b.trans, 900, st.font, 34, 20)}px ${st.font}`;
+                ctx.fillText("→ " + b.trans, 70, y + 105);
+            });
+
+            card(
+                40,
+                1570,
+                1000,
+                120,
+                st,
+                st.type === "dark"
+                    ? "rgba(0,0,0,.55)"
+                    : "rgba(255,255,255,.9)",
+                "#f59e0b"
+            );
+
+            ctx.fillStyle = st.type === "dark" ? "#fde047" : "#92400e";
+            ctx.font = "800 30px Yantramanav";
+            ctx.textAlign = "center";
+            ctx.fillText(q.tip, 540, 1630);
+        }
+
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+
+        function drawFooter(st) {
+
+            ctx.save();
+
+            ctx.fillStyle = st.type === "dark"
+                ? "rgba(4,8,17,.94)"
+                : "rgba(255,255,255,.94)";
+
+            pathShape(40, 1760, 1000, 100, "round", 24);
+            ctx.fill();
+
+            ctx.strokeStyle = st.accent;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = st.type === "dark" ? "#67e8f9" : "#0369a1";
+            ctx.font = "900 29px Yantramanav";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(
+                "🚀 4X LEARNER • रोज सीखें और English बोलें! 🔥",
+                540,
+                1810
+            );
+
+            ctx.restore();
+        }
+
+
+        /* ============================================================
+           MASTER RENDER
+           ============================================================ */
+
+        function render(progress = 1, answer = false, time = 0) {
+
+            const st = theme();
+            const mode = modeEl.value;
+            const data = safeData();
+
+            ctx.clearRect(0, 0, 1080, 1920);
+
+            drawBackground(st, time);
+
+            drawHeader(st, progress);
+
+            if (mode === "vocab")
+                drawVocab(st, data, progress, answer);
+
+            if (mode === "mcq")
+                drawMCQ(st, data, progress, answer);
+
+            if (mode === "fill")
+                drawFill(st, data, progress, answer);
+
+            if (mode === "bigHindi")
+                drawBigHindi(st, data, progress);
+
+            drawFooter(st);
+
+            statusEl.textContent =
+                `${mode.toUpperCase()} • ${String(Number(themeEl.value) + 1).padStart(2, "0")}/30`;
+
+        }
+
+
+        /* ============================================================
+           LOAD MODE
+           ============================================================ */
+
+        function loadMode() {
+
+            const mode = modeEl.value;
+
+            jsonEl.value =
+                JSON.stringify(DEFAULTS[mode], null, 2);
+
+            render(1, false, 0);
+        }
+
+        modeEl.addEventListener("change", () => {
+            loadMode();
+        });
+
+
+        /* ============================================================
+           LIVE UPDATE
+           ============================================================ */
+
+        [
+            themeEl,
+            animationEl,
+            titleEl,
+            subEl,
+            jsonEl
+        ].forEach(el => {
+            el.addEventListener("input", () => {
+                render(1, false, 0);
+            });
+
+            el.addEventListener("change", () => {
+                render(1, false, 0);
+            });
+        });
+
+
+        /* ============================================================
+           ANIMATION
+           ============================================================ */
+
+        let animationRunning = false;
+
+        function playAnimation() {
+
+            if (animationRunning) return;
+
+            animationRunning = true;
+
+            const start = performance.now();
+            const duration = 1200;
+
+            function frame(now) {
+
+                const t = clamp((now - start) / duration);
+
+                render(t, false, (now - start) / 1000);
+
+                if (t < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    animationRunning = false;
+                    render(1, false, 1.2);
+                }
+            }
+
+            requestAnimationFrame(frame);
+        }
+
+        document.getElementById("play").onclick = playAnimation;
+
+        animationEl.onchange = playAnimation;
+
+
+        /* ============================================================
+           ANSWER
+           ============================================================ */
+
+        let answerRevealed = false;
+
+        document.getElementById("answer").onclick = () => {
+
+            answerRevealed = !answerRevealed;
+
+            document.getElementById("answer").textContent =
+                answerRevealed
+                    ? "↺ HIDE ANSWER"
+                    : "✓ REVEAL ANSWER";
+
+            render(1, answerRevealed, 0);
+        };
+
+
+        /* ============================================================
+           NEXT / PREVIOUS
+           ============================================================ */
+
+        document.getElementById("next").onclick = () => {
+
+            let n = Number(themeEl.value) + 1;
+
+            if (n >= THEMES.length) n = 0;
+
+            themeEl.value = n;
+
+            playAnimation();
+        };
+
+        document.getElementById("prev").onclick = () => {
+
+            let n = Number(themeEl.value) - 1;
+
+            if (n < 0) n = THEMES.length - 1;
+
+            themeEl.value = n;
+
+            playAnimation();
+        };
+
+
+        /* ============================================================
+           4K PNG EXPORT
+           2160 x 3840
+           ============================================================ */
+
+        document.getElementById("png").onclick = () => {
+
+            const btn = document.getElementById("png");
+
+            btn.disabled = true;
+            btn.textContent = "RENDERING 4K...";
+
+            const oldW = canvas.width;
+            const oldH = canvas.height;
+
+            canvas.width = 2160;
+            canvas.height = 3840;
+
+            ctx.setTransform(2, 0, 0, 2, 0, 0);
+
+            render(1, answerRevealed, 0);
+
+            const dataURL = canvas.toDataURL(
+                "image/png",
+                1
+            );
+
+            const a = document.createElement("a");
+
+            a.href = dataURL;
+
+            a.download =
+                `4X_LEARNER_4K_${Date.now()}.png`;
+
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            canvas.width = oldW;
+            canvas.height = oldH;
+
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+            render(1, answerRevealed, 0);
+
+            btn.disabled = false;
+            btn.textContent = "⬇ DOWNLOAD 4K PNG";
+        };
+
+
+        /* ============================================================
+           VIDEO EXPORT
+           ============================================================ */
+
+        function supportedMime() {
+
+            const types = [
+                "video/webm;codecs=vp9",
+                "video/webm;codecs=vp8",
+                "video/webm"
+            ];
+
+            return types.find(
+                t => MediaRecorder.isTypeSupported(t)
+            ) || "";
+        }
+
+        document.getElementById("video").onclick = async () => {
+
+            if (!canvas.captureStream || !window.MediaRecorder) {
+
+                alert(
+                    "Your browser does not support Canvas Video Export."
+                );
+
+                return;
+            }
+
+            const btn = document.getElementById("video");
+
+            btn.disabled = true;
+            btn.textContent = "🎬 RENDERING VIDEO...";
+
+            progressEl.style.display = "block";
+            progressBar.style.width = "0%";
+            progressText.textContent =
+                "Preparing 1080×1920 animation...";
+
+            answerRevealed = false;
+
+            const stream = canvas.captureStream(60);
+
+            const mime = supportedMime();
+
+            const recorder = new MediaRecorder(
+                stream,
+                mime
+                    ? {
+                        mimeType: mime,
+                        videoBitsPerSecond: 12000000
+                    }
+                    : {
+                        videoBitsPerSecond: 12000000
+                    }
+            );
+
+            const chunks = [];
+
+            recorder.ondataavailable = e => {
+                if (e.data && e.data.size) {
+                    chunks.push(e.data);
+                }
+            };
+
+            recorder.onstop = () => {
+
+                const blob = new Blob(
+                    chunks,
+                    { type: recorder.mimeType || "video/webm" }
+                );
+
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+
+                a.href = url;
+                a.download =
+                    `4X_LEARNER_SHORT_${Date.now()}.webm`;
+
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 3000);
+
+                btn.disabled = false;
+                btn.textContent =
+                    "🎬 EXPORT 1080×1920 VIDEO";
+
+                progressText.textContent =
+                    "Video export complete.";
+
+                progressBar.style.width = "100%";
+
+                setTimeout(() => {
+                    progressEl.style.display = "none";
+                }, 1500);
+            };
+
+            recorder.start(100);
+
+            const duration = 5000;
+            const start = performance.now();
+
+            function renderVideo(now) {
+
+                const elapsed = now - start;
+
+                const p = clamp(elapsed / 1400);
+
+                const reveal = elapsed >= 2800;
+
+                render(
+                    p,
+                    reveal,
+                    elapsed / 1000
+                );
+
+                const percent =
+                    Math.min(
+                        100,
+                        (elapsed / duration) * 100
+                    );
+
+                progressBar.style.width =
+                    percent + "%";
+
+                progressText.textContent =
+                    `Rendering ${Math.floor(percent)}% • 1080×1920 • 60 FPS`;
+
+                if (elapsed < duration) {
+
+                    requestAnimationFrame(renderVideo);
+
+                } else {
+
+                    render(1, true, duration / 1000);
+
+                    setTimeout(() => {
+                        recorder.stop();
+                    }, 100);
+                }
+            }
+
+            requestAnimationFrame(renderVideo);
+        };
+
+
+        /* ============================================================
+           INITIAL
+           ============================================================ */
+
+        loadMode();
+
+        render(1, false, 0);
+
+    </script>
+
+</body>
+
+</html>

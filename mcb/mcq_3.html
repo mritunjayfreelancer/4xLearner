@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>4xlearner Master Quiz Studio</title>
+
+    <!-- Multi-Theme Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bangers&family=Cinzel:wght@700;900&family=Fredoka+One&family=Montserrat:wght@700;800;900&family=Orbitron:wght@800;900&family=Outfit:wght@600;800;900&family=Pacifico&family=Press+Start+2P&family=Righteous&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #07090e;
+            --panel: #111726;
+            --accent: #f59e0b;
+            --text: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* TOP BAR */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(17, 23, 38, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1e293b;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .brand-title {
+            font-family: 'Fredoka One', cursive;
+            color: #fbbf24;
+            font-size: 1.25rem;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-toggle-btn {
+            background: #f59e0b;
+            color: #000;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        /* LAYOUT */
+        .app-layout {
+            display: flex;
+            height: calc(100vh - 54px);
+            position: relative;
+        }
+
+        .preview-stage {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #04060a;
+            padding: 15px;
+            overflow: auto;
+            min-height: 100%;
+        }
+
+        .control-drawer {
+            width: 380px;
+            background: var(--panel);
+            border-left: 1px solid #1e293b;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+            z-index: 90;
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 860px) {
+            .control-drawer {
+                position: fixed;
+                top: 54px;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                max-width: 380px;
+                transform: translateX(100%);
+            }
+
+            .control-drawer.open {
+                transform: translateX(0);
+            }
+        }
+
+        label {
+            font-size: 0.72rem;
+            font-weight: 900;
+            color: #94a3b8;
+            margin-top: 14px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        textarea,
+        select,
+        input {
+            width: 100%;
+            padding: 9px;
+            background: #090d16;
+            border: 1.5px solid #334155;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            outline: none;
+            margin-top: 4px;
+        }
+
+        textarea:focus,
+        select:focus,
+        input:focus {
+            border-color: #fbbf24;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 12px;
+            font-weight: 900;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-replay {
+            background: #3b82f6;
+            color: #fff;
+            width: 100%;
+            margin-top: 14px;
+        }
+
+        .btn-img {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .btn-vid {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        /* QUIZ BASE CONTAINER */
+        .quiz-card {
+            width: 360px;
+            height: 640px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            user-select: none;
+            flex-shrink: 0;
+            transition: width 0.25s, height 0.25s;
+        }
+
+        .draggable {
+            cursor: grab;
+            touch-action: none;
+            position: relative;
+            z-index: 10;
+        }
+
+        .draggable:active {
+            cursor: grabbing;
+        }
+
+        /* CARD INTERNAL LAYOUT */
+        .top-brand {
+            position: absolute;
+            top: 15px;
+            left: 18px;
+            z-index: 15;
+            font-weight: 900;
+            font-size: 0.8rem;
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
+
+        .header-block {
+            position: absolute;
+            top: 55px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 12;
+        }
+
+        .bubble-row {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .speech-bubble {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+        }
+
+        .speech-bubble.bubble-center {
+            width: 62px;
+            height: 62px;
+            font-size: 2.1rem;
+            margin-bottom: 8px;
+        }
+
+        .quiz-title-card {
+            width: 100%;
+            border-radius: 22px;
+            padding: 6px 0;
+            text-align: center;
+        }
+
+        .quiz-title-card h1 {
+            font-size: 4rem;
+            line-height: 0.95;
+            letter-spacing: 2px;
+        }
+
+        .content-area {
+            position: relative;
+            z-index: 14;
+            width: 100%;
+            margin-top: 240px;
+            padding: 0 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 800;
+            text-align: center;
+            line-height: 1.35;
+            margin-bottom: 16px;
+            width: 100%;
+        }
+
+        .options-box {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .opt-card {
+            border-radius: 40px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .opt-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-right: 12px;
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+
+        .opt-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .footer-brand {
+            position: relative;
+            z-index: 15;
+            margin-bottom: 16px;
+            font-weight: 900;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===================================================================== */
+        /* 20 DIVERSE PREMIUM THEMES (FONTS, BUTTONS, GLOWS, AND BORDERS)        */
+        /* ===================================================================== */
+
+        /* 1. School Grid 3D (Screenshot Look) */
+        .th-1 {
+            background: #034687;
+            font-family: 'Fredoka One', cursive;
+            border-radius: 28px;
+        }
+
+        .th-1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 240px;
+            background-color: #fff;
+            background-image: linear-gradient(#002f6c 1.5px, transparent 1.5px), linear-gradient(90deg, #002f6c 1.5px, transparent 1.5px);
+            background-size: 30px 30px;
+            z-index: 1;
+        }
+
+        .th-1 .top-brand {
+            background: #034687;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+
+        .th-1 .speech-bubble {
+            background: #0284c7;
+            color: #fff;
+            border: 3px solid #fff;
+            box-shadow: 0 5px 0 #002f6c;
+        }
+
+        .th-1 .quiz-title-card {
+            background: #f59e0b;
+            border: 4px solid #fff;
+            box-shadow: 0 6px 0 #b45309;
+        }
+
+        .th-1 .quiz-title-card h1 {
+            color: #fff;
+            text-shadow: 0 4px 0 #b45309;
+            -webkit-text-stroke: 2px #b45309;
+        }
+
+        .th-1 .question-text {
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .th-1 .opt-card {
+            background: #fffaee;
+            border: 2px solid #fff;
+            box-shadow: 0 5px 0 #d97706;
+        }
+
+        .th-1 .opt-badge {
+            background: #f59e0b;
+            color: #000;
+        }
+
+        .th-1 .opt-title {
+            color: #000;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .th-1 .footer-brand {
+            color: #ffffff;
+        }
+
+        /* 2. Cyber Neon Pulse */
+        .th-2 {
+            background: #05050f;
+            font-family: 'Orbitron', monospace;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+        }
+
+        .th-2 .top-brand {
+            background: rgba(0, 255, 204, 0.1);
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+        }
+
+        .th-2 .speech-bubble {
+            background: #110022;
+            color: #ff007f;
+            border: 2px solid #ff007f;
+            box-shadow: 0 0 15px #ff007f;
+        }
+
+        .th-2 .quiz-title-card {
+            background: transparent;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 20px #00ffcc;
+        }
+
+        .th-2 .quiz-title-card h1 {
+            color: #00ffcc;
+            text-shadow: 0 0 15px #00ffcc;
+        }
+
+        .th-2 .question-text {
+            color: #ffffff;
+        }
+
+        .th-2 .opt-card {
+            background: rgba(0, 255, 204, 0.05);
+            border: 1.5px solid #00ffcc;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.2);
+        }
+
+        .th-2 .opt-badge {
+            background: #00ffcc;
+            color: #000;
+            border-radius: 4px;
+        }
+
+        .th-2 .opt-title {
+            color: #00ffcc;
+        }
+
+        .th-2 .footer-brand {
+            color: #ff007f;
+            text-shadow: 0 0 10px #ff007f;
+        }
+
+        /* 3. Comic Book Pop Art */
+        .th-3 {
+            background: #ffde59;
+            font-family: 'Bangers', cursive;
+            border: 6px solid #000;
+        }
+
+        .th-3 .top-brand {
+            background: #ff3131;
+            color: #fff;
+            border: 3px solid #000;
+            transform: rotate(-3deg);
+        }
+
+        .th-3 .speech-bubble {
+            background: #00bf63;
+            color: #fff;
+            border: 4px solid #000;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .th-3 .quiz-title-card {
+            background: #ff3131;
+            border: 5px solid #000;
+            box-shadow: 6px 6px 0 #000;
+            transform: rotate(1deg);
+        }
+
+        .th-3 .quiz-title-card h1 {
+            color: #fff;
+            text-shadow: 4px 4px 0 #000;
+            -webkit-text-stroke: 1.5px #000;
+        }
+
+        .th-3 .question-text {
+            color: #000;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+        }
+
+        .th-3 .opt-card {
+            background: #fff;
+            border: 4px solid #000;
+            box-shadow: 4px 4px 0 #000;
+            border-radius: 12px;
+        }
+
+        .th-3 .opt-badge {
+            background: #5457ff;
+            color: #fff;
+            border: 3px solid #000;
+            font-size: 1.5rem;
+        }
+
+        .th-3 .opt-title {
+            color: #000;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+        }
+
+        .th-3 .footer-brand {
+            color: #000;
+            font-size: 1.2rem;
+        }
+
+        /* 4. Luxury Royal Gold */
+        .th-4 {
+            background: radial-gradient(circle, #1f1a14 0%, #080705 100%);
+            font-family: 'Cinzel', serif;
+            border: 2px solid #d4af37;
+        }
+
+        .th-4 .top-brand {
+            background: #d4af37;
+            color: #000;
+            font-weight: 900;
+        }
+
+        .th-4 .speech-bubble {
+            background: #262016;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .th-4 .quiz-title-card {
+            background: linear-gradient(135deg, #d4af37, #996515);
+            border: 1px solid #ffe57f;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+        }
+
+        .th-4 .quiz-title-card h1 {
+            color: #000;
+            text-shadow: 0 1px 0 #ffe57f;
+        }
+
+        .th-4 .question-text {
+            color: #fdf6e2;
+        }
+
+        .th-4 .opt-card {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid #d4af37;
+            border-radius: 4px;
+        }
+
+        .th-4 .opt-badge {
+            background: #d4af37;
+            color: #000;
+            border-radius: 2px;
+        }
+
+        .th-4 .opt-title {
+            color: #ffe89e;
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+        }
+
+        .th-4 .footer-brand {
+            color: #d4af37;
+            letter-spacing: 2px;
+        }
+
+        /* 5. Retro 8-Bit Pixel Game */
+        .th-5 {
+            background: #181425;
+            font-family: 'Press Start 2P', cursive;
+            border: 4px solid #63c74d;
+        }
+
+        .th-5 .top-brand {
+            background: #e43b44;
+            color: #fff;
+            font-size: 0.6rem;
+            border-radius: 0;
+        }
+
+        .th-5 .speech-bubble {
+            background: #0099db;
+            color: #fff;
+            border: 3px solid #fff;
+            border-radius: 0;
+            font-size: 1.2rem;
+        }
+
+        .th-5 .quiz-title-card {
+            background: #fee761;
+            border-radius: 0;
+            border: 4px solid #000;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .th-5 .quiz-title-card h1 {
+            font-size: 2.3rem;
+            color: #000;
+        }
+
+        .th-5 .question-text {
+            color: #fff;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .th-5 .opt-card {
+            background: #262b44;
+            border: 2px solid #63c74d;
+            border-radius: 0;
+            box-shadow: 3px 3px 0 #000;
+        }
+
+        .th-5 .opt-badge {
+            background: #63c74d;
+            color: #000;
+            border-radius: 0;
+            font-size: 0.8rem;
+        }
+
+        .th-5 .opt-title {
+            color: #fff;
+            font-size: 0.75rem;
+        }
+
+        .th-5 .footer-brand {
+            color: #fee761;
+            font-size: 0.7rem;
+        }
+
+        /* 6. Soft Frosted Glassmorphism */
+        .th-6 {
+            background: linear-gradient(135deg, #6366f1 0%, #d946ef 100%);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .th-6 .top-brand {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .th-6 .speech-bubble {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+        }
+
+        .th-6 .quiz-title-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(14px);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .th-6 .quiz-title-card h1 {
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .th-6 .question-text {
+            color: #fff;
+        }
+
+        .th-6 .opt-card {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+        }
+
+        .th-6 .opt-badge {
+            background: #fff;
+            color: #6366f1;
+        }
+
+        .th-6 .opt-title {
+            color: #fff;
+        }
+
+        .th-6 .footer-brand {
+            color: #fff;
+        }
+
+        /* 7. Crimson Dark Gamer */
+        .th-7 {
+            background: radial-gradient(circle, #3b0707 0%, #0d0101 100%);
+            font-family: 'Righteous', cursive;
+            border: 2px solid #ef4444;
+        }
+
+        .th-7 .top-brand {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .th-7 .speech-bubble {
+            background: #1c0303;
+            color: #ef4444;
+            border: 2px solid #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+        }
+
+        .th-7 .quiz-title-card {
+            background: #ef4444;
+            border: 2px solid #ff7b7b;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
+        }
+
+        .th-7 .quiz-title-card h1 {
+            color: #fff;
+        }
+
+        .th-7 .question-text {
+            color: #fca5a5;
+        }
+
+        .th-7 .opt-card {
+            background: #1c0303;
+            border: 1.5px solid #ef4444;
+            border-radius: 8px;
+        }
+
+        .th-7 .opt-badge {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .th-7 .opt-title {
+            color: #fff;
+        }
+
+        .th-7 .footer-brand {
+            color: #ef4444;
+        }
+
+        /* 8. Sweet Pastel Pink / Cute */
+        .th-8 {
+            background: #ffe4e6;
+            font-family: 'Pacifico', cursive;
+        }
+
+        .th-8 .top-brand {
+            background: #f43f5e;
+            color: #fff;
+            border-radius: 12px;
+        }
+
+        .th-8 .speech-bubble {
+            background: #fda4af;
+            color: #881337;
+            border: 3px solid #fff;
+        }
+
+        .th-8 .quiz-title-card {
+            background: #fb7185;
+            border: 3px solid #fff;
+            box-shadow: 0 6px 0 #f43f5e;
+        }
+
+        .th-8 .quiz-title-card h1 {
+            color: #fff;
+            font-size: 3.5rem;
+            text-shadow: 0 3px 0 #e11d48;
+        }
+
+        .th-8 .question-text {
+            color: #881337;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .th-8 .opt-card {
+            background: #fff;
+            border: 2px solid #fda4af;
+            box-shadow: 0 4px 0 #fda4af;
+            border-radius: 24px;
+        }
+
+        .th-8 .opt-badge {
+            background: #f43f5e;
+            color: #fff;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .th-8 .opt-title {
+            color: #881337;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .th-8 .footer-brand {
+            color: #be123c;
+        }
+
+        /* 9. Emerald Tech */
+        .th-9 {
+            background: #022c22;
+            font-family: 'Outfit', sans-serif;
+            border: 2px solid #10b981;
+        }
+
+        .th-9 .top-brand {
+            background: #10b981;
+            color: #000;
+        }
+
+        .th-9 .speech-bubble {
+            background: #064e3b;
+            color: #34d399;
+            border: 2px solid #10b981;
+        }
+
+        .th-9 .quiz-title-card {
+            background: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .th-9 .quiz-title-card h1 {
+            color: #000;
+        }
+
+        .th-9 .question-text {
+            color: #a7f3d0;
+        }
+
+        .th-9 .opt-card {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1.5px solid #10b981;
+            border-radius: 30px;
+        }
+
+        .th-9 .opt-badge {
+            background: #10b981;
+            color: #000;
+        }
+
+        .th-9 .opt-title {
+            color: #fff;
+        }
+
+        .th-9 .footer-brand {
+            color: #34d399;
+        }
+
+        /* 10. Brutalist High-Contrast */
+        .th-10 {
+            background: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            border: 5px solid #000;
+        }
+
+        .th-10 .top-brand {
+            background: #000;
+            color: #fff;
+            border-radius: 0;
+        }
+
+        .th-10 .speech-bubble {
+            background: #fff;
+            color: #000;
+            border: 4px solid #000;
+            border-radius: 0;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .th-10 .quiz-title-card {
+            background: #ffff00;
+            border: 5px solid #000;
+            border-radius: 0;
+            box-shadow: 6px 6px 0 #000;
+        }
+
+        .th-10 .quiz-title-card h1 {
+            color: #000;
+        }
+
+        .th-10 .question-text {
+            color: #000;
+            font-weight: 900;
+        }
+
+        .th-10 .opt-card {
+            background: #fff;
+            border: 3px solid #000;
+            border-radius: 0;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .th-10 .opt-badge {
+            background: #000;
+            color: #fff;
+            border-radius: 0;
+        }
+
+        .th-10 .opt-title {
+            color: #000;
+            font-weight: 900;
+        }
+
+        .th-10 .footer-brand {
+            color: #000;
+        }
+
+        /* 11. Deep Violet Galaxy */
+        .th-11 {
+            background: linear-gradient(180deg, #1e003a 0%, #0c0017 100%);
+            font-family: 'Righteous', cursive;
+        }
+
+        .th-11 .top-brand {
+            background: #a855f7;
+            color: #fff;
+        }
+
+        .th-11 .speech-bubble {
+            background: #2e0854;
+            color: #c084fc;
+            border: 2px solid #a855f7;
+        }
+
+        .th-11 .quiz-title-card {
+            background: linear-gradient(90deg, #9333ea, #c084fc);
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+        }
+
+        .th-11 .quiz-title-card h1 {
+            color: #fff;
+        }
+
+        .th-11 .question-text {
+            color: #f3e8ff;
+        }
+
+        .th-11 .opt-card {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid #c084fc;
+            border-radius: 14px;
+        }
+
+        .th-11 .opt-badge {
+            background: #a855f7;
+            color: #fff;
+        }
+
+        .th-11 .opt-title {
+            color: #fff;
+        }
+
+        .th-11 .footer-brand {
+            color: #c084fc;
+        }
+
+        /* 12. Sunset Orange Cream */
+        .th-12 {
+            background: linear-gradient(180deg, #ea580c 0%, #7c2d12 100%);
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .th-12 .top-brand {
+            background: #ffedd5;
+            color: #ea580c;
+        }
+
+        .th-12 .speech-bubble {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        .th-12 .quiz-title-card {
+            background: #fdba74;
+            border: 3px solid #fff;
+            box-shadow: 0 6px 0 #c2410c;
+        }
+
+        .th-12 .quiz-title-card h1 {
+            color: #7c2d12;
+        }
+
+        .th-12 .question-text {
+            color: #fff;
+        }
+
+        .th-12 .opt-card {
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 4px 0 #9a3412;
+        }
+
+        .th-12 .opt-badge {
+            background: #ea580c;
+            color: #fff;
+        }
+
+        .th-12 .opt-title {
+            color: #7c2d12;
+        }
+
+        .th-12 .footer-brand {
+            color: #ffedd5;
+        }
+
+        /* 13. Minimal Studio Dark */
+        .th-13 {
+            background: #121212;
+            font-family: 'Montserrat', sans-serif;
+            border: 1px solid #27272a;
+        }
+
+        .th-13 .top-brand {
+            background: #27272a;
+            color: #fff;
+        }
+
+        .th-13 .speech-bubble {
+            background: #18181b;
+            color: #a1a1aa;
+            border: 1px solid #3f3f46;
+        }
+
+        .th-13 .quiz-title-card {
+            background: #27272a;
+            border: 1px solid #3f3f46;
+        }
+
+        .th-13 .quiz-title-card h1 {
+            color: #fff;
+        }
+
+        .th-13 .question-text {
+            color: #d4d4d8;
+        }
+
+        .th-13 .opt-card {
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 8px;
+        }
+
+        .th-13 .opt-badge {
+            background: #3f3f46;
+            color: #fff;
+        }
+
+        .th-13 .opt-title {
+            color: #f4f4f5;
+        }
+
+        .th-13 .footer-brand {
+            color: #71717a;
+        }
+
+        /* 14. Aqua Marine Fresh */
+        .th-14 {
+            background: linear-gradient(180deg, #0284c7 0%, #075985 100%);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .th-14 .top-brand {
+            background: #38bdf8;
+            color: #000;
+        }
+
+        .th-14 .speech-bubble {
+            background: #0369a1;
+            color: #fff;
+            border: 2px solid #38bdf8;
+        }
+
+        .th-14 .quiz-title-card {
+            background: #38bdf8;
+            box-shadow: 0 6px 0 #0284c7;
+        }
+
+        .th-14 .quiz-title-card h1 {
+            color: #034687;
+        }
+
+        .th-14 .question-text {
+            color: #e0f2fe;
+        }
+
+        .th-14 .opt-card {
+            background: #e0f2fe;
+            border-radius: 18px;
+            box-shadow: 0 4px 0 #0284c7;
+        }
+
+        .th-14 .opt-badge {
+            background: #0284c7;
+            color: #fff;
+        }
+
+        .th-14 .opt-title {
+            color: #0c4a6e;
+        }
+
+        .th-14 .footer-brand {
+            color: #bae6fd;
+        }
+
+        /* 15. Forest Camp Wooden / Earthy */
+        .th-15 {
+            background: #2e1d13;
+            font-family: 'Cinzel', serif;
+            border: 3px solid #854d0e;
+        }
+
+        .th-15 .top-brand {
+            background: #854d0e;
+            color: #fef08a;
+        }
+
+        .th-15 .speech-bubble {
+            background: #452817;
+            color: #fef08a;
+            border: 2px solid #854d0e;
+        }
+
+        .th-15 .quiz-title-card {
+            background: #854d0e;
+            border: 2px solid #ca8a04;
+        }
+
+        .th-15 .quiz-title-card h1 {
+            color: #fef08a;
+        }
+
+        .th-15 .question-text {
+            color: #fef9c3;
+        }
+
+        .th-15 .opt-card {
+            background: #3d2416;
+            border: 1.5px solid #a16207;
+            border-radius: 6px;
+        }
+
+        .th-15 .opt-badge {
+            background: #ca8a04;
+            color: #000;
+        }
+
+        .th-15 .opt-title {
+            color: #fef08a;
+        }
+
+        .th-15 .footer-brand {
+            color: #ca8a04;
+        }
+
+        /* 16. Synthwave 80s Grid */
+        .th-16 {
+            background: linear-gradient(180deg, #2b0938 0%, #0e0018 100%);
+            font-family: 'Righteous', cursive;
+            border: 2px solid #ff007f;
+        }
+
+        .th-16 .top-brand {
+            background: #ff007f;
+            color: #fff;
+        }
+
+        .th-16 .speech-bubble {
+            background: #ff007f;
+            color: #00ffff;
+            box-shadow: 0 0 10px #ff007f;
+        }
+
+        .th-16 .quiz-title-card {
+            background: linear-gradient(90deg, #ff007f, #7928ca);
+            box-shadow: 0 0 20px #ff007f;
+        }
+
+        .th-16 .quiz-title-card h1 {
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .th-16 .question-text {
+            color: #fff;
+        }
+
+        .th-16 .opt-card {
+            background: rgba(255, 0, 127, 0.1);
+            border: 1.5px solid #ff007f;
+            border-radius: 12px;
+        }
+
+        .th-16 .opt-badge {
+            background: #00ffff;
+            color: #000;
+        }
+
+        .th-16 .opt-title {
+            color: #ff77e9;
+        }
+
+        .th-16 .footer-brand {
+            color: #00ffff;
+        }
+
+        /* 17. Clean Blueprint Engineer */
+        .th-17 {
+            background: #0f3460;
+            font-family: 'Montserrat', monospace;
+            border: 2px dashed #90caf9;
+        }
+
+        .th-17 .top-brand {
+            background: #90caf9;
+            color: #0f3460;
+        }
+
+        .th-17 .speech-bubble {
+            background: #16213e;
+            color: #90caf9;
+            border: 2px solid #90caf9;
+        }
+
+        .th-17 .quiz-title-card {
+            background: transparent;
+            border: 3px solid #90caf9;
+        }
+
+        .th-17 .quiz-title-card h1 {
+            color: #90caf9;
+        }
+
+        .th-17 .question-text {
+            color: #fff;
+        }
+
+        .th-17 .opt-card {
+            background: rgba(144, 202, 249, 0.1);
+            border: 1px solid #90caf9;
+            border-radius: 4px;
+        }
+
+        .th-17 .opt-badge {
+            background: #90caf9;
+            color: #0f3460;
+        }
+
+        .th-17 .opt-title {
+            color: #fff;
+        }
+
+        .th-17 .footer-brand {
+            color: #90caf9;
+        }
+
+        /* 18. Coffee Warm Roast */
+        .th-18 {
+            background: #271c19;
+            font-family: 'Outfit', sans-serif;
+            border: 2px solid #d7ccc8;
+        }
+
+        .th-18 .top-brand {
+            background: #d7ccc8;
+            color: #3e2723;
+        }
+
+        .th-18 .speech-bubble {
+            background: #3e2723;
+            color: #d7ccc8;
+            border: 1px solid #8d6e63;
+        }
+
+        .th-18 .quiz-title-card {
+            background: #5d4037;
+            border: 2px solid #8d6e63;
+        }
+
+        .th-18 .quiz-title-card h1 {
+            color: #d7ccc8;
+        }
+
+        .th-18 .question-text {
+            color: #efebe9;
+        }
+
+        .th-18 .opt-card {
+            background: #3e2723;
+            border-radius: 12px;
+            border: 1px solid #8d6e63;
+        }
+
+        .th-18 .opt-badge {
+            background: #bcaaa4;
+            color: #3e2723;
+        }
+
+        .th-18 .opt-title {
+            color: #efebe9;
+        }
+
+        .th-18 .footer-brand {
+            color: #d7ccc8;
+        }
+
+        /* 19. Toxic Acid Lime */
+        .th-19 {
+            background: #0d1117;
+            font-family: 'Bangers', cursive;
+            border: 3px solid #a3e635;
+        }
+
+        .th-19 .top-brand {
+            background: #a3e635;
+            color: #000;
+        }
+
+        .th-19 .speech-bubble {
+            background: #161b22;
+            color: #a3e635;
+            border: 2px solid #a3e635;
+        }
+
+        .th-19 .quiz-title-card {
+            background: #a3e635;
+            box-shadow: 0 0 20px #a3e635;
+        }
+
+        .th-19 .quiz-title-card h1 {
+            color: #000;
+        }
+
+        .th-19 .question-text {
+            color: #fff;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+        }
+
+        .th-19 .opt-card {
+            background: #161b22;
+            border: 2px solid #a3e635;
+            border-radius: 10px;
+        }
+
+        .th-19 .opt-badge {
+            background: #a3e635;
+            color: #000;
+            font-size: 1.3rem;
+        }
+
+        .th-19 .opt-title {
+            color: #a3e635;
+            font-size: 1.2rem;
+        }
+
+        .th-19 .footer-brand {
+            color: #a3e635;
+        }
+
+        /* 20. Candy Sugar Pop */
+        .th-20 {
+            background: linear-gradient(180deg, #ec4899 0%, #8b5cf6 100%);
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .th-20 .top-brand {
+            background: #fef08a;
+            color: #831843;
+        }
+
+        .th-20 .speech-bubble {
+            background: #fef08a;
+            color: #db2777;
+        }
+
+        .th-20 .quiz-title-card {
+            background: #fef08a;
+            box-shadow: 0 6px 0 #be185d;
+        }
+
+        .th-20 .quiz-title-card h1 {
+            color: #be185d;
+        }
+
+        .th-20 .question-text {
+            color: #fff;
+        }
+
+        .th-20 .opt-card {
+            background: #fff;
+            border-radius: 25px;
+            box-shadow: 0 5px 0 #be185d;
+        }
+
+        .th-20 .opt-badge {
+            background: #f43f5e;
+            color: #fff;
+        }
+
+        .th-20 .opt-title {
+            color: #831843;
+        }
+
+        .th-20 .footer-brand {
+            color: #fef08a;
+        }
+
+        /* ========================================================= */
+        /* FAST-LANDING ANIMATION CLASSES (PREVIEW ONLY)             */
+        /* ========================================================= */
+        .anim-active .lp-pop {
+            animation: kfPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .anim-active .lp-top-slam {
+            animation: kfTopSlam 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .anim-active .lp-bottom-slam {
+            animation: kfBottomSlam 0.45s ease-out forwards;
+        }
+
+        .anim-active .lp-left-skew {
+            animation: kfLeftSkew 0.45s ease-out forwards;
+        }
+
+        .anim-active .lp-right-skew {
+            animation: kfRightSkew 0.45s ease-out forwards;
+        }
+
+        .anim-active .lp-overshoot {
+            animation: kfOver 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .anim-active .lp-blur-snap {
+            animation: kfBlur 0.4s ease-out forwards;
+        }
+
+        @keyframes kfPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes kfTopSlam {
+            0% {
+                opacity: 0;
+                transform: translateY(-80px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes kfBottomSlam {
+            0% {
+                opacity: 0;
+                transform: translateY(80px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes kfLeftSkew {
+            0% {
+                opacity: 0;
+                transform: translateX(-100px) skewX(8deg);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0) skewX(0);
+            }
+        }
+
+        @keyframes kfRightSkew {
+            0% {
+                opacity: 0;
+                transform: translateX(100px) skewX(-8deg);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0) skewX(0);
+            }
+        }
+
+        @keyframes kfOver {
+            0% {
+                opacity: 0;
+                transform: scale(0.4);
+            }
+
+            70% {
+                transform: scale(1.08);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes kfBlur {
+            0% {
+                opacity: 0;
+                filter: blur(8px);
+            }
+
+            100% {
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER WITH CONTROLS TOGGLE -->
+    <header>
+        <div class="brand-title">4XLEARNER STUDIO</div>
+        <button class="menu-toggle-btn" onclick="toggleMenu()">
+            <span>⚙️ Edit & Download</span>
+        </button>
+    </header>
+
+    <div class="app-layout">
+        <!-- 1. ALWAYS-VISIBLE STICKY PREVIEW -->
+        <main class="preview-stage">
+            <div class="quiz-card th-1 anim-active" id="quizCard">
+
+                <!-- Top Brand Watermark -->
+                <div class="top-brand draggable lp-pop" id="el-topBrand">
+                    <span id="dispTopChannel">@4xlearner</span>
+                </div>
+
+                <!-- Header Block with Bubbles and Big QUIZ Title -->
+                <div class="header-block draggable" id="dragHeader">
+                    <div class="bubble-row lp-top-slam">
+                        <div class="speech-bubble">!</div>
+                        <div class="speech-bubble bubble-center">✔</div>
+                        <div class="speech-bubble">?</div>
+                    </div>
+                    <div class="quiz-title-card lp-overshoot">
+                        <h1>QUIZ</h1>
+                    </div>
+                </div>
+
+                <!-- Question & Options Block -->
+                <div class="content-area draggable" id="dragContent">
+                    <p class="question-text lp-blur-snap" id="dispQ">The part of the plant that absorbs water and
+                        minerals from soil is...</p>
+
+                    <div class="options-box" id="optionsBox">
+                        <div class="opt-card lp-left-skew" id="cardA">
+                            <span class="opt-badge">A</span>
+                            <span class="opt-title" id="optA">Leaf</span>
+                        </div>
+                        <div class="opt-card lp-right-skew" id="cardB">
+                            <span class="opt-badge">B</span>
+                            <span class="opt-title" id="optB">Root</span>
+                        </div>
+                        <div class="opt-card lp-left-skew" id="cardC">
+                            <span class="opt-badge">C</span>
+                            <span class="opt-title" id="optC">Stem</span>
+                        </div>
+                        <div class="opt-card lp-right-skew" id="cardD">
+                            <span class="opt-badge">D</span>
+                            <span class="opt-title" id="optD">Flower</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Footer Branding -->
+                <div class="footer-brand draggable lp-bottom-slam" id="el-footer">
+                    <span id="dispBottomChannel">@4xlearner</span>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- 2. SLIDE-OUT CONTROLS PANEL -->
+        <aside class="control-drawer" id="controlDrawer">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="color:#fbbf24; font-family:'Fredoka One';">⚙️ Control Panel</h3>
+                <button onclick="toggleMenu()"
+                    style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer;">✕</button>
+            </div>
+
+            <label>1 Box Paste (Question + 4 Options)</label>
+            <textarea id="rawInput" rows="5">The part of the plant that absorbs water and minerals from soil is...
+A) Leaf
+B) Root
+C) Stem
+D) Flower</textarea>
+
+            <label>Select From Top 20 Unique Themes</label>
+            <select id="themeSelect">
+                <option value="th-1">1. School Grid 3D (Screenshot Look)</option>
+                <option value="th-2">2. Cyber Neon Pulse (Orbitron Font)</option>
+                <option value="th-3">3. Comic Book Pop Art (Bangers Font)</option>
+                <option value="th-4">4. Royal Gold Baroque (Cinzel Serif)</option>
+                <option value="th-5">5. Retro 8-Bit Pixel Game (Press Start)</option>
+                <option value="th-6">6. Soft Glassmorphism (Frosted UI)</option>
+                <option value="th-7">7. Crimson Dark Gamer (Righteous)</option>
+                <option value="th-8">8. Sweet Pastel Pink (Cute Pacifico)</option>
+                <option value="th-9">9. Emerald Cyber Tech (Outfit Font)</option>
+                <option value="th-10">10. Brutalist High-Contrast (Bold BW)</option>
+                <option value="th-11">11. Deep Violet Galaxy</option>
+                <option value="th-12">12. Sunset Orange Cream</option>
+                <option value="th-13">13. Minimal Studio Dark</option>
+                <option value="th-14">14. Aqua Marine Fresh</option>
+                <option value="th-15">15. Forest Camp Wooden</option>
+                <option value="th-16">16. Synthwave 80s Grid</option>
+                <option value="th-17">17. Clean Blueprint Engineer</option>
+                <option value="th-18">18. Coffee Warm Roast</option>
+                <option value="th-19">19. Toxic Acid Lime</option>
+                <option value="th-20">20. Candy Sugar Pop</option>
+            </select>
+
+            <label>Aspect Ratio / Platform Size</label>
+            <select id="aspectRatio">
+                <option value="9:16">9:16 (Shorts / Reels / Story)</option>
+                <option value="1:1">1:1 (Post / Square / Community)</option>
+                <option value="16:9">16:9 (Landscape YouTube Video)</option>
+                <option value="4:5">4:5 (Instagram Portrait Feed)</option>
+            </select>
+
+            <label>Channel Name (Top & Bottom)</label>
+            <input type="text" id="channelName" value="@4xlearner" />
+
+            <button class="btn btn-replay" onclick="triggerFastLanding()">🔄 Replay Fast Landing Animation</button>
+
+            <div class="btn-group">
+                <button class="btn btn-img" onclick="exportPerfect4KImage()">📸 4K Image (Final Frame)</button>
+                <button class="btn btn-vid" onclick="exportMotionVideo()">🎥 4K Video (Animated)</button>
+            </div>
+            <div id="loader"
+                style="display:none; color:#fbbf24; font-weight:800; font-size:0.8rem; margin-top:10px; text-align:center;">
+                Rendering 4K... Please wait!</div>
+        </aside>
+    </div>
+
+    <script>
+        const quizCard = document.getElementById('quizCard');
+        const rawInput = document.getElementById('rawInput');
+        const themeSelect = document.getElementById('themeSelect');
+        const aspectRatio = document.getElementById('aspectRatio');
+        const channelName = document.getElementById('channelName');
+        const optionsBox = document.getElementById('optionsBox');
+        const loader = document.getElementById('loader');
+
+        // Drawer Toggle
+        function toggleMenu() {
+            document.getElementById('controlDrawer').classList.toggle('open');
+        }
+
+        // 1-Box Parser
+        rawInput.addEventListener('input', () => {
+            const lines = rawInput.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            if (!lines.length) return;
+
+            document.getElementById('dispQ').innerText = lines[0];
+
+            const optKeys = ['optA', 'optB', 'optC', 'optD'];
+            optKeys.forEach(k => document.getElementById(k).innerText = '...');
+
+            let count = 0;
+            for (let i = 1; i < lines.length; i++) {
+                let clean = lines[i].replace(/^([A-Da-d0-9][\.\)\-\:\s]+)/, '');
+                if (count < 4) {
+                    document.getElementById(optKeys[count]).innerText = clean;
+                    count++;
+                }
+            }
+        });
+
+        // Theme Selector
+        themeSelect.addEventListener('change', (e) => {
+            // Remove all th- classes
+            quizCard.className = quizCard.className.replace(/th-\d+/g, '').trim();
+            quizCard.classList.add(e.target.value);
+        });
+
+        // Channel Name Sync
+        channelName.addEventListener('input', (e) => {
+            const val = e.target.value || '@4xlearner';
+            document.getElementById('dispTopChannel').innerText = val;
+            document.getElementById('dispBottomChannel').innerText = val;
+        });
+
+        // Aspect Ratio & Layout Adjuster (No Overlap)
+        aspectRatio.addEventListener('change', (e) => {
+            const val = e.target.value;
+            const content = document.getElementById('dragContent');
+
+            // Reset transforms
+            document.querySelectorAll('.draggable').forEach(el => el.style.transform = 'translate(0px, 0px)');
+
+            if (val === '9:16') {
+                quizCard.style.width = '360px';
+                quizCard.style.height = '640px';
+                content.style.marginTop = '240px';
+                optionsBox.style.display = 'flex';
+                optionsBox.style.gridTemplateColumns = 'none';
+            } else if (val === '1:1') {
+                quizCard.style.width = '480px';
+                quizCard.style.height = '480px';
+                content.style.marginTop = '210px';
+                optionsBox.style.display = 'grid';
+                optionsBox.style.gridTemplateColumns = '1fr 1fr';
+            } else if (val === '16:9') {
+                quizCard.style.width = '640px';
+                quizCard.style.height = '360px';
+                content.style.marginTop = '180px';
+                optionsBox.style.display = 'grid';
+                optionsBox.style.gridTemplateColumns = '1fr 1fr';
+            } else if (val === '4:5') {
+                quizCard.style.width = '380px';
+                quizCard.style.height = '475px';
+                content.style.marginTop = '210px';
+                optionsBox.style.display = 'flex';
+                optionsBox.style.gridTemplateColumns = 'none';
+            }
+        });
+
+        // Fast Landing Replay
+        function triggerFastLanding() {
+            quizCard.classList.remove('anim-active');
+            void quizCard.offsetWidth;
+            quizCard.classList.add('anim-active');
+        }
+
+        // Touch & Mouse Drag Functionality
+        function makeDraggable(el) {
+            let isDragging = false, startX, startY, curX = 0, curY = 0;
+
+            function onStart(e) {
+                isDragging = true;
+                const evt = e.touches ? e.touches[0] : e;
+                startX = evt.clientX - curX;
+                startY = evt.clientY - curY;
+            }
+
+            function onMove(e) {
+                if (!isDragging) return;
+                const evt = e.touches ? e.touches[0] : e;
+                curX = evt.clientX - startX;
+                curY = evt.clientY - startY;
+                el.style.transform = `translate(${curX}px, ${curY}px)`;
+            }
+
+            function onEnd() { isDragging = false; }
+
+            el.addEventListener('mousedown', onStart);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onEnd);
+            el.addEventListener('touchstart', onStart, { passive: true });
+            window.addEventListener('touchmove', onMove, { passive: true });
+            window.addEventListener('touchend', onEnd);
+        }
+        document.querySelectorAll('.draggable').forEach(makeDraggable);
+
+        // =========================================================================
+        // 100% PERFECT 4K IMAGE EXPORT (FREEZES ANIMATIONS AT FINAL SETTLED FRAME)
+        // =========================================================================
+        async function exportPerfect4KImage() {
+            loader.style.display = 'block';
+            loader.innerText = '📸 Generating Pure 4K Image (Final Frame)...';
+
+            // 1. Temporarily disable all ongoing CSS animations to lock the final frame
+            quizCard.classList.remove('anim-active');
+
+            try {
+                const canvas = await html2canvas(quizCard, {
+                    scale: 6, // 360 x 6 = 2160px (Standard 4K Ultra High-Definition)
+                    useCORS: true,
+                    backgroundColor: null,
+                    logging: false
+                });
+
+                const link = document.createElement('a');
+                link.download = `4xlearner-quiz-4k-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+            } catch (err) {
+                alert('Image Export Error: ' + err);
+            } finally {
+                // Re-enable preview state
+                quizCard.classList.add('anim-active');
+                loader.style.display = 'none';
+            }
+        }
+
+        // VIDEO EXPORT (CAPTURES STAGGERED LANDING TO FINAL SETTLED FRAME)
+        async function exportMotionVideo() {
+            loader.style.display = 'block';
+            loader.innerText = '🎥 Recording Fast-Landing Video...';
+
+            const width = 1080;
+            const height = 1920;
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+
+            const stream = canvas.captureStream(30);
+            const recorder = new MediaRecorder(stream, {
+                mimeType: 'video/webm; codecs=vp9',
+                videoBitsPerSecond: 9000000
+            });
+
+            const chunks = [];
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `4xlearner-video-${Date.now()}.webm`;
+                a.click();
+                loader.style.display = 'none';
+            };
+
+            triggerFastLanding();
+            recorder.start();
+
+            let frames = 0;
+            const maxFrames = 90; // 3 seconds total
+
+            const captureInterval = setInterval(async () => {
+                const frameCanvas = await html2canvas(quizCard, { scale: 3, logging: false });
+                ctx.clearRect(0, 0, width, height);
+                ctx.drawImage(frameCanvas, 0, 0, width, height);
+
+                frames++;
+                if (frames >= maxFrames) {
+                    clearInterval(captureInterval);
+                    recorder.stop();
+                }
+            }, 33);
+        }
+    </script>
+</body>
+
+</html>

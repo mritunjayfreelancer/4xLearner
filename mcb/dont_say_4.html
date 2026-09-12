@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>4X LEARNER — Premium Poster Studio</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #080b13;
+            --panel: #101827;
+            --panel2: #0b1220;
+            --line: rgba(255, 255, 255, .1);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --blue: #38bdf8;
+            --purple: #6366f1;
+            --pink: #f43f5e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Plus Jakarta Sans", "Noto Sans Devanagari", sans-serif;
+            overflow-x: hidden;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .topbar {
+            height: 66px;
+            padding: 0 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(8, 11, 19, .94);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: #fff;
+            color: #101827;
+            padding: 5px 12px 5px 5px;
+            border-radius: 13px;
+            font-size: 13px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .brand strong {
+            background: linear-gradient(135deg, #f43f5e, #be123c);
+            color: #fff;
+            padding: 9px 10px;
+            border-radius: 9px;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .btn {
+            border: 1px solid var(--line);
+            background: #192437;
+            color: #fff;
+            padding: 10px 13px;
+            border-radius: 11px;
+            font-size: 11px;
+            font-weight: 800;
+            transition: .2s;
+        }
+
+        .btn:hover {
+            filter: brightness(1.2);
+        }
+
+        .btn.primary {
+            border: 0;
+            background: linear-gradient(135deg, #0ea5e9, #6366f1);
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 380px minmax(0, 1fr);
+            min-height: calc(100vh - 66px);
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #111827, #0a111e);
+            border-right: 1px solid var(--line);
+            padding: 15px;
+            overflow-y: auto;
+            max-height: calc(100vh - 66px);
+        }
+
+        .block {
+            background: rgba(255, 255, 255, .035);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 13px;
+            margin-bottom: 13px;
+        }
+
+        .block h3 {
+            color: var(--blue);
+            font-size: 10px;
+            letter-spacing: 1.2px;
+            font-weight: 900;
+            margin-bottom: 11px;
+            text-transform: uppercase;
+        }
+
+        textarea,
+        input,
+        select {
+            width: 100%;
+            background: #060b14;
+            color: #fff;
+            border: 1px solid var(--line);
+            border-radius: 11px;
+            padding: 11px;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 190px;
+            resize: vertical;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        textarea:focus,
+        input:focus,
+        select:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, .1);
+        }
+
+        .field {
+            margin-bottom: 11px;
+        }
+
+        .field label {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        input[type=range] {
+            padding: 0;
+            accent-color: var(--blue);
+            cursor: pointer;
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .ratios {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+
+        .ratio {
+            background: #09111e;
+            color: #aebbd0;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            padding: 9px 3px;
+            font-size: 10px;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .ratio.active {
+            background: var(--blue);
+            color: #06111b;
+            border-color: var(--blue);
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+            max-height: 210px;
+            overflow-y: auto;
+        }
+
+        .theme {
+            height: 44px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 900;
+            color: #101827;
+            overflow: hidden;
+        }
+
+        .theme.active {
+            border-color: #fff;
+            box-shadow: 0 0 0 2px var(--blue);
+        }
+
+        .export {
+            display: grid;
+            gap: 8px;
+        }
+
+        .export button {
+            border: 0;
+            border-radius: 12px;
+            color: #fff;
+            padding: 13px;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .png {
+            background: linear-gradient(135deg, #06b6d4, #6366f1);
+        }
+
+        .video {
+            background: linear-gradient(135deg, #e11d48, #9333ea);
+        }
+
+        .stage {
+            min-width: 0;
+            min-height: calc(100vh - 66px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px;
+            background:
+                radial-gradient(circle at 50% 25%, #1b2940 0, #080b13 62%);
+        }
+
+        .stage-info {
+            color: #9caec5;
+            font-size: 11px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .frame {
+            width: min(90%, 570px);
+            height: min(82vh, 860px);
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        canvas {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 20px;
+            box-shadow: 0 25px 90px rgba(0, 0, 0, .6);
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        .toast {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 999;
+            background: #16a34a;
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 800;
+            display: none;
+        }
+
+        @media(max-width:900px) {
+
+            .topbar {
+                height: 58px;
+                padding: 0 10px;
+            }
+
+            .brand {
+                font-size: 11px;
+            }
+
+            .brand strong {
+                padding: 8px;
+            }
+
+            .top-actions .btn {
+                padding: 9px;
+                font-size: 10px;
+            }
+
+            .layout {
+                display: block;
+                min-height: calc(100vh - 58px);
+            }
+
+            .stage {
+                height: calc(100vh - 58px);
+                min-height: 430px;
+                padding: 8px;
+                justify-content: flex-start;
+            }
+
+            .stage-info {
+                margin-top: 3px;
+            }
+
+            .frame {
+                width: 100%;
+                height: calc(100vh - 145px);
+                min-height: 300px;
+                max-height: none;
+            }
+
+            canvas {
+                max-width: 100%;
+                max-height: 100%;
+                border-radius: 14px;
+            }
+
+            .sidebar {
+                display: none;
+                position: fixed;
+                inset: 58px 0 0;
+                z-index: 200;
+                max-height: none;
+                border: 0;
+                padding: 12px;
+                background: #0b1220;
+            }
+
+            .sidebar.open {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                right: 13px;
+                bottom: 14px;
+                z-index: 300;
+                width: 54px;
+                height: 54px;
+                border: 0;
+                border-radius: 50%;
+                color: #fff;
+                background: linear-gradient(135deg, #0ea5e9, #6366f1);
+                box-shadow: 0 8px 30px #0009;
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <div class="brand">
+            <strong>4X</strong>
+            <span>LEARNER</span>
+        </div>
+
+        <div class="top-actions">
+            <button class="btn" onclick="loadSample()">⚡ Sample</button>
+            <button class="btn" onclick="copyText()">📋 Copy</button>
+            <button class="btn primary" onclick="toggleMenu()">☰ Settings</button>
+        </div>
+
+    </header>
+
+    <div class="layout">
+
+        <aside class="sidebar" id="sidebar">
+
+            <section class="block">
+
+                <h3>Smart content editor</h3>
+
+                <textarea id="script" spellcheck="false" placeholder="Category: COMMON ENGLISH MISTAKE
+Headline: DON'T SAY vs SAY
+Wrong: I am agree with you.
+WrongHindi: (गलत: मैं आपसे सहमत हूँ)
+Right: I agree with you.
+RightHindi: (सही: नेचुरल इंग्लिश)
+Tip: Agree is already a verb.
+Brand: 4X LEARNER • @4xlearner"></textarea>
+
+                <button class="btn primary" style="width:100%;margin-top:8px" onclick="parseText()">
+                    ⚡ UPDATE PREVIEW
+                </button>
+
+            </section>
+
+            <section class="block">
+
+                <h3>Canvas format</h3>
+
+                <div class="ratios">
+
+                    <button class="ratio active" data-r="9:16" onclick="setRatio('9:16',this)">
+                        9:16<br>Shorts
+                    </button>
+
+                    <button class="ratio" data-r="1:1" onclick="setRatio('1:1',this)">
+                        1:1<br>Post
+                    </button>
+
+                    <button class="ratio" data-r="4:5" onclick="setRatio('4:5',this)">
+                        4:5<br>Feed
+                    </button>
+
+                    <button class="ratio" data-r="16:9" onclick="setRatio('16:9',this)">
+                        16:9<br>Wide
+                    </button>
+
+                </div>
+
+            </section>
+
+            <section class="block">
+
+                <h3>Safe layout tuning</h3>
+
+                <div class="field">
+                    <label>
+                        <span>Vertical position</span>
+                        <output id="yv">0</output>
+                    </label>
+                    <input id="y" type="range" min="-180" max="180" value="0" oninput="updateControls()">
+                </div>
+
+                <div class="field">
+                    <label>
+                        <span>Card scale</span>
+                        <output id="sv">1.00x</output>
+                    </label>
+                    <input id="scale" type="range" min=".86" max="1.08" step=".01" value="1" oninput="updateControls()">
+                </div>
+
+                <div class="field">
+                    <label>
+                        <span>Text size</span>
+                        <output id="tv">100%</output>
+                    </label>
+                    <input id="textScale" type="range" min=".82" max="1.12" step=".01" value="1"
+                        oninput="updateControls()">
+                </div>
+
+            </section>
+
+            <section class="block">
+
+                <h3>Premium themes</h3>
+                <div class="theme-grid" id="themes"></div>
+
+            </section>
+
+            <section class="block">
+
+                <h3>Export studio</h3>
+
+                <div class="grid2">
+
+                    <div class="field">
+                        <label>Image quality</label>
+                        <select id="quality">
+                            <option value="1">Ultra</option>
+                            <option value=".92">High</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Video duration</label>
+                        <select id="duration">
+                            <option value="4">4 sec</option>
+                            <option value="6">6 sec</option>
+                            <option value="8">8 sec</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="export">
+                    <button class="png" onclick="downloadPNG()">
+                        ⬇ DOWNLOAD PERFECT PNG
+                    </button>
+
+                    <button class="video" onclick="downloadVideo()">
+                        ▶ EXPORT ANIMATED VIDEO
+                    </button>
+                </div>
+
+            </section>
+
+        </aside>
+
+        <main class="stage">
+
+            <div class="stage-info" id="dimension">
+                9:16 • 2160 × 3840 • LIVE PREVIEW
+            </div>
+
+            <div class="frame">
+                <canvas id="canvas"></canvas>
+            </div>
+
+        </main>
+
+    </div>
+
+    <button class="mobile-menu" onclick="toggleMenu()">☰</button>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        "use strict";
+
+        /* ---------------- CONFIG ---------------- */
+
+        const sizes = {
+            "9:16": [2160, 3840],
+            "1:1": [2160, 2160],
+            "4:5": [2160, 2700],
+            "16:9": [3840, 2160]
+        };
+
+        const themes = [
+            ["Aurora", ["#c7d2fe", "#fbcfe8", "#bae6fd"], "#be123c", "#047857", "#4338ca"],
+            ["Ocean", ["#cffafe", "#dbeafe", "#c7d2fe"], "#be123c", "#047857", "#1d4ed8"],
+            ["Sunset", ["#fed7aa", "#fbcfe8", "#fef08a"], "#b91c1c", "#15803d", "#c2410c"],
+            ["Lavender", ["#ddd6fe", "#fbcfe8", "#e9d5ff"], "#be123c", "#047857", "#6d28d9"],
+            ["Mint", ["#a7f3d0", "#d1fae5", "#dbeafe"], "#be123c", "#047857", "#0369a1"],
+            ["Peach", ["#fed7aa", "#ffedd5", "#fbcfe8"], "#be123c", "#047857", "#b45309"],
+            ["Ice", ["#e0f2fe", "#f0f9ff", "#e0e7ff"], "#be123c", "#047857", "#0369a1"],
+            ["Candy", ["#fbcfe8", "#fce7f3", "#c7d2fe"], "#be123c", "#047857", "#7e22ce"],
+            ["Emerald", ["#bbf7d0", "#dcfce7", "#fed7aa"], "#be123c", "#047857", "#047857"],
+            ["Royal", ["#c4b5fd", "#ddd6fe", "#bfdbfe"], "#9f1239", "#065f46", "#3730a3"],
+            ["Lemon", ["#fef08a", "#fef9c3", "#fed7aa"], "#b91c1c", "#166534", "#a16207"],
+            ["Rose", ["#fecdd3", "#fce7f3", "#ddd6fe"], "#9f1239", "#047857", "#7e22ce"],
+            ["Sky", ["#bae6fd", "#e0f2fe", "#dbeafe"], "#be123c", "#047857", "#1d4ed8"],
+            ["Coral", ["#fecaca", "#fed7aa", "#fbcfe8"], "#991b1b", "#166534", "#c2410c"],
+            ["Fresh", ["#bbf7d0", "#ccfbf1", "#dbeafe"], "#be123c", "#047857", "#0369a1"],
+            ["Blueberry", ["#bfdbfe", "#c7d2fe", "#ddd6fe"], "#9f1239", "#065f46", "#3730a3"],
+            ["Plum", ["#e9d5ff", "#f5d0fe", "#c4b5fd"], "#9f1239", "#047857", "#7e22ce"],
+            ["Aqua", ["#a5f3fc", "#ccfbf1", "#bfdbfe"], "#be123c", "#047857", "#0369a1"],
+            ["Berry", ["#fbcfe8", "#e9d5ff", "#fecdd3"], "#9f1239", "#047857", "#7e22ce"],
+            ["Spring", ["#d9f99d", "#bbf7d0", "#a5f3fc"], "#9f1239", "#166534", "#0369a1"],
+            ["Cloud", ["#f1f5f9", "#e0f2fe", "#e0e7ff"], "#be123c", "#047857", "#4338ca"],
+            ["Butter", ["#fef3c7", "#fef9c3", "#fed7aa"], "#b91c1c", "#166534", "#a16207"],
+            ["Orchid", ["#f5d0fe", "#ddd6fe", "#fbcfe8"], "#9f1239", "#047857", "#7e22ce"],
+            ["Forest", ["#bbf7d0", "#d1fae5", "#a7f3d0"], "#9f1239", "#047857", "#047857"],
+            ["Flamingo", ["#fecdd3", "#fbcfe8", "#fed7aa"], "#9f1239", "#047857", "#be123c"],
+            ["Nordic", ["#e2e8f0", "#cbd5e1", "#dbeafe"], "#334155", "#166534", "#1d4ed8"],
+            ["Tropical", ["#99f6e4", "#a5f3fc", "#bef264"], "#be123c", "#047857", "#0369a1"],
+            ["Blush", ["#fce7f3", "#ffe4e6", "#f3e8ff"], "#9f1239", "#047857", "#7e22ce"],
+            ["Citrus", ["#bef264", "#fef08a", "#fed7aa"], "#b91c1c", "#166534", "#c2410c"],
+            ["Blue Rose", ["#bfdbfe", "#ddd6fe", "#fbcfe8"], "#9f1239", "#047857", "#3730a3"]
+        ];
+
+        /* ---------------- STATE ---------------- */
+
+        let ratio = "9:16";
+        let theme = themes[0];
+        let yOffset = 0;
+        let scale = 1;
+        let textScale = 1;
+
+        let data = {
+            tag: "COMMON ENGLISH MISTAKE",
+            title: "DON'T SAY vs SAY",
+            wrong: "I am agree with you.",
+            wrongHindi: "(गलत: मैं आपसे सहमत हूँ)",
+            right: "I agree with you.",
+            rightHindi: "(सही: नेचुरल इंग्लिश)",
+            tip: "Agree is already a verb. Don't use am before it.",
+            brand: "4X LEARNER • @4xlearner"
+        };
+
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const scriptBox = document.getElementById("script");
+        const ySlider = document.getElementById("y");
+        const scaleSlider = document.getElementById("scale");
+        const textSlider = document.getElementById("textScale");
+
+        /* ---------------- UI ---------------- */
+
+        function toggleMenu() {
+            document.getElementById("sidebar").classList.toggle("open");
+        }
+
+        function toast(message) {
+            const box = document.getElementById("toast");
+            box.textContent = message;
+            box.style.display = "block";
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                box.style.display = "none";
+            }, 1800);
+        }
+
+        function loadSample() {
+
+            scriptBox.value = `Category: COMMON ENGLISH MISTAKE
+Headline: DON'T SAY vs SAY
+Wrong: I am agree with you.
+WrongHindi: (गलत: मैं आपसे सहमत हूँ)
+Right: I agree with you.
+RightHindi: (सही: नेचुरल इंग्लिश)
+Tip: Agree is already a verb. Don't use am before it.
+Brand: 4X LEARNER • @4xlearner`;
+
+            parseText();
+        }
+
+        function parseText() {
+
+            const result = {};
+
+            scriptBox.value.split(/\n/).forEach(line => {
+                const index = line.indexOf(":");
+                if (index === -1) return;
+
+                const key = line.slice(0, index).trim().toLowerCase();
+                const value = line.slice(index + 1).trim();
+
+                if (value) result[key] = value;
+            });
+
+            data.tag = (result.category || result.tag || data.tag).toUpperCase();
+            data.title = (result.headline || result.title || result.hook || data.title).toUpperCase();
+
+            data.wrong = result.wrong || data.wrong;
+            data.wrongHindi = result.wronghindi || data.wrongHindi;
+
+            data.right = result.right || data.right;
+            data.rightHindi = result.righthindi || data.rightHindi;
+
+            data.tip = result.tip || data.tip;
+            data.brand = result.brand || data.brand;
+
+            render();
+            toast("Preview updated");
+        }
+
+        function setRatio(newRatio, button) {
+
+            ratio = newRatio;
+
+            document.querySelectorAll(".ratio").forEach(item => {
+                item.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            render();
+        }
+
+        function updateControls() {
+
+            yOffset = Number(ySlider.value);
+            scale = Number(scaleSlider.value);
+            textScale = Number(textSlider.value);
+
+            document.getElementById("yv").textContent = yOffset;
+            document.getElementById("sv").textContent = scale.toFixed(2) + "x";
+            document.getElementById("tv").textContent = Math.round(textScale * 100) + "%";
+
+            render();
+        }
+
+        /* ---------------- TEXT ENGINE ---------------- */
+
+        function wrapText(text, maxWidth, font) {
+
+            ctx.font = font;
+
+            const words = String(text).trim().split(/\s+/);
+            const lines = [];
+            let line = "";
+
+            for (const word of words) {
+
+                const test = line ? line + " " + word : word;
+
+                if (ctx.measureText(test).width <= maxWidth || !line) {
+                    line = test;
+                } else {
+                    lines.push(line);
+                    line = word;
+                }
+            }
+
+            if (line) lines.push(line);
+
+            return lines;
+        }
+
+        function fitText(text, maxWidth, startSize, minSize, font, maxLines) {
+
+            for (let size = startSize; size >= minSize; size -= 2) {
+
+                const lines = wrapText(
+                    text,
+                    maxWidth,
+                    `900 ${size}px ${font}`
+                );
+
+                if (lines.length <= maxLines) {
+                    return { size, lines };
+                }
+            }
+
+            return {
+                size: minSize,
+                lines: wrapText(
+                    text,
+                    maxWidth,
+                    `900 ${minSize}px ${font}`
+                )
+            };
+        }
+
+        function drawTextBlock(
+            text, x, y, maxWidth, startSize, minSize,
+            color, font, lineHeight, align = "left", maxLines = 3
+        ) {
+
+            const result = fitText(
+                text, maxWidth, startSize, minSize, font, maxLines
+            );
+
+            ctx.font = `900 ${result.size}px ${font}`;
+            ctx.fillStyle = color;
+            ctx.textAlign = align;
+            ctx.textBaseline = "top";
+
+            result.lines.forEach((line, index) => {
+                ctx.fillText(
+                    line,
+                    x,
+                    y + index * result.size * lineHeight
+                );
+            });
+
+            return y + result.lines.length * result.size * lineHeight;
+        }
+
+        /* ---------------- CANVAS HELPERS ---------------- */
+
+        function roundedRect(x, y, w, h, r, fill) {
+
+            ctx.beginPath();
+            ctx.roundRect(x, y, w, h, r);
+            ctx.fillStyle = fill;
+            ctx.fill();
+        }
+
+        function gradientRect(x, y, w, h, r, color1, color2) {
+
+            const gradient = ctx.createLinearGradient(x, y, x + w, y);
+
+            gradient.addColorStop(0, color1);
+            gradient.addColorStop(1, color2);
+
+            roundedRect(x, y, w, h, r, gradient);
+        }
+
+        function drawPill(
+            x, y, w, h, color1, color2,
+            icon, iconBg, iconColor,
+            english, hindi
+        ) {
+
+            gradientRect(x, y, w, h, h * .16, color1, color2);
+
+            const pad = h * .11;
+            const iconSize = h * .70;
+            const iconX = x + pad;
+            const iconY = y + (h - iconSize) / 2;
+
+            roundedRect(
+                iconX, iconY,
+                iconSize, iconSize,
+                iconSize * .25,
+                iconBg
+            );
+
+            ctx.font = `900 ${iconSize * .48}px "Plus Jakarta Sans"`;
+            ctx.fillStyle = iconColor;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            ctx.fillText(
+                icon,
+                iconX + iconSize / 2,
+                iconY + iconSize / 2
+            );
+
+            const textX = iconX + iconSize + pad;
+            const available = w - (textX - x) - pad;
+
+            const englishFit = fitText(
+                english,
+                available,
+                h * .24 * textScale,
+                h * .105,
+                '"Plus Jakarta Sans"',
+                2
+            );
+
+            const hindiFit = fitText(
+                hindi,
+                available,
+                h * .17 * textScale,
+                h * .075,
+                '"Noto Sans Devanagari"',
+                2
+            );
+
+            const englishHeight =
+                englishFit.lines.length * englishFit.size * 1.12;
+
+            const hindiHeight =
+                hindiFit.lines.length * hindiFit.size * 1.15;
+
+            const totalHeight =
+                englishHeight + hindiHeight + h * .06;
+
+            let currentY = y + (h - totalHeight) / 2;
+
+            ctx.textAlign = "left";
+            ctx.textBaseline = "top";
+
+            ctx.font = `900 ${englishFit.size}px "Plus Jakarta Sans"`;
+            ctx.fillStyle = "#fff";
+
+            englishFit.lines.forEach(line => {
+                ctx.fillText(line, textX, currentY);
+                currentY += englishFit.size * 1.12;
+            });
+
+            currentY += h * .025;
+
+            ctx.font = `800 ${hindiFit.size}px "Noto Sans Devanagari"`;
+            ctx.fillStyle = "rgba(255,255,255,.9)";
+
+            hindiFit.lines.forEach(line => {
+                ctx.fillText(line, textX, currentY);
+                currentY += hindiFit.size * 1.15;
+            });
+        }
+
+        /* ---------------- MAIN RENDER ---------------- */
+
+        function render(animation = 1) {
+
+            const [W, H] = sizes[ratio];
+
+            canvas.width = W;
+            canvas.height = H;
+
+            const isLandscape = ratio === "16:9";
+            const isSquare = ratio === "1:1";
+
+            /* BACKGROUND */
+
+            const background = ctx.createLinearGradient(0, 0, W, H);
+
+            background.addColorStop(0, theme[1][0]);
+            background.addColorStop(.5, theme[1][1]);
+            background.addColorStop(1, theme[1][2]);
+
+            ctx.fillStyle = background;
+            ctx.fillRect(0, 0, W, H);
+
+            const unit = Math.min(W, H);
+            const margin = unit * .065;
+
+            /* BRAND HEADER */
+
+            const brandW = unit * .34;
+            const brandH = unit * .075;
+            const brandX = margin;
+            const brandY = H * .045;
+
+            roundedRect(
+                brandX, brandY,
+                brandW, brandH,
+                brandH * .28,
+                "#fff"
+            );
+
+            roundedRect(
+                brandX + brandW * .035,
+                brandY + brandH * .13,
+                brandW * .30,
+                brandH * .74,
+                brandH * .20,
+                "#ef3159"
+            );
+
+            ctx.font = `900 ${brandH * .46}px "Plus Jakarta Sans"`;
+            ctx.fillStyle = "#fff";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            ctx.fillText(
+                "4X",
+                brandX + brandW * .185,
+                brandY + brandH * .50
+            );
+
+            ctx.font = `900 ${brandH * .40}px "Plus Jakarta Sans"`;
+            ctx.fillStyle = "#0f172a";
+            ctx.textAlign = "left";
+
+            ctx.fillText(
+                "LEARNER",
+                brandX + brandW * .37,
+                brandY + brandH * .50
+            );
+
+            /* CARD */
+
+            const cardW = isLandscape ? W * .84 : W * .88;
+            const cardH = isLandscape ? H * .72 : (isSquare ? H * .79 : H * .78);
+
+            const cardX = (W - cardW) / 2;
+            const baseCardY = (H - cardH) / 2;
+            const cardY = baseCardY + yOffset * (H / 1920);
+
+            ctx.save();
+
+            ctx.translate(W / 2, baseCardY + cardH / 2);
+            ctx.scale(scale * animation, scale * animation);
+            ctx.translate(-W / 2, -baseCardY - cardH / 2);
+
+            /* SHADOW */
+
+            ctx.shadowColor = "rgba(15,23,42,.25)";
+            ctx.shadowBlur = unit * .045;
+            ctx.shadowOffsetY = unit * .025;
+
+            roundedRect(
+                cardX, cardY,
+                cardW, cardH,
+                cardW * .045,
+                "#fff"
+            );
+
+            ctx.shadowColor = "transparent";
+
+            const pad = cardW * .065;
+            const innerW = cardW - pad * 2;
+
+            /* CATEGORY */
+
+            ctx.font = `900 ${cardW * .032 * textScale}px "Plus Jakarta Sans"`;
+            ctx.fillStyle = "#6366f1";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "top";
+
+            ctx.fillText(
+                data.tag,
+                W / 2,
+                cardY + cardH * .065
+            );
+
+            /* TITLE */
+
+            const titleFit = fitText(
+                data.title,
+                innerW,
+                cardW * .075 * textScale,
+                cardW * .035,
+                '"Plus Jakarta Sans"',
+                2
+            );
+
+            ctx.font = `900 ${titleFit.size}px "Plus Jakarta Sans"`;
+            ctx.fillStyle = theme[2];
+            ctx.textAlign = "center";
+
+            let titleY = cardY + cardH * .115;
+
+            titleFit.lines.forEach(line => {
+                ctx.fillText(line, W / 2, titleY);
+                titleY += titleFit.size * 1.08;
+            });
+
+            /* ROW SIZES */
+
+            const rowW = innerW;
+            const rowH = Math.min(cardH * .175, innerW * .235);
+            const gap = cardH * .025;
+            const rowX = cardX + pad;
+
+            const firstRowY = titleY + cardH * .045;
+
+            /* WRONG */
+
+            drawPill(
+                rowX, firstRowY, rowW, rowH,
+                theme[2], "#e11d48",
+                "×", "#ffe4e6", theme[2],
+                data.wrong, data.wrongHindi
+            );
+
+            /* RIGHT */
+
+            const secondRowY = firstRowY + rowH + gap;
+
+            drawPill(
+                rowX, secondRowY, rowW, rowH,
+                theme[3], "#059669",
+                "✓", "#d1fae5", theme[3],
+                data.right, data.rightHindi
+            );
+
+            /* TIP */
+
+            const thirdRowY = secondRowY + rowH + gap;
+
+            drawPill(
+                rowX, thirdRowY, rowW, rowH,
+                theme[4], "#6366f1",
+                "!", "#e0e7ff", theme[4],
+                "QUICK ENGLISH RULE", data.tip
+            );
+
+            /* DIVIDER */
+
+            const dividerY = thirdRowY + rowH + cardH * .035;
+
+            ctx.fillStyle = "#e2e8f0";
+            ctx.fillRect(
+                rowX,
+                dividerY,
+                rowW,
+                Math.max(3, unit * .004)
+            );
+
+            ctx.font = `800 ${unit * .022 * textScale}px "Plus Jakarta Sans"`;
+            ctx.fillStyle = "#64748b";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "top";
+
+            ctx.fillText(
+                "SAVE FOR REVISION • SHARE WITH FRIENDS",
+                W / 2,
+                dividerY + cardH * .035
+            );
+
+            ctx.restore();
+
+            /* FOOTER */
+
+            ctx.font = `900 ${unit * .027 * textScale}px "Plus Jakarta Sans"`;
+            ctx.fillStyle = "#0f172a";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            ctx.fillText(
+                data.brand,
+                W / 2,
+                H * .95
+            );
+
+            document.getElementById("dimension").textContent =
+                `${ratio} • ${W} × ${H} • LIVE PREVIEW`;
+        }
+
+        /* ---------------- THEMES ---------------- */
+
+        function buildThemes() {
+
+            const container = document.getElementById("themes");
+
+            themes.forEach((item, index) => {
+
+                const button = document.createElement("button");
+
+                button.className = "theme" + (index === 0 ? " active" : "");
+                button.textContent = (index + 1) + " " + item[0];
+
+                button.style.background =
+                    `linear-gradient(135deg,${item[1][0]},${item[1][2]})`;
+
+                button.onclick = () => {
+
+                    theme = item;
+
+                    document.querySelectorAll(".theme").forEach(item => {
+                        item.classList.remove("active");
+                    });
+
+                    button.classList.add("active");
+
+                    render();
+                };
+
+                container.appendChild(button);
+            });
+        }
+
+        /* ---------------- EXPORT ---------------- */
+
+        function downloadPNG() {
+
+            render();
+
+            const link = document.createElement("a");
+
+            link.download =
+                `4X_LEARNER_${ratio.replace(":", "x")}_${Date.now()}.png`;
+
+            link.href = canvas.toDataURL(
+                "image/png",
+                Number(document.getElementById("quality").value)
+            );
+
+            link.click();
+
+            toast("Perfect PNG exported");
+        }
+
+        function downloadVideo() {
+
+            if (!canvas.captureStream || !window.MediaRecorder) {
+                toast("Video export is not supported in this browser");
+                return;
+            }
+
+            const seconds = Number(
+                document.getElementById("duration").value
+            );
+
+            const stream = canvas.captureStream(30);
+            const chunks = [];
+
+            let mime = "video/webm;codecs=vp9";
+
+            if (!MediaRecorder.isTypeSupported(mime)) {
+                mime = "video/webm";
+            }
+
+            const recorder = new MediaRecorder(stream, {
+                mimeType: mime,
+                videoBitsPerSecond: 12000000
+            });
+
+            recorder.ondataavailable = event => {
+                if (event.data.size > 0) {
+                    chunks.push(event.data);
+                }
+            };
+
+            recorder.onstop = () => {
+
+                const blob = new Blob(chunks, { type: "video/webm" });
+                const url = URL.createObjectURL(blob);
+
+                const link = document.createElement("a");
+
+                link.href = url;
+                link.download = `4X_LEARNER_VIDEO_${Date.now()}.webm`;
+
+                link.click();
+
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 1000);
+
+                toast("Animated video exported");
+            };
+
+            recorder.start();
+
+            const start = performance.now();
+
+            function animate(now) {
+
+                const progress = (now - start) / (seconds * 1000);
+
+                if (progress < 1) {
+
+                    const movement =
+                        .985 + .015 * Math.sin(progress * Math.PI * 8);
+
+                    render(movement);
+
+                    requestAnimationFrame(animate);
+
+                } else {
+
+                    render();
+                    recorder.stop();
+
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        function copyText() {
+
+            const text =
+                `${data.title}
+
+❌ DON'T SAY: ${data.wrong} ${data.wrongHindi}
+
+✅ SAY THIS: ${data.right} ${data.rightHindi}
+
+💡 TIP: ${data.tip}
+
+${data.brand}`;
+
+            if (navigator.clipboard) {
+
+                navigator.clipboard.writeText(text)
+                    .then(() => toast("Text copied"))
+                    .catch(() => toast("Copy permission denied"));
+
+            } else {
+
+                const temporary = document.createElement("textarea");
+                temporary.value = text;
+                document.body.appendChild(temporary);
+                temporary.select();
+                document.execCommand("copy");
+                temporary.remove();
+
+                toast("Text copied");
+            }
+        }
+
+        /* ---------------- START ---------------- */
+
+        buildThemes();
+        loadSample();
+
+        window.addEventListener("resize", () => {
+            render();
+        });
+
+    </script>
+
+</body>
+
+</html>

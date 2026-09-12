@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4X Learner Hub — 100 Short-Form English Studios</title>
+    <meta name="description"
+        content="10 Categories, 100 Production Lessons for English Reels, Shorts, and Graphic Posters.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #05070d;
+            --bg-card: rgba(16, 22, 38, 0.75);
+            --bg-btn: rgba(23, 32, 54, 0.85);
+            --line: rgba(255, 255, 255, 0.08);
+            --cyan: #38bdf8;
+            --purple: #a855f7;
+            --green: #22c55e;
+            --rose: #f43f5e;
+            --amber: #f59e0b;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --heading: "Manrope", sans-serif;
+            --font: "DM Sans", sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font);
+            color: var(--text);
+            background: radial-gradient(circle at 5% 0%, rgba(56, 189, 248, 0.14), transparent 25%),
+                radial-gradient(circle at 95% 10%, rgba(168, 85, 247, 0.12), transparent 25%),
+                linear-gradient(180deg, #05070d, #080d1a 50%, #05070d);
+            min-height: 100vh;
+            padding-bottom: 90px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.28;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            mask-image: linear-gradient(to bottom, black 30%, transparent 95%);
+            z-index: -1;
+        }
+
+        .container {
+            width: min(1240px, calc(100% - 24px));
+            margin: auto;
+        }
+
+        /* HEADER */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 64px;
+            background: rgba(5, 7, 13, 0.88);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .nav {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #67e8f9, #38bdf8 50%, #818cf8);
+            color: #020c14;
+            display: grid;
+            place-items: center;
+            font-family: var(--heading);
+            font-size: 15px;
+            font-weight: 900;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .brand-title {
+            font-family: var(--heading);
+            font-size: 15px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+        }
+
+        .open-editor-btn {
+            padding: 8px 14px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #67e8f9, #38bdf8);
+            color: #020c14;
+            font-size: 11px;
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.25);
+            transition: transform 0.2s;
+        }
+
+        .open-editor-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* HERO */
+        .hero {
+            padding: 28px 0 16px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: var(--cyan);
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-family: var(--heading);
+            font-size: clamp(26px, 7vw, 54px);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(120deg, #fff, #7dd3fc 40%, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            max-width: 580px;
+            margin: auto;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+
+        /* SEARCH BAR */
+        .search-container {
+            margin: 18px auto 8px;
+            max-width: 480px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 44px;
+            padding: 0 14px 0 38px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .search-input:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        /* CATEGORY JUMP STRIP */
+        .category-bar {
+            position: sticky;
+            top: 64px;
+            z-index: 900;
+            background: rgba(5, 7, 13, 0.94);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--line);
+            padding: 10px 0;
+            margin-bottom: 24px;
+        }
+
+        .category-scroll {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 2px;
+        }
+
+        .category-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .chip {
+            white-space: nowrap;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .chip:hover,
+        .chip.active {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--cyan);
+            color: #fff;
+        }
+
+        /* SECTION BOX */
+        .cat-section {
+            scroll-margin-top: 120px;
+            background: var(--bg-card);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .cat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            gap: 10px;
+        }
+
+        .cat-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--line);
+        }
+
+        .cat-title {
+            font-family: var(--heading);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .cat-subtitle {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .cat-counter {
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--line);
+            color: var(--cyan);
+        }
+
+        /* BUTTONS GRID */
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        @media (min-width: 580px) {
+            .btn-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 860px) {
+            .btn-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .module-btn {
+            background: var(--bg-btn);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+            text-decoration: none;
+            color: inherit;
+            min-height: 72px;
+            transition: transform 0.15s, border-color 0.15s, background 0.15s;
+        }
+
+        .module-btn:active {
+            transform: scale(0.97);
+        }
+
+        .module-btn:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            background: rgba(30, 42, 70, 0.9);
+        }
+
+        .btn-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .num-tag {
+            font-size: 8px;
+            font-weight: 800;
+            color: var(--cyan);
+            background: rgba(56, 189, 248, 0.1);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .arrow {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .file-name {
+            font-family: var(--heading);
+            font-size: 11px;
+            font-weight: 800;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .target-path {
+            font-size: 8px;
+            color: #64748b;
+            font-family: monospace;
+        }
+
+        /* MOBILE BOTTOM DOCK */
+        .dock {
+            position: fixed;
+            bottom: 8px;
+            left: 10px;
+            right: 10px;
+            height: 54px;
+            border-radius: 16px;
+            background: rgba(9, 13, 24, 0.94);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .dock a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .dock a.active,
+        .dock a:hover {
+            color: var(--cyan);
+        }
+
+        .dock a span:first-child {
+            font-size: 15px;
+        }
+
+        @media (min-width: 820px) {
+            .dock {
+                display: none;
+            }
+
+            body {
+                padding-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container nav">
+            <a href="index.html" class="brand">
+                <div class="brand-icon">4X</div>
+                <div>
+                    <div class="brand-title">4X Learner Hub</div>
+                    <div class="brand-sub">Shorts & Reels Studio</div>
+                </div>
+            </a>
+            <a href="edit.html" class="open-editor-btn">✨ Poster Studio</a>
+        </div>
+    </header>
+
+    <!-- STICKY HORIZONTAL CATEGORY SELECTOR -->
+    <div class="category-bar">
+        <div class="container">
+            <div class="category-scroll" id="categoryScroll">
+                <a href="#cat-mcq" class="chip active">🧠 MCQ Quiz</a>
+                <a href="#cat-hindi-eng" class="chip">🗣️ Hindi to English</a>
+                <a href="#cat-dont-say" class="chip">❌ Don't Say, Say This</a>
+                <a href="#cat-instead-very" class="chip">⚡ Instead of Very</a>
+                <a href="#cat-fill-blanks" class="chip">✍️ Fill In The Blanks</a>
+                <a href="#cat-choose-correct" class="chip">✅ Choose Correct</a>
+                <a href="#cat-slang" class="chip">🔥 Daily Phrases & Slang</a>
+                <a href="#cat-pronounce" class="chip">🎙️ Pronunciation & Silent</a>
+                <a href="#cat-rules" class="chip">⏱️ 1-Min Grammar Rule</a>
+                <a href="#cat-idioms" class="chip">🎨 Idioms & Phrasal Verbs</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN BODY -->
+    <main class="container">
+
+        <section class="hero">
+            <div class="hero-badge">⚡ 10 Categories • 100 Live Modules</div>
+            <h1>Full-Course English<br><span>Shorts & Poster Library</span></h1>
+            <p>Har category me 10 interactive files hain. Sabhi templates directly <code>mcb/</code> folder ke andar
+                link hain.</p>
+
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="search" id="quickSearch" class="search-input"
+                    placeholder="Search lesson or file name (e.g. mcq, slang, rule)..." autocomplete="off">
+            </div>
+        </section>
+
+        <!-- SECTIONS CONTAINER -->
+        <div id="allSections"></div>
+
+    </main>
+
+    <!-- MOBILE DOCK -->
+    <nav class="dock">
+        <a href="index.html" class="active">
+            <span>🏠</span>
+            <span>Home</span>
+        </a>
+        <a href="#cat-mcq">
+            <span>🧠</span>
+            <span>MCQ</span>
+        </a>
+        <a href="#cat-hindi-eng">
+            <span>🗣️</span>
+            <span>Translate</span>
+        </a>
+        <a href="#cat-dont-say">
+            <span>❌</span>
+            <span>Errors</span>
+        </a>
+        <a href="edit.html">
+            <span>✨</span>
+            <span>Editor</span>
+        </a>
+    </nav>
+
+    <!-- LOGIC SCRIPT -->
+    <script>
+        const FOLDER = "mcb/";
+
+        // Complete 10-Category Config with explicit filenames and descriptions
+        const curriculum = [
+            {
+                id: "cat-mcq",
+                icon: "🧠",
+                title: "MCQ English Quizzes",
+                desc: "4-Option challenge reels and posters",
+                prefix: "mcq_",
+                label: "MCQ Quiz"
+            },
+            {
+                id: "cat-hindi-eng",
+                icon: "🗣️",
+                title: "Hindi to English Spoken",
+                desc: "Daily life Hindi conversation to fluent English",
+                prefix: "hindi_eng_",
+                label: "Translate"
+            },
+            {
+                id: "cat-dont-say",
+                icon: "❌",
+                title: "Don't Say vs Say (Common Mistakes)",
+                desc: "High viral-rate split screen error correction",
+                prefix: "dont_say_",
+                label: "Correction"
+            },
+            {
+                id: "cat-instead-very",
+                icon: "⚡",
+                title: "Stop Saying 'Very' (Smart Vocab)",
+                desc: "Replace 'Very Happy' with 'Ecstatic', etc.",
+                prefix: "instead_very_",
+                label: "Advanced Word"
+            },
+            {
+                id: "cat-fill-blanks",
+                icon: "✍️",
+                title: "Fill in the Blanks",
+                desc: "Tense, preposition & verb form tests",
+                prefix: "fill_blank_",
+                label: "Fill Blank"
+            },
+            {
+                id: "cat-choose-correct",
+                icon: "✅",
+                title: "Choose The Correct Sentence",
+                desc: "Spot correct grammar and eliminate options",
+                prefix: "choose_correct_",
+                label: "Sentence Fix"
+            },
+            {
+                id: "cat-slang",
+                icon: "🔥",
+                title: "Daily Slang & Modern Phrases",
+                desc: "Casual chatting phrases, trends & short slang",
+                prefix: "slang_",
+                label: "Modern Slang"
+            },
+            {
+                id: "cat-pronounce",
+                icon: "🎙️",
+                title: "Pronunciation & Silent Letters",
+                desc: "Correct accent, receipt, Wednesday & silent letters",
+                prefix: "pronounce_",
+                label: "Sound Guide"
+            },
+            {
+                id: "cat-rules",
+                icon: "⏱️",
+                title: "1-Minute Grammar Rules",
+                desc: "Since vs For, May vs Might, In vs On",
+                prefix: "rule_",
+                label: "Grammar Rule"
+            },
+            {
+                id: "cat-idioms",
+                icon: "🎨",
+                title: "Idioms & Phrasal Verbs",
+                desc: "Visual metaphors, idioms and real world examples",
+                prefix: "idiom_",
+                label: "Idiom / Verb"
+            }
+        ];
+
+        const root = document.getElementById("allSections");
+        const docFragment = document.createDocumentFragment();
+
+        // Dynamically build all 10 sections x 10 buttons = 100 modules
+        curriculum.forEach(cat => {
+            const section = document.createElement("section");
+            section.className = "cat-section";
+            section.id = cat.id;
+
+            section.innerHTML = `
+                <div class="cat-header">
+                    <div class="cat-title-group">
+                        <div class="cat-icon">${cat.icon}</div>
+                        <div>
+                            <h2 class="cat-title">${cat.title}</h2>
+                            <p class="cat-subtitle">${cat.desc}</p>
+                        </div>
+                    </div>
+                    <span class="cat-counter">10 Lessons</span>
+                </div>
+                <div class="btn-grid" id="grid-${cat.prefix}"></div>
+            `;
+
+            const grid = section.querySelector(".btn-grid");
+
+            for (let i = 1; i <= 10; i++) {
+                const fileName = `${cat.prefix}${i}.html`;
+                const btn = document.createElement("a");
+                btn.className = "module-btn";
+                btn.href = `${FOLDER}${fileName}`;
+                btn.dataset.search = `${cat.title} ${cat.label} ${fileName}`.toLowerCase();
+
+                btn.innerHTML = `
+                    <div class="btn-head">
+                        <span class="num-tag">#${String(i).padStart(2, '0')}</span>
+                        <span class="arrow">→</span>
+                    </div>
+                    <div>
+                        <div class="file-name">${cat.label} ${i}</div>
+                        <div class="target-path">${fileName}</div>
+                    </div>
+                `;
+                grid.appendChild(btn);
+            }
+
+            docFragment.appendChild(section);
+        });
+
+        root.appendChild(docFragment);
+
+        // Instant Realtime Search Filter
+        const searchInput = document.getElementById("quickSearch");
+        searchInput.addEventListener("input", function (e) {
+            const val = e.target.value.toLowerCase().trim();
+            const allBtns = document.querySelectorAll(".module-btn");
+            const allSecs = document.querySelectorAll(".cat-section");
+
+            allBtns.forEach(btn => {
+                const match = !val || btn.dataset.search.includes(val);
+                btn.style.display = match ? "" : "none";
+            });
+
+            // Hide empty sections during search
+            allSecs.forEach(sec => {
+                const visibleButtons = sec.querySelectorAll(".module-btn:not([style*='display: none'])");
+                sec.style.display = visibleButtons.length === 0 ? "none" : "";
+            });
+        });
+
+        // Sync sticky chip indicator on click
+        const chips = document.querySelectorAll(".chip");
+        chips.forEach(chip => {
+            chip.addEventListener("click", function () {
+                chips.forEach(c => c.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+    </script>
+</body>
+
+</html>

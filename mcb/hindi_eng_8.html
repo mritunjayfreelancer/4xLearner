@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>4X Learner - Ultra 4K & Viral Video Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Montserrat:wght@800;900&family=Poppins:wght@600;700;800;900&family=Oswald:wght@700&family=Teko:wght@700&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg: #030712;
+            --panel: #0b1120;
+            --border: #1e293b;
+            --accent: #f59e0b;
+            --text: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Mobile Hamburger Button */
+        .mobile-btn {
+            display: none;
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            z-index: 100;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 900;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+            cursor: pointer;
+        }
+
+        /* Control Panel */
+        .controls {
+            width: 440px;
+            min-width: 440px;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            z-index: 50;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .controls::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .controls::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #fbbf24;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+        }
+
+        .brand-header span {
+            color: #ef4444;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #94a3b8;
+            letter-spacing: 0.6px;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            background: #060a12;
+            color: #fff;
+            border: 1px solid #1e293b;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 125px;
+            font-family: monospace;
+            font-size: 0.76rem;
+            line-height: 1.45;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: 900;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            filter: brightness(1.18);
+            transform: translateY(-1px);
+        }
+
+        .btn-theme {
+            background: #1e293b;
+            color: #f8fafc;
+        }
+
+        .btn-preview {
+            background: #0284c7;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-4k {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+        }
+
+        .btn-video-3s {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: #fff;
+            border: none;
+            padding: 13px;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-video-fast {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: #fff;
+            border: none;
+            padding: 13px;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        /* Preview Stage */
+        .preview-stage {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #020617;
+            overflow: auto;
+            padding: 24px;
+            position: relative;
+        }
+
+        /* 9:16 Canvas Box */
+        .reels-viewport {
+            width: 360px;
+            height: 640px;
+            max-height: 94vh;
+            aspect-ratio: 9 / 16;
+            border-radius: 28px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 0 2px #334155;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 22px 16px;
+            transition: all 0.3s;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .learner-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 6px 14px;
+            border-radius: 30px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: #fff;
+            font-weight: 900;
+            font-size: 0.82rem;
+            padding: 2px 7px;
+            border-radius: 6px;
+        }
+
+        .logo-text {
+            font-size: 0.82rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        .social-tag {
+            font-size: 0.76rem;
+            font-weight: 800;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(6px);
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Title Area */
+        .title-banner {
+            text-align: center;
+            margin: 6px 0 2px;
+            z-index: 5;
+        }
+
+        .title-banner h1 {
+            font-size: 1.35rem;
+            font-weight: 900;
+            line-height: 1.15;
+            text-transform: uppercase;
+        }
+
+        .title-banner p {
+            font-size: 0.76rem;
+            font-weight: 800;
+            margin-top: 3px;
+        }
+
+        /* Cards List */
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            z-index: 5;
+        }
+
+        /* Exact Reference Infographic Card */
+        .info-card-wrap {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.1));
+            will-change: transform, opacity;
+        }
+
+        .info-card {
+            flex: 1;
+            height: 64px;
+            border-radius: 12px 0 0 12px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .card-left-tab {
+            width: 12px;
+            height: 100%;
+            border-radius: 12px 0 0 12px;
+            flex-shrink: 0;
+        }
+
+        .card-num-box {
+            padding: 0 10px 0 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
+            min-width: 58px;
+        }
+
+        .card-num-box .num {
+            font-size: 1.35rem;
+            font-weight: 900;
+            line-height: 1;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .card-num-box .lbl {
+            font-size: 0.58rem;
+            font-weight: 900;
+            opacity: 0.7;
+        }
+
+        .card-content {
+            flex: 1;
+            padding: 0 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card-hindi {
+            font-size: 0.82rem;
+            font-weight: 900;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-eng {
+            font-size: 0.78rem;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-icon-area {
+            padding-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .card-chevron {
+            width: 32px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            clip-path: polygon(0% 0%, 55% 0%, 100% 50%, 55% 100%, 0% 100%, 45% 50%);
+            border-radius: 0 10px 10px 0;
+            margin-left: -2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Bottom Hook */
+        .bottom-hook {
+            text-align: center;
+            font-size: 0.74rem;
+            font-weight: 800;
+            padding: 8px 16px;
+            border-radius: 20px;
+            width: fit-content;
+            margin: 0 auto;
+            z-index: 5;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+            background: rgba(15, 23, 42, 0.9);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Top Running Progress Bar */
+        .viewport-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            z-index: 20;
+        }
+
+        /* Mobile Drawer Responsive */
+        @media (max-width: 860px) {
+            .mobile-btn {
+                display: block;
+            }
+
+            .controls {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                width: 90%;
+                min-width: unset;
+                box-shadow: 20px 0 50px rgba(0, 0, 0, 0.9);
+            }
+
+            .controls.open {
+                transform: translateX(0);
+            }
+
+            .preview-stage {
+                padding: 60px 10px 20px;
+            }
+
+            .reels-viewport {
+                width: 100%;
+                max-width: 350px;
+                height: calc(100vw * 16 / 9);
+                max-height: 86vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="mobile-btn" onclick="toggleMenu()"><i class="fa-solid fa-sliders"></i> Studio Menu</button>
+
+    <aside class="controls" id="sidebar">
+        <div class="brand-header">
+            <i class="fa-solid fa-graduation-cap"></i> 4X LEARNER <span>VIRAL STUDIO</span>
+        </div>
+
+        <div class="form-group">
+            <label>Reel Headline</label>
+            <input type="text" id="headTitle" value="DAILY SPOKEN ENGLISH" oninput="updateUI()" />
+        </div>
+
+        <div class="form-group">
+            <label>Sub-Headline / Hook</label>
+            <input type="text" id="headSub" value="हर रोज़ बोले जाने वाले 6 धांसू वाक्य!" oninput="updateUI()" />
+        </div>
+
+        <div class="form-group">
+            <label>50+ Eye-Catching Themes</label>
+            <select id="themeSelect" onchange="applyTheme()"></select>
+        </div>
+
+        <div class="form-group">
+            <label>50+ Fast Landing Animation Presets</label>
+            <select id="animSelect"></select>
+        </div>
+
+        <div class="form-group">
+            <label>Daily Talk Sentences (Hindi | English | Icon)</label>
+            <textarea id="dataInput">यह मेरा फैसला है! | It's my decision! | fa-gavel
+मुझे कोई ऐतराज नहीं। | I have no objection. | fa-handshake
+तुम क्या बकवास कर रहे हो? | What nonsense are you talking? | fa-comments
+बात को आगे मत बढ़ाओ। | Don't stretch the matter. | fa-ban
+ज़रा दिमाग से काम लो! | Use your common sense! | fa-brain
+मुझसे पंगे मत लो! | Don't mess with me! | fa-hand-fist</textarea>
+        </div>
+
+        <div class="btn-grid">
+            <button class="btn-theme" onclick="renderCards()"><i class="fa-solid fa-rotate"></i> Refresh Data</button>
+            <button class="btn-preview" onclick="playCurrentAnimation()"><i class="fa-solid fa-play"></i> Run
+                Landing</button>
+        </div>
+
+        <div class="form-group">
+            <button class="btn-4k" onclick="download4KUltraHD()">
+                <i class="fa-solid fa-camera"></i> Download 4K Ultra-HD (2160x3840)
+            </button>
+        </div>
+
+        <div class="form-group">
+            <button class="btn-video-3s" id="videoBtn3s" onclick="exportVideo(3200, '3s_Viral_Reel')">
+                <i class="fa-solid fa-video"></i> Export 3s Animated Video (60FPS)
+            </button>
+        </div>
+
+        <div class="form-group">
+            <button class="btn-video-fast" id="videoBtnFast" onclick="exportVideo(1600, 'Fast_Landing_Short')">
+                <i class="fa-solid fa-bolt"></i> Export 1.5s Fast Landing Video (60FPS)
+            </button>
+        </div>
+    </aside>
+
+    <main class="preview-stage" onclick="closeMenu()">
+        <div class="reels-viewport" id="reelsViewport">
+            <div class="viewport-progress" id="viewProgress"></div>
+
+            <div class="top-bar">
+                <div class="learner-logo">
+                    <span class="logo-badge">4X</span>
+                    <span class="logo-text">LEARNER</span>
+                </div>
+                <div class="social-tag" id="dispSocial">@4xlearner</div>
+            </div>
+
+            <div class="title-banner">
+                <h1 id="dispHead">DAILY SPOKEN ENGLISH</h1>
+                <p id="dispSub">हर रोज़ बोले जाने वाले 6 धांसू वाक्य!</p>
+            </div>
+
+            <div class="cards-container" id="cardsList"></div>
+
+            <div class="bottom-hook" id="hookText">
+                🔥 Save Karo & Follow @4xlearner for Daily Fluency!
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==========================================
+        // 52 COMPLETE EYE-CATCHING THEMES
+        // ==========================================
+        const THEMES = [
+            { name: "01 Clean Studio Pro", bg: "#f1f5f9", text: "#0f172a", sub: "#ef4444", cardBg: "#ffffff", cardText: "#0f172a", colors: ["#f59e0b", "#ea580c", "#84cc16", "#06b6d4", "#d946ef", "#7c3aed"] },
+            { name: "02 Cyber Neon Dark", bg: "#090d16", text: "#00f0ff", sub: "#fbbf24", cardBg: "#111827", cardText: "#ffffff", colors: ["#00f0ff", "#ff0055", "#ffe600", "#a855f7", "#00ff66", "#00e5ff"] },
+            { name: "03 Sunset Glow Flare", bg: "#1a0808", text: "#fef08a", sub: "#f97316", cardBg: "#ffffff", cardText: "#180202", colors: ["#ea580c", "#f97316", "#fbbf24", "#f43f5e", "#e11d48", "#be123c"] },
+            { name: "04 Oceanic Deep Navy", bg: "#041424", text: "#e0f2fe", sub: "#38bdf8", cardBg: "#ffffff", cardText: "#0f172a", colors: ["#0284c7", "#0ea5e9", "#38bdf8", "#06b6d4", "#2563eb", "#1d4ed8"] },
+            { name: "05 Emerald Success", bg: "#031c15", text: "#a7f3d0", sub: "#34d399", cardBg: "#ffffff", cardText: "#022c22", colors: ["#059669", "#10b981", "#34d399", "#14b8a6", "#0d9488", "#047857"] },
+            { name: "06 Royal Purple Master", bg: "#120724", text: "#e9d5ff", sub: "#c084fc", cardBg: "#ffffff", cardText: "#1e1b4b", colors: ["#7e22ce", "#9333ea", "#c084fc", "#d946ef", "#a855f7", "#6b21a8"] },
+            { name: "07 Charcoal & Flame", bg: "#121214", text: "#fafafa", sub: "#f59e0b", cardBg: "#ffffff", cardText: "#18181b", colors: ["#dc2626", "#ea580c", "#f59e0b", "#e11d48", "#f97316", "#b91c1c"] },
+            { name: "08 Vintage Golden Wood", bg: "#201306", text: "#fed7aa", sub: "#fbbf24", cardBg: "#fffbeb", cardText: "#451a03", colors: ["#b45309", "#d97706", "#f59e0b", "#78350f", "#92400e", "#a16207"] },
+            { name: "09 Berry Punch Crimson", bg: "#1f030a", text: "#ffe4e6", sub: "#fb7185", cardBg: "#ffffff", cardText: "#4c0519", colors: ["#e11d48", "#f43f5e", "#fb7185", "#be123c", "#9f1239", "#db2777"] },
+            { name: "10 Nordic Clean Slate", bg: "#111827", text: "#e2e8f0", sub: "#38bdf8", cardBg: "#ffffff", cardText: "#0f172a", colors: ["#0284c7", "#0d9488", "#475569", "#64748b", "#3b82f6", "#0891b2"] },
+            { name: "11 Luxury Pure Gold", bg: "#0d0d0d", text: "#fde047", sub: "#eab308", cardBg: "#1a1a1a", cardText: "#fef08a", colors: ["#ca8a04", "#eab308", "#facc15", "#a16207", "#f59e0b", "#d97706"] },
+            { name: "12 Crimson Dark Velocity", bg: "#1f0409", text: "#fecdd3", sub: "#f43f5e", cardBg: "#ffffff", cardText: "#3b0712", colors: ["#9f1239", "#be123c", "#e11d48", "#f43f5e", "#dc2626", "#ef4444"] },
+            { name: "13 Tech Mint Future", bg: "#021716", text: "#99f6e4", sub: "#2dd4bf", cardBg: "#ffffff", cardText: "#042f2e", colors: ["#0d9488", "#14b8a6", "#2dd4bf", "#059669", "#10b981", "#0f766e"] },
+            { name: "14 Warm Pastel Studio", bg: "#faf5ff", text: "#581c87", sub: "#c084fc", cardBg: "#ffffff", cardText: "#3b0764", colors: ["#c084fc", "#f472b6", "#fb7185", "#38bdf8", "#818cf8", "#a78bfa"] },
+            { name: "15 Electric Violet Laser", bg: "#0a071f", text: "#c7d2fe", sub: "#818cf8", cardBg: "#ffffff", cardText: "#1e1b4b", colors: ["#4f46e5", "#6366f1", "#818cf8", "#4338ca", "#3730a3", "#7c3aed"] },
+            { name: "16 Synthwave Retro 80s", bg: "#12021c", text: "#f0abfc", sub: "#06b6d4", cardBg: "#1c062c", cardText: "#fdf4ff", colors: ["#d946ef", "#06b6d4", "#f43f5e", "#eab308", "#a855f7", "#22d3ee"] },
+            { name: "17 Earthy Terracotta", bg: "#170a04", text: "#ffedd5", sub: "#fb923c", cardBg: "#ffffff", cardText: "#291811", colors: ["#c2410c", "#ea580c", "#d97706", "#9a3412", "#b45309", "#78350f"] },
+            { name: "18 Cyber Matrix Green", bg: "#010e05", text: "#86efac", sub: "#4ade80", cardBg: "#05260f", cardText: "#bbf7d0", colors: ["#16a34a", "#22c55e", "#4ade80", "#15803d", "#166534", "#10b981"] },
+            { name: "19 Dark Indigo Midnight", bg: "#040b1e", text: "#bfdbfe", sub: "#60a5fa", cardBg: "#ffffff", cardText: "#172554", colors: ["#1d4ed8", "#2563eb", "#3b82f6", "#1e40af", "#1e3a8a", "#0284c7"] },
+            { name: "20 Solar Magma Fire", bg: "#1c0600", text: "#fed7aa", sub: "#f97316", cardBg: "#ffffff", cardText: "#451a03", colors: ["#dc2626", "#ea580c", "#f97316", "#e11d48", "#b91c1c", "#c2410c"] },
+            { name: "21 Minimal Monochrome", bg: "#111113", text: "#e4e4e7", sub: "#a1a1aa", cardBg: "#ffffff", cardText: "#18181b", colors: ["#27272a", "#3f3f46", "#52525b", "#71717a", "#18181b", "#09090b"] },
+            { name: "22 Teal Lagoon Paradise", bg: "#021c17", text: "#99f6e4", sub: "#14b8a6", cardBg: "#ffffff", cardText: "#064e3b", colors: ["#0f766e", "#0d9488", "#14b8a6", "#047857", "#10b981", "#059669"] },
+            { name: "23 Candy Pink Pop", bg: "#290314", text: "#fbcfe8", sub: "#f472b6", cardBg: "#ffffff", cardText: "#500724", colors: ["#db2777", "#ec4899", "#f472b6", "#be185d", "#9d174d", "#e11d48"] },
+            { name: "24 Monokai Pro Hacker", bg: "#171714", text: "#e6db74", sub: "#a6e22e", cardBg: "#242321", cardText: "#fcfcfa", colors: ["#a6e22e", "#66d9ef", "#fd971f", "#f92672", "#ae81ff", "#e6db74"] },
+            { name: "25 Solarized Dark Warm", bg: "#002029", text: "#eee8d5", sub: "#b58900", cardBg: "#073642", cardText: "#fdf6e3", colors: ["#b58900", "#cb4b16", "#dc322f", "#268bd2", "#2aa198", "#859900"] },
+            { name: "26 Dracula Gothic Vampire", bg: "#13141c", text: "#f8f8f2", sub: "#ff79c6", cardBg: "#21222c", cardText: "#f8f8f2", colors: ["#bd93f9", "#ff79c6", "#50fa7b", "#8be9fd", "#ffb86c", "#ff5555"] },
+            { name: "27 Deep Violet Nebula", bg: "#1a0429", text: "#f3e8ff", sub: "#a855f7", cardBg: "#ffffff", cardText: "#311042", colors: ["#6b21a8", "#7e22ce", "#a855f7", "#c084fc", "#9333ea", "#d946ef"] },
+            { name: "28 Lemon Lime Fresh", bg: "#141708", text: "#fef08a", sub: "#a3e635", cardBg: "#ffffff", cardText: "#1c1917", colors: ["#65a30d", "#84cc16", "#a3e635", "#4d7c0f", "#3f6212", "#eab308"] },
+            { name: "29 Sapphire Classic Blue", bg: "#0a1329", text: "#dbeafe", sub: "#38bdf8", cardBg: "#ffffff", cardText: "#0f172a", colors: ["#1d4ed8", "#2563eb", "#3b82f6", "#1e40af", "#0284c7", "#0369a1"] },
+            { name: "30 Copper & Lava Fire", bg: "#1a0902", text: "#fed7aa", sub: "#f97316", cardBg: "#ffffff", cardText: "#311308", colors: ["#c2410c", "#b45309", "#d97706", "#9a3412", "#ea580c", "#78350f"] },
+            { name: "31 High Voltage Yellow", bg: "#121101", text: "#fef08a", sub: "#facc15", cardBg: "#ffffff", cardText: "#18181b", colors: ["#eab308", "#ca8a04", "#a16207", "#713f12", "#f59e0b", "#d97706"] },
+            { name: "32 Synthwave Drive Neon", bg: "#0d011c", text: "#38bdf8", sub: "#f43f5e", cardBg: "#ffffff", cardText: "#1a052e", colors: ["#f43f5e", "#8b5cf6", "#06b6d4", "#eab308", "#ec4899", "#10b981"] },
+            { name: "33 Coffee Master Roast", bg: "#140803", text: "#fed7aa", sub: "#d97706", cardBg: "#ffffff", cardText: "#27170e", colors: ["#78350f", "#92400e", "#b45309", "#5b2609", "#c2410c", "#a16207"] },
+            { name: "34 Arctic Ice Glacier", bg: "#04151c", text: "#a5f3fc", sub: "#22d3ee", cardBg: "#ffffff", cardText: "#083344", colors: ["#0891b2", "#06b6d4", "#22d3ee", "#0e7490", "#0284c7", "#38bdf8"] },
+            { name: "35 Crimson Bloodline Dark", bg: "#1c0202", text: "#fecdd3", sub: "#ef4444", cardBg: "#ffffff", cardText: "#2b0606", colors: ["#b91c1c", "#dc2626", "#ef4444", "#991b1b", "#7f1d1d", "#e11d48"] },
+            { name: "36 Olive Forest Nature", bg: "#111707", text: "#ecfccb", sub: "#84cc16", cardBg: "#ffffff", cardText: "#1f2416", colors: ["#4d7c0f", "#65a30d", "#84cc16", "#3f6212", "#15803d", "#16a34a"] },
+            { name: "37 Tokyo Midnight Rain", bg: "#0a0b12", text: "#7aa2f7", sub: "#bb9af7", cardBg: "#161724", cardText: "#c0caf5", colors: ["#f7768e", "#bb9af7", "#7dcfff", "#e0af68", "#7aa2f7", "#9ece6a"] },
+            { name: "38 Flamingo Sunset Pink", bg: "#1f0703", text: "#ffedd5", sub: "#fb923c", cardBg: "#ffffff", cardText: "#3d140e", colors: ["#ea580c", "#f97316", "#fb923c", "#c2410c", "#f43f5e", "#e11d48"] },
+            { name: "39 Navy & Golden Crown", bg: "#050d1a", text: "#fbbf24", sub: "#f59e0b", cardBg: "#ffffff", cardText: "#0b1528", colors: ["#1e40af", "#d97706", "#2563eb", "#f59e0b", "#ca8a04", "#1d4ed8"] },
+            { name: "40 Lavender Bliss Violet", bg: "#14051a", text: "#f5d0fe", sub: "#c084fc", cardBg: "#ffffff", cardText: "#351a42", colors: ["#9333ea", "#a855f7", "#c084fc", "#7e22ce", "#6b21a8", "#d946ef"] },
+            { name: "41 Cyberpunk 2077 Night", bg: "#fee000", text: "#000000", sub: "#dc2626", cardBg: "#000000", cardText: "#ffffff", colors: ["#00f0ff", "#ff003c", "#fcee0a", "#39ff14", "#7000ff", "#ff7700"] },
+            { name: "42 Moss Wilderness Deep", bg: "#08140b", text: "#dcfce7", sub: "#22c55e", cardBg: "#ffffff", cardText: "#132418", colors: ["#15803d", "#16a34a", "#22c55e", "#166534", "#14532d", "#059669"] },
+            { name: "43 Acid Lime Velocity", bg: "#091201", text: "#bef264", sub: "#a3e635", cardBg: "#ffffff", cardText: "#111c07", colors: ["#84cc16", "#a3e635", "#65a30d", "#4d7c0f", "#365314", "#eab308"] },
+            { name: "44 Urban Maroon Velvet", bg: "#1a030b", text: "#ffe4e6", sub: "#f43f5e", cardBg: "#ffffff", cardText: "#2c0915", colors: ["#be123c", "#e11d48", "#f43f5e", "#9f1239", "#881337", "#db2777"] },
+            { name: "45 Peach Pastel Soft", bg: "#fff7ed", text: "#9a3412", sub: "#ea580c", cardBg: "#ffffff", cardText: "#7c2d12", colors: ["#f97316", "#ea580c", "#fb923c", "#c2410c", "#d97706", "#b45309"] },
+            { name: "46 Aqua Candy Tropical", bg: "#031c26", text: "#67e8f9", sub: "#38bdf8", cardBg: "#ffffff", cardText: "#083344", colors: ["#06b6d4", "#ec4899", "#f59e0b", "#3b82f6", "#10b981", "#8b5cf6"] },
+            { name: "47 Wine Cellar Burgundy", bg: "#1a020c", text: "#fbcfe8", sub: "#db2777", cardBg: "#ffffff", cardText: "#2a0815", colors: ["#9d174d", "#be185d", "#db2777", "#831843", "#700732", "#be123c"] },
+            { name: "48 Midnight Titanium Glow", bg: "#050507", text: "#ffffff", sub: "#38bdf8", cardBg: "#17171c", cardText: "#ffffff", colors: ["#ef4444", "#3b82f6", "#10b981", "#f59e0b", "#a855f7", "#ec4899"] },
+            { name: "49 Forest Green Lantern", bg: "#02170a", text: "#86efac", sub: "#22c55e", cardBg: "#ffffff", cardText: "#052e16", colors: ["#16a34a", "#15803d", "#166534", "#22c55e", "#10b981", "#059669"] },
+            { name: "50 Stealth Jet Carbon", bg: "#0f0f12", text: "#f4f4f5", sub: "#fbbf24", cardBg: "#22222a", cardText: "#ffffff", colors: ["#fbbf24", "#38bdf8", "#4ade80", "#f43f5e", "#a855f7", "#fb923c"] },
+            { name: "51 Hyper Velocity Wave", bg: "#020717", text: "#38bdf8", sub: "#ec4899", cardBg: "#ffffff", cardText: "#030712", colors: ["#2563eb", "#06b6d4", "#a855f7", "#ec4899", "#3b82f6", "#10b981"] },
+            { name: "52 Pure Minimalist Milk", bg: "#ffffff", text: "#0f172a", sub: "#ef4444", cardBg: "#f8fafc", cardText: "#0f172a", colors: ["#0284c7", "#475569", "#dc2626", "#16a34a", "#ea580c", "#7c3aed"] }
+        ];
+
+        // ==========================================
+        // 50+ RAPID LANDING ANIMATION PRESETS
+        // ==========================================
+        const ANIM_STYLES = [
+            "Elastic Zoom Snap", "Rapid Left Slide Bounce", "Rapid Right Slide Bounce",
+            "3D Flip Horizontal", "3D Flip Vertical", "Skewer Left Drop",
+            "Skewer Right Drop", "Vortex Tornado Spin", "Drop Pop Overshoot",
+            "High Velocity Zoom In", "Spring Hook Bottom"
+        ];
+
+        let activeTheme = THEMES[0];
+
+        // Populate 52 Themes
+        const themeSelect = document.getElementById("themeSelect");
+        THEMES.forEach((t, i) => {
+            const opt = document.createElement("option");
+            opt.value = i;
+            opt.textContent = t.name;
+            themeSelect.appendChild(opt);
+        });
+
+        // Populate 50 Animation Presets
+        const animSelect = document.getElementById("animSelect");
+        for (let i = 1; i <= 52; i++) {
+            const style = ANIM_STYLES[(i - 1) % ANIM_STYLES.length];
+            const speed = 180 + ((i % 5) * 30); // 180ms - 300ms ultra speed
+            const opt = document.createElement("option");
+            opt.value = `${(i - 1) % ANIM_STYLES.length}:${speed}`;
+            opt.textContent = `Preset ${i < 10 ? '0' + i : i} - ${style} (${speed}ms)`;
+            animSelect.appendChild(opt);
+        }
+
+        function toggleMenu() { document.getElementById("sidebar").classList.toggle("open"); }
+        function closeMenu() {
+            if (window.innerWidth <= 860) document.getElementById("sidebar").classList.remove("open");
+        }
+
+        function updateUI() {
+            document.getElementById("dispHead").innerText = document.getElementById("headTitle").value;
+            document.getElementById("dispSub").innerText = document.getElementById("headSub").value;
+        }
+
+        function parseCardsData() {
+            const raw = document.getElementById("dataInput").value.trim().split("\n").filter(l => l.trim().length > 0);
+            const defaultIcons = ["fa-gavel", "fa-handshake", "fa-comments", "fa-ban", "fa-brain", "fa-hand-fist"];
+
+            return raw.map((line, idx) => {
+                const parts = line.split("|");
+                return {
+                    num: idx < 9 ? `0${idx + 1}` : `${idx + 1}`,
+                    hindi: parts[0] ? parts[0].trim() : `वाक्य ${idx + 1}`,
+                    english: parts[1] ? parts[1].trim() : `English Spoken Dialogue ${idx + 1}`,
+                    icon: parts[2] ? parts[2].trim() : defaultIcons[idx % defaultIcons.length]
+                };
+            });
+        }
+
+        function renderCards() {
+            const container = document.getElementById("cardsList");
+            container.innerHTML = "";
+            const data = parseCardsData();
+
+            data.forEach((item, idx) => {
+                const color = activeTheme.colors[idx % activeTheme.colors.length];
+                const wrap = document.createElement("div");
+                wrap.className = "info-card-wrap";
+                wrap.id = `cardWrap${idx}`;
+
+                wrap.innerHTML = `
+                    <div class="info-card" style="background: ${activeTheme.cardBg};">
+                        <div class="card-left-tab" style="background: ${color};"></div>
+                        <div class="card-num-box">
+                            <span class="num" style="color: ${activeTheme.cardText};">${item.num}</span>
+                            <span class="lbl" style="color: ${activeTheme.cardText};">TALK</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-hindi" style="color: ${activeTheme.cardText};">${item.hindi}</div>
+                            <div class="card-eng" style="color: ${color};">${item.english}</div>
+                        </div>
+                        <div class="card-icon-area" style="color: ${color};">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                    </div>
+                    <div class="card-chevron" style="background: ${color};"></div>
+                `;
+                container.appendChild(wrap);
+            });
+            closeMenu();
+        }
+
+        function applyTheme() {
+            const idx = parseInt(document.getElementById("themeSelect").value, 10);
+            activeTheme = THEMES[idx];
+
+            const vp = document.getElementById("reelsViewport");
+            vp.style.background = activeTheme.bg;
+            document.getElementById("dispHead").style.color = activeTheme.text;
+            document.getElementById("dispSub").style.color = activeTheme.sub;
+
+            const socialTag = document.getElementById("dispSocial");
+            socialTag.style.color = activeTheme.text;
+
+            renderCards();
+        }
+
+        // Web Audio Dynamic Swoosh Sound Engine
+        function playSwooshAudio(audioCtx, time) {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(520, time);
+                osc.frequency.exponentialRampToValueAtTime(80, time + 0.12);
+                gain.gain.setValueAtTime(0.35, time);
+                gain.gain.exponentialRampToValueAtTime(0.01, time + 0.12);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(time);
+                osc.stop(time + 0.13);
+            } catch (e) { }
+        }
+
+        function playCurrentAnimation() {
+            closeMenu();
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const [animIndex, speed] = document.getElementById("animSelect").value.split(":").map(Number);
+            const interval = speed;
+            const wraps = document.querySelectorAll(".info-card-wrap");
+
+            wraps.forEach((el, i) => {
+                el.style.opacity = "0";
+                // Pick animation transform based on preset
+                if (animIndex === 0) el.style.transform = "scale(0.3) translateY(80px)";
+                else if (animIndex === 1) el.style.transform = "translateX(-320px)";
+                else if (animIndex === 2) el.style.transform = "translateX(320px)";
+                else if (animIndex === 3) el.style.transform = "perspective(500px) rotateY(90deg)";
+                else if (animIndex === 4) el.style.transform = "perspective(500px) rotateX(90deg)";
+                else el.style.transform = "scale(0.2) rotate(-15deg)";
+
+                setTimeout(() => {
+                    playSwooshAudio(audioCtx, audioCtx.currentTime);
+                    el.style.transition = `all ${speed / 1000}s cubic-bezier(0.175, 0.885, 0.32, 1.275)`;
+                    el.style.opacity = "1";
+                    el.style.transform = "none";
+                }, i * (interval * 0.85));
+            });
+        }
+
+        // ==========================================
+        // TRUE 4K (2160x3840) CANVAS ENGINE
+        // ==========================================
+        function drawInfographicCanvas(ctx, W, H, elapsedMs = 9999, isStatic4K = false) {
+            const scale = W / 1080;
+
+            // 1. Background
+            ctx.fillStyle = activeTheme.bg;
+            ctx.fillRect(0, 0, W, H);
+
+            // Subtle modern dot mesh
+            ctx.fillStyle = activeTheme.text === "#ffffff" ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)";
+            for (let x = 30 * scale; x < W; x += 55 * scale) {
+                for (let y = 30 * scale; y < H; y += 55 * scale) {
+                    ctx.beginPath();
+                    ctx.arc(x, y, 2.5 * scale, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // 2. Top-Left 4X LEARNER Badge
+            ctx.save();
+            const badgeW = 340 * scale;
+            const badgeH = 75 * scale;
+            const badgeX = 60 * scale;
+            const badgeY = 70 * scale;
+
+            ctx.fillStyle = "rgba(15, 23, 42, 0.95)";
+            ctx.shadowColor = "rgba(0,0,0,0.25)";
+            ctx.shadowBlur = 20 * scale;
+            ctx.shadowOffsetY = 8 * scale;
+            roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 38 * scale, true);
+            ctx.shadowColor = "transparent";
+
+            const redGrad = ctx.createLinearGradient(badgeX, badgeY, badgeX + 80 * scale, badgeY + badgeH);
+            redGrad.addColorStop(0, "#f59e0b");
+            redGrad.addColorStop(1, "#ef4444");
+            ctx.fillStyle = redGrad;
+            roundRect(ctx, badgeX + 10 * scale, badgeY + 10 * scale, 80 * scale, badgeH - 20 * scale, 16 * scale, true);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = `900 ${32 * scale}px 'Poppins', sans-serif`;
+            ctx.textAlign = "center";
+            ctx.fillText("4X", badgeX + 50 * scale, badgeY + 50 * scale);
+
+            ctx.font = `900 ${30 * scale}px 'Poppins', sans-serif`;
+            ctx.textAlign = "left";
+            ctx.fillText("LEARNER", badgeX + 105 * scale, badgeY + 50 * scale);
+
+            // Top-Right Clean @4xlearner Tag
+            ctx.fillStyle = "rgba(15, 23, 42, 0.8)";
+            roundRect(ctx, W - 250 * scale, badgeY + 8 * scale, 190 * scale, 60 * scale, 30 * scale, true);
+            ctx.fillStyle = "#38bdf8";
+            ctx.font = `900 ${24 * scale}px 'Poppins', sans-serif`;
+            ctx.textAlign = "center";
+            ctx.fillText("@4xlearner", W - 155 * scale, badgeY + 46 * scale);
+            ctx.restore();
+
+            // 3. Headline & Sub-Hook
+            ctx.save();
+            ctx.textAlign = "center";
+            ctx.fillStyle = activeTheme.text;
+            ctx.font = `900 ${52 * scale}px 'Cabinet Grotesk', 'Montserrat', sans-serif`;
+            ctx.fillText(document.getElementById("headTitle").value, W / 2, 235 * scale);
+
+            ctx.fillStyle = activeTheme.sub;
+            ctx.font = `800 ${30 * scale}px 'Poppins', sans-serif`;
+            ctx.fillText(document.getElementById("headSub").value, W / 2, 285 * scale);
+            ctx.restore();
+
+            // 4. Cards Rendering with High-Speed Animation
+            const data = parseCardsData();
+            const startY = 345 * scale;
+            const cardW = 860 * scale;
+            const cardH = 175 * scale;
+            const chevronW = 85 * scale;
+            const gap = 36 * scale;
+            const leftX = 60 * scale;
+
+            const [animIndex, speed] = document.getElementById("animSelect").value.split(":").map(Number);
+            const stepDuration = isStatic4K ? 0 : speed;
+
+            data.forEach((item, idx) => {
+                const cardStartTime = idx * (stepDuration * 0.85);
+                const cardElapsed = Math.max(0, elapsedMs - cardStartTime);
+                let progress = isStatic4K ? 1.0 : Math.min(1.0, cardElapsed / stepDuration);
+
+                if (progress <= 0) return;
+
+                // Elastic Bounce Formula
+                const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress) * Math.cos((progress * 10 - 0.75) * ((2 * Math.PI) / 3));
+
+                const y = startY + idx * (cardH + gap);
+                const color = activeTheme.colors[idx % activeTheme.colors.length];
+
+                ctx.save();
+                ctx.translate(leftX, y);
+
+                // Apply Selected Animation Transformation
+                if (!isStatic4K) {
+                    if (animIndex === 0) {
+                        const curScale = 0.4 + 0.6 * ease;
+                        ctx.translate((cardW + chevronW) / 2, cardH / 2);
+                        ctx.scale(curScale, curScale);
+                        ctx.translate(-(cardW + chevronW) / 2, -cardH / 2);
+                    } else if (animIndex === 1) {
+                        ctx.translate((1 - ease) * -400 * scale, 0);
+                    } else if (animIndex === 2) {
+                        ctx.translate((1 - ease) * 400 * scale, 0);
+                    }
+                    ctx.globalAlpha = Math.min(1.0, progress * 1.5);
+                }
+
+                // Card Drop Shadow
+                ctx.shadowColor = "rgba(0, 0, 0, 0.16)";
+                ctx.shadowBlur = 24 * scale;
+                ctx.shadowOffsetY = 10 * scale;
+
+                // White/Themed Card Body
+                ctx.fillStyle = activeTheme.cardBg;
+                roundRect(ctx, 0, 0, cardW, cardH, 24 * scale, true);
+                ctx.shadowColor = "transparent";
+
+                // Left Colored Tab
+                ctx.fillStyle = color;
+                roundLeftTab(ctx, 0, 0, 32 * scale, cardH, 24 * scale);
+
+                // Number + TALK column
+                ctx.fillStyle = activeTheme.cardText;
+                ctx.font = `900 ${56 * scale}px 'Montserrat', sans-serif`;
+                ctx.textAlign = "center";
+                ctx.fillText(item.num, 115 * scale, 95 * scale);
+
+                ctx.fillStyle = activeTheme.cardText;
+                ctx.globalAlpha = 0.65;
+                ctx.font = `900 ${22 * scale}px 'Poppins', sans-serif`;
+                ctx.fillText("TALK", 115 * scale, 132 * scale);
+                ctx.globalAlpha = 1.0;
+
+                // Thin Divider
+                ctx.strokeStyle = "rgba(0,0,0,0.08)";
+                ctx.lineWidth = 2 * scale;
+                ctx.beginPath();
+                ctx.moveTo(180 * scale, 30 * scale);
+                ctx.lineTo(180 * scale, cardH - 30 * scale);
+                ctx.stroke();
+
+                // Hindi Sentence
+                ctx.fillStyle = activeTheme.cardText;
+                ctx.font = `800 ${34 * scale}px 'Poppins', sans-serif`;
+                ctx.textAlign = "left";
+                ctx.fillText(item.hindi, 215 * scale, 78 * scale);
+
+                // English Dialogue
+                ctx.fillStyle = color;
+                ctx.font = `900 ${36 * scale}px 'Cabinet Grotesk', 'Montserrat', sans-serif`;
+                ctx.fillText(item.english, 215 * scale, 130 * scale);
+
+                // Right Icon Ring
+                ctx.save();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 4 * scale;
+                ctx.beginPath();
+                ctx.arc(cardW - 65 * scale, cardH / 2, 38 * scale, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = color;
+                ctx.font = `900 ${34 * scale}px 'Font Awesome 6 Free', 'Font Awesome 6 Brands'`;
+                ctx.textAlign = "center";
+                ctx.fillText("✓", cardW - 65 * scale, cardH / 2 + 12 * scale);
+                ctx.restore();
+
+                // Distinct 3D Chevron Notch Arrow
+                ctx.save();
+                ctx.fillStyle = color;
+                ctx.shadowColor = "rgba(0, 0, 0, 0.18)";
+                ctx.shadowBlur = 18 * scale;
+                ctx.shadowOffsetY = 6 * scale;
+
+                const chevX = cardW + 8 * scale;
+                ctx.beginPath();
+                ctx.moveTo(chevX, 0);
+                ctx.lineTo(chevX + chevronW * 0.55, 0);
+                ctx.lineTo(chevX + chevronW, cardH / 2);
+                ctx.lineTo(chevX + chevronW * 0.55, cardH);
+                ctx.lineTo(chevX, cardH);
+                ctx.lineTo(chevX + chevronW * 0.45, cardH / 2);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+
+                ctx.restore();
+            });
+
+            // 5. Bottom Engaging Hook Box
+            ctx.save();
+            ctx.fillStyle = "rgba(15, 23, 42, 0.95)";
+            ctx.shadowColor = "rgba(0,0,0,0.25)";
+            ctx.shadowBlur = 25 * scale;
+            ctx.shadowOffsetY = 10 * scale;
+            roundRect(ctx, W / 2 - 390 * scale, H - 150 * scale, 780 * scale, 75 * scale, 38 * scale, true);
+            ctx.shadowColor = "transparent";
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = `800 ${28 * scale}px 'Poppins', sans-serif`;
+            ctx.textAlign = "center";
+            ctx.fillText("🔥 Save Karo & Follow @4xlearner for Daily Fluency!", W / 2, H - 102 * scale);
+            ctx.restore();
+        }
+
+        // Shape Helpers
+        function roundRect(ctx, x, y, width, height, radius, fill) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            if (fill) ctx.fill();
+        }
+
+        function roundLeftTab(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width, y);
+            ctx.lineTo(x + width, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // ==========================================
+        // 2160x3840 4K ULTRA-HD PNG EXPORT
+        // ==========================================
+        async function download4KUltraHD() {
+            await document.fonts.ready;
+            const canvas = document.createElement("canvas");
+            const W = 2160;
+            const H = 3840;
+            canvas.width = W;
+            canvas.height = H;
+            const ctx = canvas.getContext("2d");
+
+            drawInfographicCanvas(ctx, W, H, 9999, true);
+
+            const a = document.createElement("a");
+            a.download = `4XLearner_4K_UltraHD_${Date.now()}.png`;
+            a.href = canvas.toDataURL("image/png", 1.0);
+            a.click();
+        }
+
+        // ==========================================
+        // 60FPS DUAL-MODE VIDEO EXPORT ENGINE
+        // ==========================================
+        async function exportVideo(durationMs, filenamePrefix) {
+            await document.fonts.ready;
+            closeMenu();
+
+            const btn = durationMs > 2000 ? document.getElementById("videoBtn3s") : document.getElementById("videoBtnFast");
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Rendering 60FPS Video...`;
+            btn.disabled = true;
+
+            const W = 1080;
+            const H = 1920;
+            const canvas = document.createElement("canvas");
+            canvas.width = W;
+            canvas.height = H;
+            const ctx = canvas.getContext("2d");
+
+            // Setup Audio + Video Track Stream
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const dest = audioCtx.createMediaStreamDestination();
+            const canvasStream = canvas.captureStream(60);
+
+            const combinedStream = new MediaStream([
+                ...canvasStream.getVideoTracks(),
+                ...dest.stream.getAudioTracks()
+            ]);
+
+            const mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
+            const recorder = new MediaRecorder(combinedStream, {
+                mimeType: mime,
+                videoBitsPerSecond: 18000000 // 18 Mbps Ultra Crisp Bitrate
+            });
+
+            const chunks = [];
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: "video/webm" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `4XLearner_${filenamePrefix}_${Date.now()}.webm`;
+                a.click();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            };
+
+            recorder.start();
+
+            // Trigger Swoosh Sound for every card
+            const data = parseCardsData();
+            const [, speed] = document.getElementById("animSelect").value.split(":").map(Number);
+            data.forEach((_, i) => {
+                setTimeout(() => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(540, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.12);
+                    gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+                    osc.connect(gain);
+                    gain.connect(dest);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.13);
+                }, i * (speed * 0.85));
+            });
+
+            const startTime = performance.now();
+
+            function frame(now) {
+                const elapsed = now - startTime;
+                drawInfographicCanvas(ctx, W, H, elapsed, false);
+
+                if (elapsed < durationMs) {
+                    requestAnimationFrame(frame);
+                } else {
+                    recorder.stop();
+                }
+            }
+            requestAnimationFrame(frame);
+        }
+
+        // Initialize Theme & Cards
+        applyTheme();
+    </script>
+</body>
+
+</html>

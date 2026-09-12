@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>4X Learner - Viral Reels Generator (30s Video)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Cabinet+Grotesk:wght@700;900&family=Inter:wght@500;700;900&family=Montserrat:wght@600;800;900&family=Oswald:wght@600;700&family=Poppins:wght@600;700;800&family=Teko:wght@600;700&family=Yantramanav:wght@500;700;900&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg: #090d16;
+            --panel: #111827;
+            --border: #1f293d;
+            --accent: #f59e0b;
+            --text: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Mobile Sidebar Toggle Button */
+        .mobile-btn {
+            display: none;
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            z-index: 100;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            cursor: pointer;
+        }
+
+        /* Control Panel */
+        .controls {
+            width: 400px;
+            min-width: 400px;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            z-index: 50;
+            transition: transform 0.3s ease;
+        }
+
+        .controls::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .controls::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #fbbf24;
+            border-bottom: 1px solid #1f2937;
+            padding-bottom: 10px;
+        }
+
+        .brand-title span {
+            color: #f87171;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #9ca3af;
+            letter-spacing: 0.5px;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            background: #0f172a;
+            color: #fff;
+            border: 1px solid #334155;
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 110px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: 800;
+            transition: 0.2s all;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: 1px solid #475569;
+        }
+
+        button:hover {
+            filter: brightness(1.15);
+        }
+
+        .btn-apply {
+            background: #374151;
+            color: #f8fafc;
+        }
+
+        .btn-action {
+            background: #0284c7;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-video {
+            background: linear-gradient(135deg, #e11d48, #be123c);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            font-size: 0.95rem;
+        }
+
+        /* Export Progress */
+        .export-progress-wrap {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #1e293b;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f59e0b, #e11d48);
+            transition: width 0.1s linear;
+        }
+
+        .progress-txt {
+            font-size: 0.75rem;
+            color: #fbbf24;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        /* Preview Stage */
+        .preview-stage {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #030712;
+            overflow: auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Reels Viewport */
+        .reels-viewport {
+            width: 360px;
+            height: 640px;
+            max-height: 94vh;
+            aspect-ratio: 9 / 16;
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 0 2px #374151;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 18px;
+            transition: all 0.4s ease;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .learner-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            color: #fff;
+            font-weight: 900;
+            font-size: 0.85rem;
+            padding: 3px 7px;
+            border-radius: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text {
+            font-size: 0.85rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .social-tag {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        /* Banner */
+        .title-banner {
+            text-align: center;
+            margin: 10px 0 6px;
+            z-index: 5;
+        }
+
+        .title-banner h1 {
+            font-size: 1.45rem;
+            font-weight: 900;
+            line-height: 1.2;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .title-banner p {
+            font-size: 0.72rem;
+            font-weight: 700;
+            opacity: 0.85;
+            margin-top: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Card List */
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            z-index: 5;
+        }
+
+        .info-card {
+            display: flex;
+            border-radius: 20px;
+            overflow: hidden;
+            align-items: center;
+            min-height: 76px;
+            position: relative;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s;
+        }
+
+        .info-arrow {
+            width: 76px;
+            min-width: 76px;
+            height: 100%;
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: 900;
+            clip-path: polygon(0% 0%, 82% 0%, 100% 50%, 82% 100%, 0% 100%);
+            padding-right: 12px;
+            user-select: none;
+        }
+
+        .info-body {
+            flex: 1;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hindi-word {
+            font-size: 0.95rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 2px solid;
+            padding-bottom: 2px;
+            width: fit-content;
+            margin-bottom: 2px;
+        }
+
+        .english-word {
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            color: #1e293b;
+        }
+
+        .phonetic-sub {
+            font-size: 0.65rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .info-icon-box {
+            margin-right: 12px;
+            width: 44px;
+            height: 56px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .bottom-hook {
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            width: fit-content;
+            margin: 0 auto;
+            z-index: 5;
+        }
+
+        /* Animations */
+        @keyframes dropBounce {
+            0% {
+                transform: translateY(-400px);
+                opacity: 0;
+            }
+
+            65% {
+                transform: translateY(16px);
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes popZoom {
+            0% {
+                transform: scale(0.1);
+                opacity: 0;
+            }
+
+            80% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes elasticSlideL {
+            0% {
+                transform: translateX(-400px);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translateX(20px);
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes elasticSlideR {
+            0% {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translateX(-20px);
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes flip3DX {
+            0% {
+                transform: perspective(500px) rotateX(90deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: perspective(500px) rotateX(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes flip3DY {
+            0% {
+                transform: perspective(500px) rotateY(90deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: perspective(500px) rotateY(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes skewLandL {
+            0% {
+                transform: translateX(-350px) skewX(30deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0) skewX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes skewLandR {
+            0% {
+                transform: translateX(350px) skewX(-30deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0) skewX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes vortexSpin {
+            0% {
+                transform: scale(0.2) rotate(200deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes swingIn {
+            0% {
+                transform: perspective(400px) rotateX(-65deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: perspective(400px) rotateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fastSnap {
+            0% {
+                transform: scale(1.6);
+                opacity: 0;
+                filter: blur(8px);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        @media (max-width: 860px) {
+            .mobile-btn {
+                display: block;
+            }
+
+            .controls {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+                width: 85%;
+                min-width: unset;
+                box-shadow: 20px 0 50px rgba(0, 0, 0, 0.85);
+            }
+
+            .controls.open {
+                transform: translateX(0);
+            }
+
+            .preview-stage {
+                padding: 50px 10px 15px;
+            }
+
+            .reels-viewport {
+                width: 100%;
+                max-width: 350px;
+                height: calc(100vw * 16 / 9);
+                max-height: 85vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="mobile-btn" onclick="toggleMenu()"><i class="fa-solid fa-sliders"></i> Menu</button>
+
+    <aside class="controls" id="sidebar">
+        <div class="brand-title">
+            <i class="fa-solid fa-graduation-cap"></i> 4X LEARNER <span>REELS</span>
+        </div>
+
+        <div class="form-group">
+            <label>Reel Title (Hindi / English)</label>
+            <input type="text" id="headTitle" value="DAILY USE ENGLISH WORDS" oninput="updateUI()" />
+        </div>
+
+        <div class="form-group">
+            <label>Sub-Headline / Topic</label>
+            <input type="text" id="headSub" value="हर रोज़ बोले जाने वाले 4 ज़रूरी शब्द" oninput="updateUI()" />
+        </div>
+
+        <div class="form-group">
+            <label>Words Input (JSON ya 'Hindi | English | Meaning' Format)</label>
+            <textarea id="dataInput">[
+  {"num": "01", "hindi": "नमस्ते / प्रणाम", "english": "Greetings / Hello", "desc": "Polite everyday greeting.", "icon": "fa-solid fa-handshake"},
+  {"num": "02", "hindi": "सफलता", "english": "Success / Achievement", "desc": "Reaching your target goal.", "icon": "fa-solid fa-trophy"},
+  {"num": "03", "hindi": "जिम्मेदार", "english": "Responsible / Accountable", "desc": "Taking full ownership.", "icon": "fa-solid fa-user-shield"},
+  {"num": "04", "hindi": "लगातार / निरंतर", "english": "Consistent / Continuous", "desc": "Showing up every day.", "icon": "fa-solid fa-fire"}
+]</textarea>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn-apply" onclick="renderCards()">Apply Data</button>
+            <button class="btn-apply" onclick="loadSampleText()">Plain Format</button>
+        </div>
+
+        <div class="form-group">
+            <label>50+ All-in-One Themes (Colors + Font + BG)</label>
+            <select id="themeSelect" onchange="applyTheme()"></select>
+        </div>
+
+        <div class="form-group">
+            <label>60 Fast Landing Reel Animations</label>
+            <select id="animSelect"></select>
+        </div>
+
+        <div class="form-group">
+            <label>Video Duration (Default 30 Sec)</label>
+            <select id="videoDuration">
+                <option value="30" selected>30 Seconds (Instagram/YouTube Shorts)</option>
+                <option value="15">15 Seconds (Quick Short)</option>
+                <option value="60">60 Seconds (Long Reel)</option>
+            </select>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn-action" onclick="playAnimation()"><i class="fa-solid fa-play"></i> Run Landing</button>
+            <button class="btn-action" onclick="downloadImage()"><i class="fa-solid fa-image"></i> Save HD
+                Image</button>
+        </div>
+
+        <div class="form-group">
+            <button class="btn-video" id="videoBtn" onclick="exportViralVideo()">
+                <i class="fa-solid fa-circle-play"></i> Export 30-Second Active Reel
+            </button>
+            <div class="export-progress-wrap" id="progressWrap">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-txt" id="progressTxt">Exporting: 0s / 30s</div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="preview-stage" onclick="closeMenu()">
+        <div class="reels-viewport" id="reelsViewport">
+            <div class="top-bar">
+                <div class="learner-logo">
+                    <span class="logo-badge">4X</span>
+                    <span class="logo-text">LEARNER</span>
+                </div>
+                <div class="social-tag">@4xlearner</div>
+            </div>
+
+            <div class="title-banner">
+                <h1 id="dispHead">DAILY USE ENGLISH WORDS</h1>
+                <p id="dispSub">हर रोज़ बोले जाने वाले 4 ज़रूरी शब्द</p>
+            </div>
+
+            <div class="cards-container" id="cardsList"></div>
+
+            <div class="bottom-hook" id="hookText">
+                🔥 Follow @4xlearner for Daily English Shorts!
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const THEMES = [
+            { name: "01 Original Vibrant", bg: "linear-gradient(180deg, #0f172a 0%, #1e293b 100%)", text: "#f8fafc", cardBg: "#ffffff", cardText: "#0f172a", font: "'Poppins', sans-serif", colors: ["#2563eb", "#7c3aed", "#e11d48", "#f59e0b"] },
+            { name: "02 Cyber Neon Dark", bg: "linear-gradient(180deg, #05050a 0%, #0d1117 100%)", text: "#00f0ff", cardBg: "#111827", cardText: "#f9fafb", font: "'Cabinet Grotesk', sans-serif", colors: ["#00f0ff", "#ff0055", "#ffe600", "#a855f7"] },
+            { name: "03 Sunset Glow", bg: "linear-gradient(180deg, #450a0a 0%, #180202 100%)", text: "#fef08a", cardBg: "#ffffff", cardText: "#1c1917", font: "'Montserrat', sans-serif", colors: ["#ea580c", "#f97316", "#fbbf24", "#f43f5e"] },
+            { name: "04 Oceanic Deep Blue", bg: "linear-gradient(180deg, #082f49 0%, #031826 100%)", text: "#e0f2fe", cardBg: "#ffffff", cardText: "#0f172a", font: "'Inter', sans-serif", colors: ["#0284c7", "#0ea5e9", "#38bdf8", "#06b6d4"] },
+            { name: "05 Emerald Success", bg: "linear-gradient(180deg, #022c22 0%, #064e3b 100%)", text: "#a7f3d0", cardBg: "#ffffff", cardText: "#064e3b", font: "'Baloo 2', sans-serif", colors: ["#059669", "#10b981", "#34d399", "#6ee7b7"] },
+            { name: "06 Royal Purple Master", bg: "linear-gradient(180deg, #2e1065 0%, #17072b 100%)", text: "#e9d5ff", cardBg: "#ffffff", cardText: "#1e1b4b", font: "'Poppins', sans-serif", colors: ["#7e22ce", "#9333ea", "#c084fc", "#d946ef"] },
+            { name: "07 Charcoal & Flame", bg: "linear-gradient(180deg, #18181b 0%, #09090b 100%)", text: "#fafafa", cardBg: "#ffffff", cardText: "#18181b", font: "'Oswald', sans-serif", colors: ["#dc2626", "#ea580c", "#f59e0b", "#e11d48"] },
+            { name: "08 Vintage Autumn", bg: "linear-gradient(180deg, #3f2e18 0%, #1f1406 100%)", text: "#fed7aa", cardBg: "#fffbeb", cardText: "#451a03", font: "'Yantramanav', sans-serif", colors: ["#b45309", "#d97706", "#f59e0b", "#78350f"] },
+            { name: "09 Berry Punch Red", bg: "linear-gradient(180deg, #4c0519 0%, #1c0208 100%)", text: "#ffe4e6", cardBg: "#ffffff", cardText: "#4c0519", font: "'Teko', sans-serif", colors: ["#e11d48", "#f43f5e", "#fb7185", "#be123c"] },
+            { name: "10 Nordic Clean Slate", bg: "linear-gradient(180deg, #1e293b 0%, #0f172a 100%)", text: "#cbd5e1", cardBg: "#ffffff", cardText: "#0f172a", font: "'Inter', sans-serif", colors: ["#0284c7", "#0d9488", "#475569", "#64748b"] },
+            { name: "11 Luxury Pure Gold", bg: "linear-gradient(180deg, #18181b 0%, #000000 100%)", text: "#fde047", cardBg: "#27272a", cardText: "#fef08a", font: "'Cabinet Grotesk', sans-serif", colors: ["#ca8a04", "#eab308", "#facc15", "#a16207"] },
+            { name: "12 Crimson Dark Velocity", bg: "linear-gradient(180deg, #3b0712 0%, #000000 100%)", text: "#fecdd3", cardBg: "#ffffff", cardText: "#3b0712", font: "'Montserrat', sans-serif", colors: ["#9f1239", "#be123c", "#e11d48", "#f43f5e"] },
+            { name: "13 Tech Mint Future", bg: "linear-gradient(180deg, #042f2e 0%, #021a19 100%)", text: "#99f6e4", cardBg: "#ffffff", cardText: "#042f2e", font: "'Poppins', sans-serif", colors: ["#0d9488", "#14b8a6", "#2dd4bf", "#059669"] },
+            { name: "14 Warm Pastel Studio", bg: "linear-gradient(180deg, #fdf4ff 0%, #fae8ff 100%)", text: "#701a75", cardBg: "#ffffff", cardText: "#701a75", font: "'Baloo 2', sans-serif", colors: ["#c084fc", "#f472b6", "#fb7185", "#38bdf8"] },
+            { name: "15 Electric Violet", bg: "linear-gradient(180deg, #1e1b4b 0%, #090620 100%)", text: "#c7d2fe", cardBg: "#ffffff", cardText: "#1e1b4b", font: "'Montserrat', sans-serif", colors: ["#4f46e5", "#6366f1", "#818cf8", "#4338ca"] },
+            { name: "16 Synthwave Retro 80s", bg: "linear-gradient(180deg, #2b0938 0%, #0d0114 100%)", text: "#f0abfc", cardBg: "#180829", cardText: "#fdf4ff", font: "'Teko', sans-serif", colors: ["#d946ef", "#06b6d4", "#f43f5e", "#eab308"] },
+            { name: "17 Earthy Terracotta", bg: "linear-gradient(180deg, #291811 0%, #120a06 100%)", text: "#ffedd5", cardBg: "#ffffff", cardText: "#291811", font: "'Yantramanav', sans-serif", colors: ["#c2410c", "#ea580c", "#d97706", "#9a3412"] },
+            { name: "18 Cyber Matrix Green", bg: "linear-gradient(180deg, #021e0a 0%, #000903 100%)", text: "#86efac", cardBg: "#052e16", cardText: "#bbf7d0", font: "'Oswald', sans-serif", colors: ["#16a34a", "#22c55e", "#4ade80", "#15803d"] },
+            { name: "19 Dark Indigo Sky", bg: "linear-gradient(180deg, #172554 0%, #081026 100%)", text: "#bfdbfe", cardBg: "#ffffff", cardText: "#172554", font: "'Inter', sans-serif", colors: ["#1d4ed8", "#2563eb", "#3b82f6", "#1e40af"] },
+            { name: "20 Solar Magma Flare", bg: "linear-gradient(180deg, #451a03 0%, #1c0800 100%)", text: "#fed7aa", cardBg: "#ffffff", cardText: "#451a03", font: "'Cabinet Grotesk', sans-serif", colors: ["#dc2626", "#ea580c", "#f97316", "#e11d48"] },
+            { name: "21 Minimal Monochrome", bg: "linear-gradient(180deg, #18181b 0%, #09090b 100%)", text: "#e4e4e7", cardBg: "#ffffff", cardText: "#18181b", font: "'Inter', sans-serif", colors: ["#27272a", "#3f3f46", "#52525b", "#71717a"] },
+            { name: "22 Teal Lagoon", bg: "linear-gradient(180deg, #064e3b 0%, #022c22 100%)", text: "#99f6e4", cardBg: "#ffffff", cardText: "#064e3b", font: "'Poppins', sans-serif", colors: ["#0f766e", "#0d9488", "#14b8a6", "#047857"] },
+            { name: "23 Bubblegum Kids", bg: "linear-gradient(180deg, #831843 0%, #3e071e 100%)", text: "#fbcfe8", cardBg: "#ffffff", cardText: "#500724", font: "'Baloo 2', sans-serif", colors: ["#db2777", "#ec4899", "#f472b6", "#be185d"] },
+            { name: "24 Monokai Pro Code", bg: "linear-gradient(180deg, #1e1f1c 0%, #111210 100%)", text: "#e6db74", cardBg: "#2d2a2e", cardText: "#fcfcfa", font: "'Oswald', sans-serif", colors: ["#a6e22e", "#66d9ef", "#fd971f", "#f92672"] },
+            { name: "25 Solarized Warm", bg: "linear-gradient(180deg, #073642 0%, #002b36 100%)", text: "#eee8d5", cardBg: "#fdf6e3", cardText: "#002b36", font: "'Yantramanav', sans-serif", colors: ["#b58900", "#cb4b16", "#dc322f", "#268bd2"] },
+            { name: "26 Dracula Vampire", bg: "linear-gradient(180deg, #21222c 0%, #15161c 100%)", text: "#f8f8f2", cardBg: "#282a36", cardText: "#f8f8f2", font: "'Cabinet Grotesk', sans-serif", colors: ["#bd93f9", "#ff79c6", "#50fa7b", "#8be9fd"] },
+            { name: "27 Deep Violet Nebula", bg: "linear-gradient(180deg, #311042 0%, #0e0214 100%)", text: "#f3e8ff", cardBg: "#ffffff", cardText: "#311042", font: "'Montserrat', sans-serif", colors: ["#6b21a8", "#7e22ce", "#a855f7", "#c084fc"] },
+            { name: "28 Lemon Forest", bg: "linear-gradient(180deg, #1c1917 0%, #292524 100%)", text: "#fef08a", cardBg: "#ffffff", cardText: "#1c1917", font: "'Baloo 2', sans-serif", colors: ["#65a30d", "#84cc16", "#a3e635", "#4d7c0f"] },
+            { name: "29 Sapphire Classic", bg: "linear-gradient(180deg, #1e3a8a 0%, #0f172a 100%)", text: "#dbeafe", cardBg: "#ffffff", cardText: "#0f172a", font: "'Inter', sans-serif", colors: ["#1d4ed8", "#2563eb", "#3b82f6", "#1e40af"] },
+            { name: "30 Copper & Fire", bg: "linear-gradient(180deg, #311308 0%, #140702 100%)", text: "#fed7aa", cardBg: "#ffffff", cardText: "#311308", font: "'Oswald', sans-serif", colors: ["#c2410c", "#b45309", "#d97706", "#9a3412"] },
+            { name: "31 High Voltage Yellow", bg: "linear-gradient(180deg, #18181b 0%, #09090b 100%)", text: "#facc15", cardBg: "#ffffff", cardText: "#18181b", font: "'Cabinet Grotesk', sans-serif", colors: ["#eab308", "#ca8a04", "#a16207", "#713f12"] },
+            { name: "32 Synthwave Drive", bg: "linear-gradient(180deg, #1a052e 0%, #080112 100%)", text: "#38bdf8", cardBg: "#ffffff", cardText: "#1a052e", font: "'Teko', sans-serif", colors: ["#f43f5e", "#8b5cf6", "#06b6d4", "#eab308"] },
+            { name: "33 Coffee Master Brown", bg: "linear-gradient(180deg, #27170e 0%, #120904 100%)", text: "#fae8ff", cardBg: "#ffffff", cardText: "#27170e", font: "'Yantramanav', sans-serif", colors: ["#78350f", "#92400e", "#b45309", "#5b2609"] },
+            { name: "34 Arctic Glacier", bg: "linear-gradient(180deg, #0f2b36 0%, #041217 100%)", text: "#a5f3fc", cardBg: "#ffffff", cardText: "#083344", font: "'Inter', sans-serif", colors: ["#0891b2", "#06b6d4", "#22d3ee", "#0e7490"] },
+            { name: "35 Crimson Bloodline", bg: "linear-gradient(180deg, #2b0606 0%, #0d0101 100%)", text: "#fecdd3", cardBg: "#ffffff", cardText: "#2b0606", font: "'Montserrat', sans-serif", colors: ["#b91c1c", "#dc2626", "#ef4444", "#991b1b"] },
+            { name: "36 Olive Rustic", bg: "linear-gradient(180deg, #1f2416 0%, #0d0f09 100%)", text: "#ecfccb", cardBg: "#ffffff", cardText: "#1f2416", font: "'Baloo 2', sans-serif", colors: ["#4d7c0f", "#65a30d", "#84cc16", "#3f6212"] },
+            { name: "37 Tokyo Midnight", bg: "linear-gradient(180deg, #16161e 0%, #0d0d12 100%)", text: "#7aa2f7", cardBg: "#1a1b26", cardText: "#c0caf5", font: "'Oswald', sans-serif", colors: ["#f7768e", "#bb9af7", "#7dcfff", "#e0af68"] },
+            { name: "38 Flamingo Orange", bg: "linear-gradient(180deg, #3d140e 0%, #170603 100%)", text: "#ffedd5", cardBg: "#ffffff", cardText: "#3d140e", font: "'Poppins', sans-serif", colors: ["#ea580c", "#f97316", "#fb923c", "#c2410c"] },
+            { name: "39 Navy & Gold Elite", bg: "linear-gradient(180deg, #0b1528 0%, #030712 100%)", text: "#fbbf24", cardBg: "#ffffff", cardText: "#0b1528", font: "'Cabinet Grotesk', sans-serif", colors: ["#1e40af", "#d97706", "#2563eb", "#f59e0b"] },
+            { name: "40 Lavender Bliss", bg: "linear-gradient(180deg, #351a42 0%, #120717 100%)", text: "#f5d0fe", cardBg: "#ffffff", cardText: "#351a42", font: "'Montserrat', sans-serif", colors: ["#9333ea", "#a855f7", "#c084fc", "#7e22ce"] },
+            { name: "41 Cyberpunk 2077", bg: "linear-gradient(180deg, #fee000 0%, #eab308 100%)", text: "#000000", cardBg: "#000000", cardText: "#ffffff", font: "'Teko', sans-serif", colors: ["#00f0ff", "#ff003c", "#fcee0a", "#39ff14"] },
+            { name: "42 Deep Moss Wilderness", bg: "linear-gradient(180deg, #132418 0%, #07100a 100%)", text: "#dcfce7", cardBg: "#ffffff", cardText: "#132418", font: "'Yantramanav', sans-serif", colors: ["#15803d", "#16a34a", "#22c55e", "#166534"] },
+            { name: "43 Acid Lime Pop", bg: "linear-gradient(180deg, #111c07 0%, #000000 100%)", text: "#bef264", cardBg: "#ffffff", cardText: "#111c07", font: "'Cabinet Grotesk', sans-serif", colors: ["#84cc16", "#a3e635", "#65a30d", "#4d7c0f"] },
+            { name: "44 Urban Maroon", bg: "linear-gradient(180deg, #2c0915 0%, #100206 100%)", text: "#ffe4e6", cardBg: "#ffffff", cardText: "#2c0915", font: "'Poppins', sans-serif", colors: ["#be123c", "#e11d48", "#f43f5e", "#9f1239"] },
+            { name: "45 Peach Pastel Clean", bg: "linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%)", text: "#9a3412", cardBg: "#ffffff", cardText: "#9a3412", font: "'Baloo 2', sans-serif", colors: ["#f97316", "#ea580c", "#fb923c", "#c2410c"] },
+            { name: "46 Aqua Candy Pop", bg: "linear-gradient(180deg, #083344 0%, #02141a 100%)", text: "#67e8f9", cardBg: "#ffffff", cardText: "#083344", font: "'Montserrat', sans-serif", colors: ["#06b6d4", "#ec4899", "#f59e0b", "#3b82f6"] },
+            { name: "47 Wine Royal Cellar", bg: "linear-gradient(180deg, #2a0815 0%, #0d0206 100%)", text: "#fbcfe8", cardBg: "#ffffff", cardText: "#2a0815", font: "'Inter', sans-serif", colors: ["#9d174d", "#be185d", "#db2777", "#831843"] },
+            { name: "48 Midnight Spark", bg: "linear-gradient(180deg, #09090b 0%, #000000 100%)", text: "#ffffff", cardBg: "#18181b", cardText: "#ffffff", font: "'Oswald', sans-serif", colors: ["#ef4444", "#3b82f6", "#10b981", "#f59e0b"] },
+            { name: "49 Forest Glow", bg: "linear-gradient(180deg, #052e16 0%, #021a0c 100%)", text: "#86efac", cardBg: "#ffffff", cardText: "#052e16", font: "'Yantramanav', sans-serif", colors: ["#16a34a", "#15803d", "#166534", "#22c55e"] },
+            { name: "50 Carbon Titanium", bg: "linear-gradient(180deg, #171717 0%, #0a0a0a 100%)", text: "#f5f5f5", cardBg: "#262626", cardText: "#ffffff", font: "'Cabinet Grotesk', sans-serif", colors: ["#fbbf24", "#38bdf8", "#4ade80", "#f43f5e"] },
+            { name: "51 Hyper Velocity Blue", bg: "linear-gradient(180deg, #030712 0%, #0f172a 100%)", text: "#38bdf8", cardBg: "#ffffff", cardText: "#030712", font: "'Teko', sans-serif", colors: ["#2563eb", "#06b6d4", "#a855f7", "#ec4899"] },
+            { name: "52 Minimalist White Pure", bg: "linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)", text: "#0f172a", cardBg: "#ffffff", cardText: "#0f172a", font: "'Inter', sans-serif", colors: ["#0284c7", "#475569", "#dc2626", "#16a34a"] }
+        ];
+
+        const BASE_ANIMS = [
+            "dropBounce", "popZoom", "elasticSlideL", "elasticSlideR",
+            "flip3DX", "flip3DY", "skewLandL", "skewLandR", "vortexSpin",
+            "swingIn", "fastSnap"
+        ];
+
+        let activeTheme = THEMES[0];
+
+        const themeSelect = document.getElementById("themeSelect");
+        THEMES.forEach((t, i) => {
+            const opt = document.createElement("option");
+            opt.value = i;
+            opt.textContent = t.name;
+            themeSelect.appendChild(opt);
+        });
+
+        const animSelect = document.getElementById("animSelect");
+        for (let i = 1; i <= 60; i++) {
+            const base = BASE_ANIMS[(i - 1) % BASE_ANIMS.length];
+            const opt = document.createElement("option");
+            opt.value = `${base}:${(i % 6) * 35}ms`;
+            opt.textContent = `Preset ${i < 10 ? '0' + i : i} - ${base.toUpperCase()}`;
+            animSelect.appendChild(opt);
+        }
+
+        function toggleMenu() { document.getElementById("sidebar").classList.toggle("open"); }
+        function closeMenu() {
+            if (window.innerWidth <= 860) document.getElementById("sidebar").classList.remove("open");
+        }
+
+        function updateUI() {
+            document.getElementById("dispHead").innerText = document.getElementById("headTitle").value;
+            document.getElementById("dispSub").innerText = document.getElementById("headSub").value;
+        }
+
+        function parseInputData() {
+            const raw = document.getElementById("dataInput").value.trim();
+            try {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) return parsed;
+            } catch (e) {
+                const lines = raw.split("\n").filter(l => l.trim().length > 0);
+                const icons = ["fa-handshake", "fa-trophy", "fa-user-shield", "fa-fire", "fa-star", "fa-bolt"];
+                return lines.map((line, idx) => {
+                    const parts = line.split("|");
+                    return {
+                        num: (idx + 1) < 10 ? `0${idx + 1}` : `${idx + 1}`,
+                        hindi: parts[0] ? parts[0].trim() : `शब्द ${idx + 1}`,
+                        english: parts[1] ? parts[1].trim() : `English Word ${idx + 1}`,
+                        desc: parts[2] ? parts[2].trim() : "Daily essential vocabulary word.",
+                        icon: `fa-solid ${icons[idx % icons.length]}`
+                    };
+                });
+            }
+            return [];
+        }
+
+        function renderCards() {
+            const container = document.getElementById("cardsList");
+            container.innerHTML = "";
+            const data = parseInputData();
+
+            data.forEach((item, idx) => {
+                const color = activeTheme.colors[idx % activeTheme.colors.length];
+                const card = document.createElement("div");
+                card.className = "info-card";
+                card.style.background = activeTheme.cardBg;
+
+                const iconClass = (item.icon && item.icon.startsWith("fa")) ? item.icon : `fa-solid ${item.icon || 'fa-check'}`;
+
+                card.innerHTML = `
+          <div class="info-arrow" style="background: ${color};">${item.num || `0${idx + 1}`}</div>
+          <div class="info-body">
+            <div class="hindi-word" style="color: ${color}; border-color: ${color};">
+              ${item.hindi}
+            </div>
+            <div class="english-word" style="color: ${activeTheme.cardText};">
+              ${item.english}
+            </div>
+            <div class="phonetic-sub">${item.desc}</div>
+          </div>
+          <div class="info-icon-box" style="background: ${color};">
+            <i class="${iconClass}"></i>
+          </div>
+        `;
+                container.appendChild(card);
+            });
+            closeMenu();
+        }
+
+        function applyTheme() {
+            const idx = parseInt(document.getElementById("themeSelect").value, 10);
+            activeTheme = THEMES[idx];
+
+            const viewport = document.getElementById("reelsViewport");
+            viewport.style.background = activeTheme.bg;
+            viewport.style.color = activeTheme.text;
+            viewport.style.fontFamily = activeTheme.font;
+
+            renderCards();
+        }
+
+        function playAnimation() {
+            closeMenu();
+            const val = document.getElementById("animSelect").value.split(":");
+            const animName = val[0];
+            const cards = document.querySelectorAll(".info-card");
+
+            cards.forEach((card, i) => {
+                card.style.animation = "none";
+                card.offsetHeight;
+                const delay = (i * 0.08) + "s";
+                card.style.animation = `${animName} 0.45s cubic-bezier(0.16, 1, 0.3, 1) ${delay} both`;
+            });
+        }
+
+        function loadSampleText() {
+            document.getElementById("dataInput").value =
+                `ईमानदार | Honest / Sincere | Always speaking the truth.
+आत्मविश्वास | Confidence / Self-Belief | Believing in your skills.
+जिज्ञासु | Curious / Inquisitive | Eager to learn new things.
+मेहनती | Diligent / Hardworking | Dedicated to personal growth.`;
+            renderCards();
+        }
+
+        function downloadImage() {
+            const cards = document.querySelectorAll(".info-card");
+            cards.forEach(c => { c.style.animation = "none"; c.style.opacity = "1"; c.style.transform = "none"; });
+
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = 1080;
+            canvas.height = 1920;
+
+            drawReelFrameToCanvas(ctx, 1080, 1920, 1.0, 5000, 30000);
+
+            const a = document.createElement("a");
+            a.download = `4XLearner_Shorts_${Date.now()}.png`;
+            a.href = canvas.toDataURL("image/png", 1.0);
+            a.click();
+        }
+
+        function drawReelFrameToCanvas(ctx, W, H, progress = 1.0, elapsed = 0, totalDuration = 30000) {
+            // 1. Draw Background
+            ctx.save();
+            const grad = ctx.createLinearGradient(0, 0, 0, H);
+            if (activeTheme.bg.includes("#")) {
+                const matches = activeTheme.bg.match(/#[0-9a-fA-F]{6}/g);
+                if (matches && matches.length >= 2) {
+                    grad.addColorStop(0, matches[0]);
+                    grad.addColorStop(1, matches[1]);
+                } else {
+                    grad.addColorStop(0, "#0f172a");
+                    grad.addColorStop(1, "#1e293b");
+                }
+            }
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+
+            // Ambient background particles/glow
+            const tSec = elapsed / 1000;
+            ctx.save();
+            const glow1X = W * 0.2 + Math.sin(tSec * 0.8) * 60;
+            const glow1Y = H * 0.3 + Math.cos(tSec * 0.6) * 80;
+            const g1 = ctx.createRadialGradient(glow1X, glow1Y, 10, glow1X, glow1Y, 350);
+            g1.addColorStop(0, "rgba(245, 158, 11, 0.12)");
+            g1.addColorStop(1, "rgba(245, 158, 11, 0)");
+            ctx.fillStyle = g1;
+            ctx.fillRect(0, 0, W, H);
+
+            const glow2X = W * 0.8 + Math.cos(tSec * 0.7) * 70;
+            const glow2Y = H * 0.7 + Math.sin(tSec * 0.9) * 90;
+            const g2 = ctx.createRadialGradient(glow2X, glow2Y, 10, glow2X, glow2Y, 380);
+            g2.addColorStop(0, "rgba(225, 29, 72, 0.14)");
+            g2.addColorStop(1, "rgba(225, 29, 72, 0)");
+            ctx.fillStyle = g2;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+
+            // 2. Top-Left Badge & Indicator
+            ctx.save();
+            ctx.fillStyle = "rgba(0,0,0,0.4)";
+            roundRect(ctx, 50, 70, 370, 80, 40, true);
+
+            const bGrad = ctx.createLinearGradient(60, 80, 160, 140);
+            bGrad.addColorStop(0, "#f59e0b");
+            bGrad.addColorStop(1, "#ef4444");
+            ctx.fillStyle = bGrad;
+            roundRect(ctx, 60, 80, 90, 60, 16, true);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "900 36px 'Poppins', sans-serif";
+            ctx.fillText("4X", 82, 124);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "900 34px 'Poppins', sans-serif";
+            ctx.fillText("LEARNER", 168, 124);
+
+            // Pulsing live badge
+            const livePulse = 0.6 + 0.4 * Math.sin(tSec * 4);
+            ctx.fillStyle = `rgba(239, 68, 68, ${livePulse})`;
+            ctx.beginPath();
+            ctx.arc(W - 275, 110, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "rgba(255,255,255,0.9)";
+            ctx.font = "700 28px 'Poppins', sans-serif";
+            ctx.fillText("@4xlearner", W - 250, 120);
+            ctx.restore();
+
+            // 3. Main Title Banner
+            ctx.save();
+            const titlePulse = 1 + 0.015 * Math.sin(tSec * 2.5);
+            ctx.translate(W / 2, 260);
+            ctx.scale(titlePulse, titlePulse);
+            ctx.textAlign = "center";
+            ctx.fillStyle = activeTheme.text;
+            ctx.font = "900 52px 'Montserrat', sans-serif";
+            ctx.fillText(document.getElementById("headTitle").value, 0, 0);
+
+            ctx.font = "700 32px 'Poppins', sans-serif";
+            ctx.fillStyle = activeTheme.text;
+            ctx.globalAlpha = 0.85;
+            ctx.fillText(document.getElementById("headSub").value, 0, 55);
+            ctx.restore();
+
+            // 4. Sequential Word Highlight Timeline (Active Animation for 30 sec)
+            const data = parseInputData();
+            const startY = 385;
+            const cardH = 225;
+            const gap = 45;
+
+            const landingEndTime = 2500;
+            const readingDuration = totalDuration - landingEndTime - 2500;
+            const cardFocusInterval = readingDuration / Math.max(1, data.length);
+
+            let activeCardIdx = -1;
+            if (elapsed > landingEndTime && elapsed < (totalDuration - 2000)) {
+                activeCardIdx = Math.floor((elapsed - landingEndTime) / cardFocusInterval);
+            }
+
+            data.forEach((item, idx) => {
+                const y = startY + idx * (cardH + gap);
+                const color = activeTheme.colors[idx % activeTheme.colors.length];
+
+                // Fast Landing Transition (First 2.5 seconds)
+                let itemProgress = Math.min(1, Math.max(0, (elapsed - (idx * 160)) / 500));
+                let ease = 1 - Math.pow(1 - itemProgress, 3);
+                let landingOffsetX = (1 - ease) * (idx % 2 === 0 ? -900 : 900);
+
+                // Continuous focus animation
+                const isFocused = (idx === activeCardIdx);
+                const cardScale = isFocused ? (1.025 + 0.015 * Math.sin(tSec * 6)) : (1 + 0.005 * Math.sin(tSec * 2 + idx));
+                const cardGlow = isFocused ? 35 : 12;
+
+                ctx.save();
+                ctx.globalAlpha = itemProgress;
+                ctx.translate(50 + landingOffsetX, y);
+
+                ctx.translate(490, cardH / 2);
+                ctx.scale(cardScale, cardScale);
+                ctx.translate(-490, -cardH / 2);
+
+                // Card Background Box
+                ctx.fillStyle = activeTheme.cardBg;
+                ctx.shadowColor = isFocused ? color : "rgba(0,0,0,0.25)";
+                ctx.shadowBlur = cardGlow;
+                ctx.shadowOffsetY = isFocused ? 8 : 12;
+                roundRect(ctx, 0, 0, 980, cardH, 40, true);
+                ctx.shadowColor = "transparent";
+
+                if (isFocused) {
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 5;
+                    roundRect(ctx, 0, 0, 980, cardH, 40, false, true);
+                }
+
+                // Left Arrow Notch
+                ctx.save();
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(170, 0);
+                ctx.lineTo(215, cardH / 2);
+                ctx.lineTo(170, cardH);
+                ctx.lineTo(0, cardH);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "900 68px 'Montserrat', sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText(item.num || `0${idx + 1}`, 90, cardH / 2 + 24);
+                ctx.restore();
+
+                // Hindi Word
+                ctx.fillStyle = color;
+                ctx.font = "900 44px 'Poppins', sans-serif";
+                ctx.textAlign = "left";
+                ctx.fillText(item.hindi, 245, 80);
+
+                ctx.fillRect(245, 96, 260, 4);
+
+                // English Word
+                ctx.fillStyle = activeTheme.cardText;
+                ctx.font = "800 38px 'Montserrat', sans-serif";
+                ctx.fillText(item.english, 245, 145);
+
+                // Sub Description
+                ctx.fillStyle = "#64748b";
+                ctx.font = "600 28px 'Poppins', sans-serif";
+                ctx.fillText(item.desc, 245, 185);
+
+                // Right Pill Box with Icon Bounce
+                ctx.save();
+                ctx.fillStyle = color;
+                const iconBounce = isFocused ? Math.sin(tSec * 8) * 4 : 0;
+                roundRect(ctx, 860, 35 + iconBounce, 90, 150, 45, true);
+
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "900 48px 'Font Awesome 6 Free', 'Font Awesome 6 Brands'";
+                ctx.textAlign = "center";
+                ctx.fillText("✓", 905, 126 + iconBounce);
+                ctx.restore();
+
+                ctx.restore();
+            });
+
+            // 5. Bottom Engagement Hook
+            ctx.save();
+            const hookBounce = 1 + 0.03 * Math.sin(tSec * 4);
+            ctx.translate(W / 2, H - 140);
+            ctx.scale(hookBounce, hookBounce);
+            ctx.fillStyle = "rgba(0,0,0,0.55)";
+            roundRect(ctx, -380, -35, 760, 70, 35, true);
+
+            ctx.strokeStyle = "rgba(245, 158, 11, 0.6)";
+            ctx.lineWidth = 2;
+            roundRect(ctx, -380, -35, 760, 70, 35, false, true);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "800 28px 'Poppins', sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("🔥 Follow @4xlearner for Daily English Shorts!", 0, 10);
+            ctx.restore();
+
+            // 6. Real-Time 30-Sec Reel Progress Line
+            ctx.save();
+            const progFraction = Math.min(1.0, elapsed / totalDuration);
+            const barH = 10;
+            ctx.fillStyle = "rgba(255,255,255,0.15)";
+            ctx.fillRect(0, H - barH, W, barH);
+
+            const pGrad = ctx.createLinearGradient(0, 0, W, 0);
+            pGrad.addColorStop(0, "#f59e0b");
+            pGrad.addColorStop(0.5, "#ef4444");
+            pGrad.addColorStop(1, "#3b82f6");
+            ctx.fillStyle = pGrad;
+            ctx.fillRect(0, H - barH, W * progFraction, barH);
+            ctx.restore();
+        }
+
+        function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            if (fill) ctx.fill();
+            if (stroke) ctx.stroke();
+        }
+
+        async function exportViralVideo() {
+            closeMenu();
+            const btn = document.getElementById("videoBtn");
+            const progressWrap = document.getElementById("progressWrap");
+            const progressFill = document.getElementById("progressFill");
+            const progressTxt = document.getElementById("progressTxt");
+
+            const selectedSec = parseInt(document.getElementById("videoDuration").value, 10) || 30;
+            const durationMs = selectedSec * 1000;
+
+            progressWrap.style.display = "flex";
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Rendering ${selectedSec}s Reel...`;
+            btn.disabled = true;
+
+            const W = 1080;
+            const H = 1920;
+            const canvas = document.createElement("canvas");
+            canvas.width = W;
+            canvas.height = H;
+            const ctx = canvas.getContext("2d");
+
+            const stream = canvas.captureStream(60);
+            let mimeType = 'video/webm;codecs=vp9';
+            if (!MediaRecorder.isTypeSupported(mimeType)) {
+                mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp8') ? 'video/webm;codecs=vp8' : 'video/webm';
+            }
+
+            const recorder = new MediaRecorder(stream, {
+                mimeType: mimeType,
+                videoBitsPerSecond: 6000000
+            });
+            const chunks = [];
+
+            recorder.ondataavailable = e => {
+                if (e.data.size > 0) chunks.push(e.data);
+            };
+
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: "video/webm" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `4XLearner_${selectedSec}s_Reel_${Date.now()}.webm`;
+                a.click();
+
+                btn.innerHTML = `<i class="fa-solid fa-circle-play"></i> Export ${selectedSec}-Second Active Reel`;
+                btn.disabled = false;
+                progressWrap.style.display = "none";
+            };
+
+            recorder.start();
+
+            const startTime = performance.now();
+
+            function step(now) {
+                const elapsed = now - startTime;
+                const pct = Math.min(100, (elapsed / durationMs) * 100);
+                const currentSec = Math.min(selectedSec, (elapsed / 1000)).toFixed(1);
+
+                progressFill.style.width = pct + "%";
+                progressTxt.innerText = `Recording: ${currentSec}s / ${selectedSec}s (${Math.round(pct)}%)`;
+
+                drawReelFrameToCanvas(ctx, W, H, 1.0, elapsed, durationMs);
+
+                if (elapsed < durationMs) {
+                    requestAnimationFrame(step);
+                } else {
+                    recorder.stop();
+                }
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        applyTheme();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4xlearner English Quiz Studio</title>
+    <!-- Google Fonts: Fredoka One / Nunito for that exact bold cartoonish look -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800;900&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #1e293b;
+            --accent: #38bdf8;
+            --text: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            min-height: 100vh;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 370px 1fr;
+            gap: 25px;
+            width: 100%;
+            max-width: 1250px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 920px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* CONTROL PANEL */
+        .panel {
+            background: var(--panel);
+            padding: 22px;
+            border-radius: 16px;
+            border: 1px solid #334155;
+            height: fit-content;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            font-family: 'Fredoka One', cursive;
+            letter-spacing: 1px;
+            color: #38bdf8;
+            margin-bottom: 12px;
+        }
+
+        label {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #94a3b8;
+            margin-top: 14px;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        textarea,
+        select,
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            background: #0f172a;
+            border: 1.5px solid #334155;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            margin-top: 5px;
+        }
+
+        textarea:focus,
+        select:focus,
+        input:focus {
+            border-color: #38bdf8;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: white;
+            font-weight: 900;
+            font-size: 1.05rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(2, 132, 199, 0.4);
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .drag-hint {
+            font-size: 0.78rem;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.12);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 14px;
+            border: 1px dashed #38bdf8;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* WORKSPACE */
+        .workspace {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #070a12;
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 600px;
+            border: 1px solid #1e293b;
+            overflow: auto;
+        }
+
+        /* TEMPLATE STYLING (MATCHING THE SCREENSHOT EXACTLY) */
+        .export-card {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 35px 20px 25px;
+            user-select: none;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            border-radius: 28px;
+            transition: width 0.3s, height 0.3s;
+        }
+
+        /* DRAGGABLE ELEMENTS */
+        .draggable {
+            position: relative;
+            cursor: grab;
+            touch-action: none;
+            z-index: 10;
+        }
+
+        .draggable:active {
+            cursor: grabbing;
+        }
+
+        /* BRAND / TOP BAR */
+        .top-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .channel-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 12px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .channel-logo {
+            background: #0284c7;
+            color: #fff;
+            font-family: 'Fredoka One', cursive;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        .channel-name {
+            color: #0c4a6e;
+            font-weight: 900;
+            font-size: 0.82rem;
+        }
+
+        /* HUGE CARTOON TITLE (LIKE SCREENSHOT) */
+        .quiz-title-box {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .quiz-title-box h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 4.4rem;
+            line-height: 0.88;
+            color: #ffffff;
+            text-transform: capitalize;
+            letter-spacing: 1px;
+            text-shadow: 0 6px 0 rgba(12, 74, 110, 0.6), 0 10px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        /* WHITE QUESTION CARD WITH WASHI TAPE */
+        .question-card-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .washi-tape {
+            position: absolute;
+            top: -12px;
+            width: 90px;
+            height: 24px;
+            background: #94a3b8;
+            opacity: 0.85;
+            border-left: 3px dashed rgba(255, 255, 255, 0.7);
+            border-right: 3px dashed rgba(255, 255, 255, 0.7);
+            transform: rotate(-2deg);
+            z-index: 5;
+        }
+
+        .question-card {
+            background: #ffffff;
+            width: 94%;
+            border-radius: 24px;
+            padding: 30px 18px 24px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        .question-text {
+            color: #0369a1;
+            font-size: 1.25rem;
+            font-weight: 900;
+            line-height: 1.35;
+            margin-bottom: 20px;
+            word-break: break-word;
+        }
+
+        /* 3D PILL BUTTONS (LIKE SCREENSHOT) */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .opt-pill {
+            display: flex;
+            align-items: center;
+            background: #0284c7;
+            color: #ffffff;
+            padding: 12px 16px;
+            border-radius: 50px;
+            box-shadow: 0 5px 0 #0369a1, 0 8px 12px rgba(0, 0, 0, 0.18);
+            font-size: 1.05rem;
+            font-weight: 800;
+            transition: transform 0.1s;
+        }
+
+        .opt-pill .opt-letter {
+            background: #ffffff;
+            color: #0284c7;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+            box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .opt-pill .opt-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        /* FOOTER CALL-TO-ACTION */
+        .bottom-cta {
+            background: rgba(255, 255, 255, 0.92);
+            color: #0369a1;
+            font-weight: 900;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            font-size: 0.88rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- THEMES --- */
+        /* 1. Playful Sky Blue (Image Style) */
+        .theme-playful-blue {
+            background: linear-gradient(180deg, #1d72fe 0%, #38bdf8 55%, #7dd3fc 100%);
+        }
+
+        /* 2. Sunny Bee Yellow */
+        .theme-sunny-yellow {
+            background: linear-gradient(180deg, #d97706 0%, #f59e0b 50%, #fde68a 100%);
+        }
+
+        .theme-sunny-yellow .quiz-title-box h1 {
+            text-shadow: 0 6px 0 #b45309;
+        }
+
+        .theme-sunny-yellow .question-text {
+            color: #b45309;
+        }
+
+        .theme-sunny-yellow .opt-pill {
+            background: #f59e0b;
+            box-shadow: 0 5px 0 #b45309, 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-sunny-yellow .opt-pill .opt-letter {
+            color: #d97706;
+        }
+
+        /* 3. Mint Fresh Green */
+        .theme-mint-green {
+            background: linear-gradient(180deg, #059669 0%, #10b981 50%, #a7f3d0 100%);
+        }
+
+        .theme-mint-green .quiz-title-box h1 {
+            text-shadow: 0 6px 0 #047857;
+        }
+
+        .theme-mint-green .question-text {
+            color: #047857;
+        }
+
+        .theme-mint-green .opt-pill {
+            background: #10b981;
+            box-shadow: 0 5px 0 #047857, 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-mint-green .opt-pill .opt-letter {
+            color: #059669;
+        }
+
+        /* 4. Candy Bubblegum Pink */
+        .theme-candy-pink {
+            background: linear-gradient(180deg, #db2777 0%, #f43f5e 50%, #fbcfe8 100%);
+        }
+
+        .theme-candy-pink .quiz-title-box h1 {
+            text-shadow: 0 6px 0 #9d174d;
+        }
+
+        .theme-candy-pink .question-text {
+            color: #9d174d;
+        }
+
+        .theme-candy-pink .opt-pill {
+            background: #f43f5e;
+            box-shadow: 0 5px 0 #9d174d, 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-candy-pink .opt-pill .opt-letter {
+            color: #db2777;
+        }
+
+        /* 5. Lavender Dream */
+        .theme-lavender {
+            background: linear-gradient(180deg, #6d28d9 0%, #8b5cf6 50%, #ddd6fe 100%);
+        }
+
+        .theme-lavender .quiz-title-box h1 {
+            text-shadow: 0 6px 0 #4c1d95;
+        }
+
+        .theme-lavender .question-text {
+            color: #5b21b6;
+        }
+
+        .theme-lavender .opt-pill {
+            background: #8b5cf6;
+            box-shadow: 0 5px 0 #5b21b6, 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-lavender .opt-pill .opt-letter {
+            color: #6d28d9;
+        }
+
+        /* Floating Clouds/Stars Effect in background */
+        .deco-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-grid">
+        <!-- CONTROLS -->
+        <div class="panel">
+            <h2>⚡ MCQ Creator</h2>
+
+            <label>1 Single Input (Question + 4 Options)</label>
+            <textarea id="rawInput" rows="6" placeholder="Paste directly:
+Which animal can fly and makes honey?
+A) Butterfly
+B) Honey Bee
+C) Mosquito
+D) Hummingbird"></textarea>
+
+            <label>Channel Name</label>
+            <input type="text" id="channelInput" value="@4xlearner" />
+
+            <label>Post Size (Aspect Ratio)</label>
+            <select id="aspectRatio">
+                <option value="9:16">9:16 (Shorts / Reels / Story)</option>
+                <option value="1:1">1:1 (Instagram Post / Community)</option>
+                <option value="16:9">16:9 (YouTube Video / FB Post)</option>
+                <option value="4:5">4:5 (Instagram Portrait)</option>
+            </select>
+
+            <label>Style Theme</label>
+            <select id="themeSelect">
+                <option value="theme-playful-blue">1. Playful Blue (Screenshot Look)</option>
+                <option value="theme-sunny-yellow">2. Sunny Bee Yellow</option>
+                <option value="theme-mint-green">3. Fresh Mint Green</option>
+                <option value="theme-candy-pink">4. Candy Bubblegum Pink</option>
+                <option value="theme-lavender">5. Lavender Magic</option>
+            </select>
+
+            <div class="drag-hint">
+                💡 <b>Tip:</b> Question Card, 'Quiz Time' Header या Footer को हाथ या माउस से पकड़कर कहीं भी Drag (Move)
+                कर सकते हैं!
+            </div>
+
+            <button class="btn-action" onclick="export4K()">📸 Download 4K Ultra-HD Image</button>
+            <div id="loader" style="display:none; color:#38bdf8; font-weight:800; text-align:center; margin-top:10px;">⏳
+                4K Render Ho Raha Hai...</div>
+        </div>
+
+        <!-- LIVE PREVIEW WORKSPACE -->
+        <div class="workspace">
+            <div id="exportCard" class="export-card theme-playful-blue" style="width: 360px; height: 640px;">
+
+                <!-- Decorative subtle clouds -->
+                <div class="deco-shape" style="width: 140px; height: 140px; top: -30px; left: -40px;"></div>
+                <div class="deco-shape" style="width: 180px; height: 180px; bottom: -50px; right: -50px;"></div>
+
+                <!-- 1. DRAGGABLE: BRAND LOGO HEADER -->
+                <div class="draggable top-bar" id="dragLogo">
+                    <div class="channel-pill">
+                        <span class="channel-logo">4X</span>
+                        <span class="channel-name" id="dispChannel">@4xlearner</span>
+                    </div>
+                </div>
+
+                <!-- 2. DRAGGABLE: BIG BOLD QUIZ TIME TITLE -->
+                <div class="draggable quiz-title-box" id="dragTitle">
+                    <h1>Quiz<br />Time</h1>
+                </div>
+
+                <!-- 3. DRAGGABLE: WHITE QUESTION & OPTIONS CARD -->
+                <div class="draggable question-card-wrapper" id="dragCard">
+                    <div class="washi-tape"></div>
+                    <div class="question-card">
+                        <h3 class="question-text" id="dispQ">Which animal can fly and makes honey?</h3>
+
+                        <div class="options-container" id="optionsGrid">
+                            <div class="opt-pill">
+                                <span class="opt-letter">A</span>
+                                <span class="opt-text" id="optA">Butterfly</span>
+                            </div>
+                            <div class="opt-pill">
+                                <span class="opt-letter">B</span>
+                                <span class="opt-text" id="optB">Honey Bee</span>
+                            </div>
+                            <div class="opt-pill">
+                                <span class="opt-letter">C</span>
+                                <span class="opt-text" id="optC">Mosquito</span>
+                            </div>
+                            <div class="opt-pill">
+                                <span class="opt-letter">D</span>
+                                <span class="opt-text" id="optD">Hummingbird</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. DRAGGABLE: FOOTER COMMENT CTA -->
+                <div class="draggable bottom-cta" id="dragFooter">
+                    <span>💬 Comment Your Answer!</span>
+                    <span>👇</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const exportCard = document.getElementById('exportCard');
+        const rawInput = document.getElementById('rawInput');
+        const channelInput = document.getElementById('channelInput');
+        const aspectRatio = document.getElementById('aspectRatio');
+        const themeSelect = document.getElementById('themeSelect');
+        const optionsGrid = document.getElementById('optionsGrid');
+        const loader = document.getElementById('loader');
+
+        // 1. Single Box Question + Option Parser
+        rawInput.addEventListener('input', () => {
+            const lines = rawInput.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            if (!lines.length) return;
+
+            document.getElementById('dispQ').innerText = lines[0];
+
+            const optKeys = ['optA', 'optB', 'optC', 'optD'];
+            optKeys.forEach(k => document.getElementById(k).innerText = '...');
+
+            let count = 0;
+            for (let i = 1; i < lines.length; i++) {
+                let clean = lines[i].replace(/^([A-Da-d0-9][\.\)\-\:\s]+)/, '');
+                if (count < 4) {
+                    document.getElementById(optKeys[count]).innerText = clean;
+                    count++;
+                }
+            }
+        });
+
+        // 2. Channel Name Update
+        channelInput.addEventListener('input', (e) => {
+            document.getElementById('dispChannel').innerText = e.target.value || '@4xlearner';
+        });
+
+        // 3. Theme Selector
+        themeSelect.addEventListener('change', (e) => {
+            exportCard.className = 'export-card ' + e.target.value;
+        });
+
+        // 4. Aspect Ratio Resizer (No Content Overlap)
+        aspectRatio.addEventListener('change', (e) => {
+            const ratio = e.target.value;
+
+            // Reset transforms
+            document.querySelectorAll('.draggable').forEach(el => {
+                el.style.transform = 'translate(0px, 0px)';
+            });
+
+            if (ratio === '9:16') {
+                exportCard.style.width = '360px';
+                exportCard.style.height = '640px';
+                optionsGrid.style.display = 'flex';
+                optionsGrid.style.flexDirection = 'column';
+            } else if (ratio === '1:1') {
+                exportCard.style.width = '480px';
+                exportCard.style.height = '480px';
+                optionsGrid.style.display = 'grid';
+                optionsGrid.style.gridTemplateColumns = '1fr 1fr';
+            } else if (ratio === '16:9') {
+                exportCard.style.width = '640px';
+                exportCard.style.height = '360px';
+                optionsGrid.style.display = 'grid';
+                optionsGrid.style.gridTemplateColumns = '1fr 1fr';
+            } else if (ratio === '4:5') {
+                exportCard.style.width = '400px';
+                exportCard.style.height = '500px';
+                optionsGrid.style.display = 'flex';
+                optionsGrid.style.flexDirection = 'column';
+            }
+        });
+
+        // 5. Drag & Drop Handler (Touch & Mouse)
+        function makeDraggable(el) {
+            let isDragging = false;
+            let startX, startY;
+            let currentX = 0, currentY = 0;
+
+            function onStart(e) {
+                isDragging = true;
+                const evt = e.touches ? e.touches[0] : e;
+                startX = evt.clientX - currentX;
+                startY = evt.clientY - currentY;
+            }
+
+            function onMove(e) {
+                if (!isDragging) return;
+                const evt = e.touches ? e.touches[0] : e;
+                currentX = evt.clientX - startX;
+                currentY = evt.clientY - startY;
+                el.style.transform = `translate(${currentX}px, ${currentY}px)`;
+            }
+
+            function onEnd() {
+                isDragging = false;
+            }
+
+            el.addEventListener('mousedown', onStart);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onEnd);
+
+            el.addEventListener('touchstart', onStart, { passive: true });
+            window.addEventListener('touchmove', onMove, { passive: true });
+            window.addEventListener('touchend', onEnd);
+        }
+
+        document.querySelectorAll('.draggable').forEach(makeDraggable);
+
+        // 6. 4K Ultra Clear Export
+        async function export4K() {
+            loader.style.display = 'block';
+            try {
+                const canvas = await html2canvas(exportCard, {
+                    scale: 6, // 360 x 6 = 2160px (Pure 4K resolution)
+                    useCORS: true,
+                    backgroundColor: null,
+                    logging: false
+                });
+
+                const link = document.createElement('a');
+                link.download = `4xlearner-quiz-4k-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+            } catch (err) {
+                alert('Export Failed: ' + err);
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>
